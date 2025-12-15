@@ -1,0 +1,12 @@
+venv/
+.venv/
+core.Microsoft*
+core.mongo*
+core.python*
+env.py
+_pycache_/
+*.py[cod]
+node_modules/
+.github/
+cloudinary_python.txt
+blog/fixtures/ 
