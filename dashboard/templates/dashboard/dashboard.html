@@ -23,67 +23,75 @@
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <!-- Film Strip Carousel -->
-        <section class="carousel-section mb-5">
-            <div class="container-fluid px-0">
-                <!-- New Releases Carousel -->
-                <div id="newReleasesCarousel" class="film-carousel">
-                    <div id="newReleasesSlider" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="row g-3 justify-content-center">
-                                    {% for movie in new_releases %}
-                                    <div class="col-6 col-md-4 col-lg-2">
-                                        <div class="movie-poster">
-                                            <img src="{% static movie.poster %}" class="img-fluid rounded shadow" alt="{{ movie.title }}" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ movie.title|urlencode }}'">
-                                            <div class="poster-overlay">
-                                                <h6 class="text-white text-center mt-2">{{ movie.title }}</h6>
-                                            </div>
-                                        </div>
+<!-- Film Strip Carousel -->
+<section class="carousel-section mb-5">
+    <div class="container-fluid px-0">
+        <!-- New Releases Carousel -->
+        <div id="newReleasesCarousel" class="film-carousel">
+            <div id="newReleasesSlider" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row g-3 justify-content-center">
+                            {% for film in new_releases %}
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <div class="movie-poster">
+                                    <img src="{{ film.get_poster_url }}" 
+                                         class="img-fluid rounded shadow" 
+                                         alt="{{ film.title }}"
+                                         onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'">
+                                    <div class="poster-overlay">
+                                        <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
+                                        <p class="text-center small">{{ film.get_rating_display }}</p>
                                     </div>
-                                    {% endfor %}
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
                     </div>
                 </div>
-
-                <!-- Classic Films Carousel -->
-                <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
-                    <div id="classicFilmsSlider" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="row g-3 justify-content-center">
-                                    {% for movie in classic_films %}
-                                    <div class="col-6 col-md-4 col-lg-2">
-                                        <div class="movie-poster">
-                                            <img src="{% static movie.poster %}" class="img-fluid rounded shadow" alt="{{ movie.title }}" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ movie.title|urlencode }}'">
-                                            <div class="poster-overlay">
-                                                <h6 class="text-white text-center mt-2">{{ movie.title }}</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                    </div>
-                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-        </section>
+        </div>
+
+        <!-- Classic Films Carousel -->
+        <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
+            <div id="classicFilmsSlider" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row g-3 justify-content-center">
+                            {% for film in classic_films %}
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <div class="movie-poster">
+                                    <img src="{{ film.get_poster_url }}" 
+                                         class="img-fluid rounded shadow" 
+                                         alt="{{ film.title }}"
+                                         onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'">
+                                    <div class="poster-overlay">
+                                        <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
+                                        <p class="text-center small">{{ film.year|date:"Y" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -120,39 +128,47 @@
 
                 <!-- Movies List -->
                 <div class="movies-list">
-                    {% for movie in whats_on %}
-                    <div class="movie-item mb-4">
+                    {% for film, showtimes in films_with_showtimes.items %}
+                    <div class="movie-item mb-4" data-genre="{{ film.genre }}">
                         <div class="card h-100 shadow-sm">
                             <div class="card-body">
                                 <div class="row align-items-center">
                                     <!-- Movie Poster -->
                                     <div class="col-md-3 col-lg-2 text-center mb-3 mb-md-0">
-                                        <img src="{% static movie.poster %}" 
+                                        <img src="{{ film.get_poster_url }}" 
                                              class="img-fluid rounded" 
-                                             alt="{{ movie.title }}" 
-                                             style="max-height: 200px; width: auto;"
-                                             onerror="this.src='https://via.placeholder.com/150x225/333/fff?text={{ movie.title|urlencode }}'">
+                                             alt="{{ film.title }}" 
+                                             style="max-height: 200px; width: auto;">
                                     </div>
                                     
                                     <!-- Movie Details -->
                                     <div class="col-md-9 col-lg-10">
                                         <div class="row">
                                             <div class="col-lg-6">
-                                                <h4 class="card-title fw-bold mb-2">{{ movie.title }}</h4>
+                                                <h4 class="card-title fw-bold mb-2">{{ film.title }}</h4>
                                                 <p class="text-muted mb-2">
-                                                    <span class="badge bg-secondary me-2">{{ movie.rating }}</span>
-                                                    {{ movie.genre }}
+                                                    <span class="badge bg-secondary me-2">{{ film.get_rating_display }}</span>
+                                                    {{ film.get_genre_display }}
                                                 </p>
+                                                <p class="small text-muted mb-3">
+                                                    <strong>Director:</strong> {{ film.director }}<br>
+                                                    <strong>Duration:</strong> {{ film.duration }} minutes<br>
+                                                    <strong>Year:</strong> {{ film.year|date:"Y" }}
+                                                </p>
+                                                {% if film.synopsis %}
+                                                <p class="small">{{ film.synopsis|truncatewords:20 }}</p>
+                                                {% endif %}
                                             </div>
                                             
                                             <!-- Showtimes -->
                                             <div class="col-lg-6">
                                                 <h6 class="fw-bold mb-3">Showtimes</h6>
                                                 <div class="showtime-buttons">
-                                                    {% for time in movie.showtimes %}
+                                                    {% for showtime in showtimes %}
                                                     <button class="btn btn-outline-primary btn-sm me-2 mb-2" 
-                                                            onclick="bookTicket('{{ movie.title }}', '{{ time }}')">
-                                                        {{ time }}
+                                                            onclick="bookTicket({{ showtime.id }}, '{{ film.title }}', '{{ showtime.time }}', '{{ showtime.date }}')">
+                                                        {{ showtime.time }} - £{{ showtime.price }}
+                                                        <br><small>{{ showtime.available_seats }} seats</small>
                                                     </button>
                                                     {% endfor %}
                                                 </div>
@@ -170,4 +186,66 @@
     </div>
 </section>
 
+<!-- JavaScript -->
+<script>
+function showFilms(type) {
+    const newBtn = document.getElementById('newReleasesBtn');
+    const classicBtn = document.getElementById('classicFilmsBtn');
+    const newCarousel = document.getElementById('newReleasesCarousel');
+    const classicCarousel = document.getElementById('classicFilmsCarousel');
+    
+    if (type === 'new') {
+        newBtn.classList.add('active');
+        classicBtn.classList.remove('active');
+        newCarousel.style.display = 'block';
+        classicCarousel.style.display = 'none';
+    } else {
+        classicBtn.classList.add('active');
+        newBtn.classList.remove('active');
+        classicCarousel.style.display = 'block';
+        newCarousel.style.display = 'none';
+    }
+}
+
+function bookTicket(showtimeId, filmTitle, time, date) {
+    // Check if user is authenticated
+    {% if user.is_authenticated %}
+        // Redirect to booking page with showtime ID
+        window.location.href = '/booking/select-seats/' + showtimeId + '/';
+    {% else %}
+        // Store booking intention and redirect to login
+        sessionStorage.setItem('pending_booking', showtimeId);
+        alert('Please sign in to book tickets');
+        window.location.href = '{% url "account_login" %}?next=/booking/select-seats/' + showtimeId + '/';
+    {% endif %}
+}
+
+// Date filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const dateButtons = document.querySelectorAll('[data-date]');
+    dateButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            dateButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            console.log('Filtering by:', this.dataset.date);
+        });
+    });
+    
+    // Genre filter
+    document.getElementById('genreFilter').addEventListener('change', function() {
+        const selectedGenre = this.value;
+        const movieItems = document.querySelectorAll('.movie-item');
+        
+        movieItems.forEach(item => {
+            const itemGenre = item.dataset.genre;
+            if (selectedGenre === '' || itemGenre === selectedGenre) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
