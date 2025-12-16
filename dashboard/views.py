@@ -1,7 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 import requests
 from django.conf import settings
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from booking.models import Film
+
 # Create your views here.
 
 def dashboard_view(request):
@@ -57,5 +60,53 @@ def test_tmdb(request):
     base = config["images"]["secure_base_url"]
     size = config["images"]["poster_sizes"][3]  # e.g., w342
     poster_url = f"{base}{size}{movie['poster_path']}"
+    backdrop_url = f"https://image.tmdb.org/t/p/w1280{movie.get('backdrop_path')}"
 
-    return render(request, "dashboard/test_tmdb.html", {"movie": movie, "poster": poster_url})
+    return render(request, "dashboard/test_tmdb.html", {"movie": movie, "poster": poster_url, "backdrop": backdrop_url})
+
+
+@login_required
+def add_movie(request):
+    # Only admins can access this page
+    if not request.user.is_staff:
+        return HttpResponseForbidden("Admins only")
+
+    query = request.GET.get("q")
+    results = []
+
+    if query:
+        url = (
+            f"https://api.themoviedb.org/3/search/movie"
+            f"?api_key={settings.TMDB_API_KEY}&query={query}"
+        )
+        results = requests.get(url).json().get("results", [])
+
+    return render(request, "dashboard/add_movie.html", {"results": results})
+
+
+@login_required
+def select_movie(request, tmdb_id):
+    # Only admins can save films
+    if not request.user.is_staff:
+        return HttpResponseForbidden("Admins only")
+
+    api_key = settings.TMDB_API_KEY
+
+    # Fetch full movie details
+    url = f"https://api.themoviedb.org/3/movie/{tmdb_id}?api_key={api_key}&language=en-US"
+    data = requests.get(url).json()
+
+    # Create or update Film entry
+    film, created = Film.objects.get_or_create(
+        tmdb_id=tmdb_id,
+        defaults={
+            "title": data.get("title"),
+            "poster_path": data.get("poster_path"),
+            "runtime": data.get("runtime"),
+            "release_date": data.get("release_date"),
+            "overview": data.get("overview"),
+            "genres": data.get("genres"),
+        }
+    )
+
+    return redirect("add_movie")
