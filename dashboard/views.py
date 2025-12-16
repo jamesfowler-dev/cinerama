@@ -41,7 +41,7 @@ def dashboard_view(request):
             },
         ]
     }
-    return render(request, 'booking/dashboard.html', context)
+    return render(request, 'dashboard/dashboard.html', context)
 
 def test_tmdb(request):
     api_key = settings.TMDB_API_KEY
