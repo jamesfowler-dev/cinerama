@@ -23,67 +23,67 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
-<!-- Film Strip Carousel -->
-<section class="carousel-section mb-5">
-    <div class="container-fluid px-0">
-        <!-- New Releases Carousel -->
-        <div id="newReleasesCarousel" class="film-carousel">
-            <div id="newReleasesSlider" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row g-3 justify-content-center">
-                            {% for movie in new_releases %}
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="movie-poster">
-                                    <img src="{% static movie.poster %}" class="img-fluid rounded shadow" alt="{{ movie.title }}" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ movie.title|urlencode }}'">
-                                    <div class="poster-overlay">
-                                        <h6 class="text-white text-center mt-2">{{ movie.title }}</h6>
+        <!-- Film Strip Carousel -->
+        <section class="carousel-section mb-5">
+            <div class="container-fluid px-0">
+                <!-- New Releases Carousel -->
+                <div id="newReleasesCarousel" class="film-carousel">
+                    <div id="newReleasesSlider" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row g-3 justify-content-center">
+                                    {% for movie in new_releases %}
+                                    <div class="col-6 col-md-4 col-lg-2">
+                                        <div class="movie-poster">
+                                            <img src="{% static movie.poster %}" class="img-fluid rounded shadow" alt="{{ movie.title }}" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ movie.title|urlencode }}'">
+                                            <div class="poster-overlay">
+                                                <h6 class="text-white text-center mt-2">{{ movie.title }}</h6>
+                                            </div>
+                                        </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-                            {% endfor %}
                         </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
-            </div>
-        </div>
 
-        <!-- Classic Films Carousel -->
-        <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
-            <div id="classicFilmsSlider" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row g-3 justify-content-center">
-                            {% for movie in classic_films %}
-                            <div class="col-6 col-md-4 col-lg-2">
-                                <div class="movie-poster">
-                                    <img src="{% static movie.poster %}" class="img-fluid rounded shadow" alt="{{ movie.title }}" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ movie.title|urlencode }}'">
-                                    <div class="poster-overlay">
-                                        <h6 class="text-white text-center mt-2">{{ movie.title }}</h6>
+                <!-- Classic Films Carousel -->
+                <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
+                    <div id="classicFilmsSlider" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row g-3 justify-content-center">
+                                    {% for movie in classic_films %}
+                                    <div class="col-6 col-md-4 col-lg-2">
+                                        <div class="movie-poster">
+                                            <img src="{% static movie.poster %}" class="img-fluid rounded shadow" alt="{{ movie.title }}" onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ movie.title|urlencode }}'">
+                                            <div class="poster-overlay">
+                                                <h6 class="text-white text-center mt-2">{{ movie.title }}</h6>
+                                            </div>
+                                        </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-                            {% endfor %}
                         </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
             </div>
-        </div>
+        </section>
     </div>
 </section>
 

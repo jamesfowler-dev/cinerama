@@ -1,7 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
-# Create your views here.
 
 def dashboard_view(request):
     # Sample data - replace with actual database queries later
@@ -40,4 +37,4 @@ def dashboard_view(request):
             },
         ]
     }
-    return render(request, 'booking/dashboard.html', context)
+    return render(request, 'dashboard/dashboard.html', context)

@@ -20,5 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path('', include('booking.urls')),
+    path('', include('dashboard.urls')),  # This will make dashboard the homepage
+    path('booking/', include('booking.urls')),  # Move booking to /booking/
 ]
