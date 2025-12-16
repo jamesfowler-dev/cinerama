@@ -1,30 +1,31 @@
 :root {
-    /* Classic Cinema Color Palette */
+    /* Classic Cinema Font Styles */
     --primary-font: 'Georgia', 'Times New Roman', serif;
     --secondary-font: 'Arial', 'Helvetica', sans-serif;
     
     /* Main Colors - Classic Cinema Theme */
-    --cinema-red: #8B0000;           /* Deep burgundy red */
+    --cinema-primary: #2ae8d8;         /* Matching canvas cyan */
+    --cinema-secondary: #008B8B;       /* Deep teal */
     --cinema-gold: #DAA520;          /* Rich gold */
-    --cinema-cream: #F5F5DC;         /* Warm cream/beige */
-    --cinema-black: #1C1C1C;        /* Deep charcoal black */
-    --cinema-silver: #C0C0C0;        /* Classic silver */
+    --cinema-bg-dark: #191d1e;       /* Background dark */
+    --cinema-bg-light: #283139;      /* Background light */
     
     /* Primary Palette */
-    --primary-color: var(--cinema-red);
+    --misty-blue: #E6F3FF;           /* Very light blue */
+    --primary-color: var(--cinema-primary);
     --secondary-color: var(--cinema-gold);
     --accent-color: #B8860B;         /* Darker gold for accents */
     --tertiary-color: #CD853F;       /* Peru/bronze for warmth */
     
     /* Background Colors */
-    --primary-background-color: var(--cinema-cream);
-    --secondary-background-color: var(--cinema-black);
-    --nav-background: linear-gradient(135deg, var(--cinema-red) 0%, #A0522D 100%);
-    --hero-background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%);
+    --primary-background-color: var(--cinema-bg-dark);
+    --secondary-background-color: var(--cinema-bg-light);
+    --nav-background: linear-gradient(135deg, var(--cinema-bg-dark) 0%, var(--cinema-bg-light) 100%);
+    --hero-background: linear-gradient(135deg, var(--primary-color) 0%, var(--cinema-gold) 100%);
     
     /* Text Colors */
     --primary-text-color: var(--cinema-black);
-    --secondary-text-color: var(--cinema-cream);
+    --secondary-text-color: var(--misty-blue);
     --muted-text-color: #8B7355;     /* Muted brown for subtitles */
     --white-text: #FFFFFF;
     
@@ -42,7 +43,7 @@
     --danger-text: var(--danger-color);
     
     /* Interactive Elements */
-    --button-primary-bg: var(--cinema-red);
+    --button-primary-bg: var(--primary-color);
     --button-primary-text: var(--cinema-cream);
     --button-primary-hover: #A0522D;
     
@@ -50,7 +51,7 @@
     --button-secondary-text: var(--cinema-black);
     --button-secondary-hover: var(--accent-color);
     
-    --link-color: var(--cinema-red);
+    --link-color: var(--primary-color);
     --link-hover-color: var(--accent-color);
     
     /* Shadows and Effects */
@@ -63,10 +64,10 @@
     --border-accent: var(--cinema-gold);
     
     /* Classic Cinema Elements */
-    --curtain-red: #8B0000;
+    /* --curtain-red: #8B0000;
     --spotlight-gold: #FFD700;
     --velvet-texture: linear-gradient(45deg, #8B0000 25%, transparent 25%), 
-                      linear-gradient(-45deg, #8B0000 25%, transparent 25%);
+                      linear-gradient(-45deg, #8B0000 25%, transparent 25%); */
 }
 
 /* Updated Hero Section */
@@ -76,7 +77,6 @@
     display: flex;
     align-items: center;
     position: relative;
-    overflow: hidden;
 }
 
 .hero-section::before {
@@ -86,9 +86,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-        radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -111,16 +108,21 @@
 }
 
 .navbar-brand {
-    color: var(--cinema-gold) !important;
+    color: var(--misty-blue) !important;
     font-family: var(--primary-font);
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 2rem;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-nav .nav-link {
-    color: var(--cinema-cream) !important;
+    color: var(--misty-blue) !important;
     transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link a.sign-up {
+    background-color: var(--cinema-bg-light) !important;
+    border: 1px solid var(--cinema-secondary) !important;
 }
 
 .navbar-nav .nav-link:hover {
@@ -145,16 +147,16 @@
 }
 
 .btn-outline-primary {
-    border-color: var(--cinema-red);
-    color: var(--cinema-red);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
     background: transparent;
     transition: all 0.3s ease;
 }
 
 .btn-outline-primary:hover,
 .btn-outline-primary.active {
-    background-color: var(--cinema-red);
-    border-color: var(--cinema-red);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
     color: var(--cinema-cream);
     box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
 }
@@ -173,7 +175,7 @@
 }
 
 .card-title {
-    color: var(--cinema-red);
+    color: var(--primary-color);
     font-family: var(--primary-font);
 }
 
@@ -211,11 +213,14 @@
 
 /* Section Backgrounds */
 .whats-on-section {
-    background: linear-gradient(to bottom, var(--cinema-cream), #F0F0F0) !important;
+    /* background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%); */
+    /* background: linear-gradient(to bottom, var(--cinema-cream), #F0F0F0) !important; */
 }
 
 .whats-on-section h2 {
-    color: var(--cinema-red);
+    color: var(--primary-color);
     font-family: var(--primary-font);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -228,9 +233,9 @@
 
 /* Date Filter Buttons */
 .date-filter .btn.active {
-    background-color: var(--cinema-red) !important;
-    border-color: var(--cinema-red) !important;
-    color: var(--cinema-cream) !important;
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
 }
 
 /* Input Styling */
@@ -279,21 +284,4 @@ h1, h2, h3, h4, h5, h6 {
         transparent 20%, 
         transparent 80%, 
         rgba(139, 0, 0, 0.05) 100%);
-}
-
-/* Spotlight Effect for Featured Content */
-.spotlight {
-    position: relative;
-}
-
-.spotlight::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    width: 100px;
-    height: 20px;
-    background: radial-gradient(ellipse, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
-    transform: translateX(-50%);
-    pointer-events: none;
 }
