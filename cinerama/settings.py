@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,12 +26,12 @@ if os.path.isfile('env.py'):
     import env
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-
+TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['cinerama.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['cinerama-project-c41e4c3cc388.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
