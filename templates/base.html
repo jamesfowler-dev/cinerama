@@ -1,5 +1,5 @@
 {% load static %}
-{% url 'homepage' as homepage_url %}
+{% url 'dashboard' as dashboard_url %}
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
@@ -28,7 +28,7 @@
 <!-- Navigation -->
 <nav id="navbar-bg" class="navbar navbar-expand-lg p-3">
     <div class="container" id="centered">
-        <a class="navbar-brand" id="navbarBrand" href="{% url 'homepage' %}">
+        <a class="navbar-brand" id="navbarBrand" href="{% url 'dashboard' %}">
             Cinerama
         </a>
 
@@ -40,7 +40,7 @@
             <ul class="navbar-nav me-auto">
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="">
+                    <a class="nav-link" href="{% url 'dashboard' %}">
                         Whats On
                     </a>
                 </li>

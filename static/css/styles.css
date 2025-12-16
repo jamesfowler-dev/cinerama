@@ -1,22 +1,299 @@
-
-
 :root {
-   --primary-font:
-    --secondary-font:
-    --primary-text-color:
-    --primary-background-color:
-    --secondary-text-color:
-    --primary-color:
-    --accent-color: #F5C542;
-    --success-color: #50cc2e;
-    --danger-color: #ac3527;
-    --nav-background:
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.15);
-    --success-bg: #c5f1d0;
-    --success-text: #155724;
-    --warning-bg: #ffe38d;
-    --warning-text: #857004;
-    --white: #ffffff;
-    --black: #000000;
+    /* Classic Cinema Color Palette */
+    --primary-font: 'Georgia', 'Times New Roman', serif;
+    --secondary-font: 'Arial', 'Helvetica', sans-serif;
+    
+    /* Main Colors - Classic Cinema Theme */
+    --cinema-red: #8B0000;           /* Deep burgundy red */
+    --cinema-gold: #DAA520;          /* Rich gold */
+    --cinema-cream: #F5F5DC;         /* Warm cream/beige */
+    --cinema-black: #1C1C1C;        /* Deep charcoal black */
+    --cinema-silver: #C0C0C0;        /* Classic silver */
+    
+    /* Primary Palette */
+    --primary-color: var(--cinema-red);
+    --secondary-color: var(--cinema-gold);
+    --accent-color: #B8860B;         /* Darker gold for accents */
+    --tertiary-color: #CD853F;       /* Peru/bronze for warmth */
+    
+    /* Background Colors */
+    --primary-background-color: var(--cinema-cream);
+    --secondary-background-color: var(--cinema-black);
+    --nav-background: linear-gradient(135deg, var(--cinema-red) 0%, #A0522D 100%);
+    --hero-background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%);
+    
+    /* Text Colors */
+    --primary-text-color: var(--cinema-black);
+    --secondary-text-color: var(--cinema-cream);
+    --muted-text-color: #8B7355;     /* Muted brown for subtitles */
+    --white-text: #FFFFFF;
+    
+    /* Status Colors */
+    --success-color: #228B22;        /* Forest green */
+    --danger-color: #DC143C;         /* Crimson red */
+    --warning-color: #FF8C00;        /* Dark orange */
+    
+    /* Status Backgrounds */
+    --success-bg: #F0FFF0;           /* Honeydew */
+    --success-text: var(--success-color);
+    --warning-bg: #FFF8DC;           /* Cornsilk */
+    --warning-text: var(--warning-color);
+    --danger-bg: #FFE4E1;            /* Misty rose */
+    --danger-text: var(--danger-color);
+    
+    /* Interactive Elements */
+    --button-primary-bg: var(--cinema-red);
+    --button-primary-text: var(--cinema-cream);
+    --button-primary-hover: #A0522D;
+    
+    --button-secondary-bg: var(--cinema-gold);
+    --button-secondary-text: var(--cinema-black);
+    --button-secondary-hover: var(--accent-color);
+    
+    --link-color: var(--cinema-red);
+    --link-hover-color: var(--accent-color);
+    
+    /* Shadows and Effects */
+    --shadow: 0 4px 15px rgba(139, 0, 0, 0.15);
+    --shadow-hover: 0 8px 25px rgba(139, 0, 0, 0.25);
+    --gold-glow: 0 0 20px rgba(218, 165, 32, 0.3);
+    
+    /* Borders and Lines */
+    --border-color: var(--cinema-silver);
+    --border-accent: var(--cinema-gold);
+    
+    /* Classic Cinema Elements */
+    --curtain-red: #8B0000;
+    --spotlight-gold: #FFD700;
+    --velvet-texture: linear-gradient(45deg, #8B0000 25%, transparent 25%), 
+                      linear-gradient(-45deg, #8B0000 25%, transparent 25%);
+}
+
+/* Updated Hero Section */
+.hero-section {
+    background: transparent;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero-section h1 {
+    color: var(--secondary-text-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: var(--primary-font);
+    font-weight: bold;
+}
+
+.hero-section p {
+    color: var(--cinema-cream);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Navigation Styling */
+#navbar-bg {
+    background: var(--nav-background) !important;
+    box-shadow: var(--shadow);
+}
+
+.navbar-brand {
+    color: var(--cinema-gold) !important;
+    font-family: var(--primary-font);
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-nav .nav-link {
+    color: var(--cinema-cream) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--cinema-gold) !important;
+    text-shadow: 0 0 5px rgba(218, 165, 32, 0.5);
+}
+
+/* Button Styling */
+.btn-outline-light {
+    border-color: var(--cinema-gold);
+    color: var(--cinema-gold);
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover,
+.btn-outline-light.active {
+    background-color: var(--cinema-gold);
+    border-color: var(--cinema-gold);
+    color: var(--cinema-black);
+    box-shadow: var(--gold-glow);
+}
+
+.btn-outline-primary {
+    border-color: var(--cinema-red);
+    color: var(--cinema-red);
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary.active {
+    background-color: var(--cinema-red);
+    border-color: var(--cinema-red);
+    color: var(--cinema-cream);
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
+}
+
+/* Card Styling */
+.card {
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    background: var(--primary-background-color);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.card-title {
+    color: var(--cinema-red);
+    font-family: var(--primary-font);
+}
+
+/* Badge Styling */
+.badge {
+    background-color: var(--cinema-gold) !important;
+    color: var(--cinema-black) !important;
+    font-weight: bold;
+}
+
+/* Movie Poster Effects */
+.movie-poster {
+    position: relative;
+    transition: transform 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.movie-poster:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-hover);
+}
+
+.poster-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(28, 28, 28, 0.9));
+    padding: 20px 10px 10px;
+    color: var(--cinema-gold);
+    font-weight: bold;
+}
+
+/* Section Backgrounds */
+.whats-on-section {
+    background: linear-gradient(to bottom, var(--cinema-cream), #F0F0F0) !important;
+}
+
+.whats-on-section h2 {
+    color: var(--cinema-red);
+    font-family: var(--primary-font);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Carousel Controls */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: brightness(0) saturate(100%) invert(85%) sepia(82%) saturate(347%) hue-rotate(3deg) brightness(104%) contrast(87%);
+}
+
+/* Date Filter Buttons */
+.date-filter .btn.active {
+    background-color: var(--cinema-red) !important;
+    border-color: var(--cinema-red) !important;
+    color: var(--cinema-cream) !important;
+}
+
+/* Input Styling */
+.form-control,
+.form-select {
+    border-color: var(--border-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--cinema-gold);
+    box-shadow: 0 0 10px rgba(218, 165, 32, 0.2);
+}
+
+/* Classic Cinema Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--primary-font);
+}
+
+.display-4 {
+    font-family: var(--primary-font);
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .btn-group .btn {
+        font-size: 0.9rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+}
+
+/* Additional Cinema Elements */
+.film-carousel {
+    padding: 20px;
+    background: linear-gradient(to right, 
+        rgba(139, 0, 0, 0.05) 0%, 
+        transparent 20%, 
+        transparent 80%, 
+        rgba(139, 0, 0, 0.05) 100%);
+}
+
+/* Spotlight Effect for Featured Content */
+.spotlight {
+    position: relative;
+}
+
+.spotlight::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    width: 100px;
+    height: 20px;
+    background: radial-gradient(ellipse, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    transform: translateX(-50%);
+    pointer-events: none;
 }
