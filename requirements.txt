@@ -1,8 +1,58 @@
-asgiref==3.11.0
-dj-database-url==0.5.0
-Django==5.0.14
-gunicorn==21.2.0
-packaging==25.0
+# Core
+Django==5.0.3
+asgiref==3.8.1
+sqlparse==0.5.0
+tzdata==2024.1
+
+# Database
 psycopg2-binary==2.9.9
-sqlparse==0.5.4
-whitenoise==6.11.0
+dj-database-url==2.1.0
+
+# Auth
+django-allauth==0.61.1
+oauthlib==3.2.2
+requests-oauthlib==1.3.1
+python3-openid==3.2.0
+PyJWT==2.8.0
+
+# Forms & UI
+django-crispy-forms==2.1
+crispy-bootstrap5==2024.2
+
+# Media & Static files
+cloudinary==1.40.0
+dj3-cloudinary-storage==0.0.6
+whitenoise==6.6.0
+pillow==10.3.0
+
+# Rich text / admin
+django-summernote==0.8.20.0
+bleach==6.1.0
+
+# PDF / ticket generation (WeasyPrint)
+weasyprint==61.2
+tinycss2==1.3.0
+cssselect2==0.7.0
+fonttools==4.51.0
+pyphen==0.14.0
+pydyf==0.9.0
+webencodings==0.5.1
+zopfli==0.2.3
+
+# HTTP & utils
+requests==2.32.3
+urllib3==2.2.1
+charset-normalizer==3.3.2
+idna==3.7
+certifi==2024.2.2
+
+# Security / crypto
+cryptography==42.0.5
+cffi==1.16.0
+pycparser==2.22
+
+# Deployment
+gunicorn==21.2.0
+packaging==24.0
+typing_extensions==4.11.0
+six==1.16.0
