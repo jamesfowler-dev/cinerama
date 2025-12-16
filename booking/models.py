@@ -11,23 +11,15 @@ from django.contrib.auth.models import User
 
 SCREEN_TYPE_CHOICES = ((0, "Silver Screen"), (1, "IMAX"), (2, "Cabaret"), (3, "VIP"))
 
-class User(User):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    password = models.CharField(max_length=100)
-    # more to be added
-    def __str__(self):
-        return self.name
-
 class Screen(models.Model):
     type = models.IntegerField(choices=SCREEN_TYPE_CHOICES, default=0)
-    number = models.IntegerField()
-    seats = models.IntegerField()
+    number = models.IntegerField(blank=False, null=False)
+    seats = models.IntegerField(blank=False, null=False)
 # more to be added
 
 class Film(models.Model):
     title = models.CharField(max_length=100)
     director = models.CharField(max_length=100)
     cast = models.CharField(max_length=100)
-    year = models.DateFieldField()
+    year = models.DateField(blank=False, null=False)
     # more to be added
