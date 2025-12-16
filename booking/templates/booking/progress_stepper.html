@@ -1,0 +1,145 @@
+<!-- Progress Stepper -->
+<div class="progress-stepper mb-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="stepper-wrapper">
+                    <div class="stepper-item {% if current_step >= 1 %}active{% endif %} {% if current_step > 1 %}completed{% endif %}">
+                        <div class="step-counter">
+                            {% if current_step > 1 %}<i class="bi bi-check"></i>{% else %}1{% endif %}
+                        </div>
+                        <div class="step-name">Select Film</div>
+                    </div>
+                    
+                    <div class="stepper-item {% if current_step >= 2 %}active{% endif %} {% if current_step > 2 %}completed{% endif %}">
+                        <div class="step-counter">
+                            {% if current_step > 2 %}<i class="bi bi-check"></i>{% else %}2{% endif %}
+                        </div>
+                        <div class="step-name">Choose Seats</div>
+                    </div>
+                    
+                    <div class="stepper-item {% if current_step >= 3 %}active{% endif %} {% if current_step > 3 %}completed{% endif %}">
+                        <div class="step-counter">
+                            {% if current_step > 3 %}<i class="bi bi-check"></i>{% else %}3{% endif %}
+                        </div>
+                        <div class="step-name">Review & Pay</div>
+                    </div>
+                    
+                    <div class="stepper-item {% if current_step >= 4 %}active completed{% endif %}">
+                        <div class="step-counter">
+                            {% if current_step >= 4 %}<i class="bi bi-check"></i>{% else %}4{% endif %}
+                        </div>
+                        <div class="step-name">Confirmation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.stepper-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.stepper-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    right: 50px;
+    height: 2px;
+    background-color: #e0e0e0;
+    z-index: 1;
+}
+
+.stepper-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.step-counter {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    border: 2px solid #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.stepper-item.active .step-counter {
+    background-color: var(--cinema-red);
+    border-color: var(--cinema-red);
+    color: white;
+}
+
+.stepper-item.completed .step-counter {
+    background-color: var(--cinema-gold);
+    border-color: var(--cinema-gold);
+    color: var(--cinema-black);
+}
+
+.step-name {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    font-weight: 500;
+}
+
+.stepper-item.active .step-name {
+    color: var(--cinema-red);
+    font-weight: bold;
+}
+
+.stepper-item.completed .step-name {
+    color: var(--cinema-gold);
+    font-weight: bold;
+}
+
+/* Progress line animation */
+.stepper-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    height: 2px;
+    background: linear-gradient(to right, var(--cinema-red), var(--cinema-gold));
+    z-index: 1;
+    transition: width 0.5s ease;
+    {% if current_step == 1 %}width: 0%;{% endif %}
+    {% if current_step == 2 %}width: 33.33%;{% endif %}
+    {% if current_step == 3 %}width: 66.66%;{% endif %}
+    {% if current_step >= 4 %}width: calc(100% - 100px);{% endif %}
+}
+
+@media (max-width: 768px) {
+    .step-counter {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+    
+    .step-name {
+        font-size: 12px;
+    }
+    
+    .stepper-wrapper::before,
+    .stepper-wrapper::after {
+        left: 35px;
+        right: 35px;
+    }
+}
+</style>
