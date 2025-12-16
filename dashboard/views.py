@@ -2,44 +2,47 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 from django.conf import settings
-# Create your views here.
+from booking.models import Film, Showtime  # Add this import
+from django.utils import timezone
 
 def dashboard_view(request):
-    # Sample data - replace with actual database queries later
+    # Get films for different categories
+    new_releases = Film.objects.filter(
+        is_new_release=True, 
+        is_active=True
+    )[:6]  # Limit to 6 for carousel
+    
+    classic_films = Film.objects.filter(
+        is_classic=True, 
+        is_active=True
+    )[:6]  # Limit to 6 for carousel
+    
+    # Get today's and upcoming showtimes
+    today = timezone.now().date()
+    upcoming_showtimes = Showtime.objects.filter(
+        date__gte=today,
+        is_available=True,
+        film__is_active=True
+    ).select_related('film', 'screen').order_by('date', 'time')
+    
+    # Group showtimes by film for the "What's On" section
+    films_with_showtimes = {}
+    for showtime in upcoming_showtimes:
+        if showtime.film not in films_with_showtimes:
+            films_with_showtimes[showtime.film] = []
+        films_with_showtimes[showtime.film].append({
+            'id': showtime.id,
+            'time': showtime.time.strftime('%H:%M'),
+            'date': showtime.date,
+            'price': showtime.price,
+            'screen': showtime.screen,
+            'available_seats': showtime.available_seats
+        })
+    
     context = {
-        'new_releases': [
-            {'title': 'Latest Movie 1', 'poster': 'images/movie1.jpg'},
-            {'title': 'Latest Movie 2', 'poster': 'images/movie2.jpg'},
-            {'title': 'Latest Movie 3', 'poster': 'images/movie3.jpg'},
-        ],
-        'classic_films': [
-            {'title': 'Classic Film 1', 'poster': 'images/classic1.jpg'},
-            {'title': 'Classic Film 2', 'poster': 'images/classic2.jpg'},
-            {'title': 'Classic Film 3', 'poster': 'images/classic3.jpg'},
-        ],
-        'whats_on': [
-            {
-                'title': 'Movie Title 1',
-                'poster': 'images/movie1.jpg',
-                'showtimes': ['14:00', '17:30', '20:00', '22:30'],
-                'rating': 'PG-13',
-                'genre': 'Action, Adventure'
-            },
-            {
-                'title': 'Movie Title 2',
-                'poster': 'images/movie2.jpg',
-                'showtimes': ['15:00', '18:00', '21:00'],
-                'rating': '15',
-                'genre': 'Drama, Thriller'
-            },
-            {
-                'title': 'Movie Title 3',
-                'poster': 'images/movie3.jpg',
-                'showtimes': ['16:00', '19:00', '21:45'],
-                'rating': 'PG',
-                'genre': 'Comedy, Family'
-            },
-        ]
+        'new_releases': new_releases,
+        'classic_films': classic_films,
+        'films_with_showtimes': films_with_showtimes,
     }
     return render(request, 'dashboard/dashboard.html', context)
 
