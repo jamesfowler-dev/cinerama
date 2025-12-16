@@ -1,4 +1,3 @@
-<!-- JavaScript -->
 
 // function showFilms(type) {
 //     const newBtn = document.getElementById('newReleasesBtn');

@@ -21,6 +21,7 @@ from dashboard.views import test_tmdb
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path('', include('booking.urls')),
+    path('', include('dashboard.urls')),  # This will make dashboard the homepage
+    path('booking/', include('booking.urls')),  # Move booking to /booking/
     path("test-tmdb/", test_tmdb, name="test_tmdb"),
 ]

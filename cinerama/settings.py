@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['cinerama.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -72,7 +72,7 @@ ROOT_URLCONF = 'cinerama.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
