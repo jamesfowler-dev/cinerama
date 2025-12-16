@@ -1,75 +1,135 @@
 {% extends "base.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
 
-{% block title %}Booking{% endblock %}
+{% block title %}Book Your Tickets - Cinerama{% endblock %}
 
 {% block content %}
-<div class="page-wrapper">
-    <div class="bookings-page">
-        <div class="ticket-header">
-            <section class="movie-summary">
-                <div class="movie-summary-wrapper">
-                    <div class="movie-title">
-                        <h2>Movie Title</h2>
-                    </div>
-                    <div class="movie-showtime">
-                        <p>Showtime: 7:00 PM</p>
-                    </div>
-                </div>
-                <div class="accessibility">
-                    <p>Accessibility: Wheelchair Accessible</p>
-                </div>
-            </section>
-            <div class="go-back-wrapper">
-                <a href="" class="go-back-link">
-                    <i class=""></i> Back to Home
-                </a>
+<!-- Hero Section -->
+<section class="hero-section bg-dark text-white py-4 mb-4">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Book Your Tickets</h1>
+                <p class="lead mb-3">Select a showtime below to continue</p>
             </div>
-        </div>
-        <div class="progress-stepper">
-            <div class="step active">
-                <img src="">
-                <span>Step 1: Select Seats</span>
-            </div>
-            <div class="step">
-                <img src="">
-                <span>Step 2: Sign In</span>
-            </div>
-            <div class="step">
-                <img src="">
-                <span>Step 3: Tickets</span>
-            </div>
-            <div class="step">
-                <img src="">
-                <span>Step 4: Summary</span>
-            </div>
-            <div class="step">
-                <img src="">
-                <span>Step 5: Payment</span>
-            </div>
-        </div>
-
-        <!-- Choose your seat -->
-        <div class="seat-picker-title">
-            <h3>Choose Your Seat</h3>
-        </div>
-        <div class="seat-picker-container">
-            <div class="seat-picker">
-                <div class="seat-picker-map"></div>
-            </div>
-        </div>
-
-        <!-- Selected Seats Info -->
-        <div class="selected-seats-info">
-            <h4>Selected Seats</h4>
-            <ul>
-                <li>Seat 1: A1</li>
-                <li>Seat 2: A2</li>
-                <li>Seat 3: A3</li>
-            </ul>
         </div>
     </div>
-</div>
+</section>
 
+<!-- Progress Stepper -->
+{% include 'booking/progress_stepper.html' %}
+
+<!-- Available Films Section -->
+<section class="available-films py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-4 fw-bold" style="color: var(--cinema-red);">Select Your Film & Showtime</h2>
+                
+                {% if films_with_showtimes %}
+                    <div class="films-list">
+                        {% for film, showtimes in films_with_showtimes.items %}
+                        <div class="film-item mb-4">
+                            <div class="card shadow-lg">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <!-- Film Poster -->
+                                        <div class="col-md-3 col-lg-2 text-center mb-3 mb-md-0">
+                                            <img src="{{ film.get_poster_url }}" 
+                                                 class="img-fluid rounded shadow" 
+                                                 alt="{{ film.title }}" 
+                                                 style="max-height: 200px; width: auto;">
+                                        </div>
+                                        
+                                        <!-- Film Details -->
+                                        <div class="col-md-9 col-lg-10">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <h4 class="fw-bold mb-3" style="color: var(--cinema-red);">{{ film.title }}</h4>
+                                                    <p class="mb-2">
+                                                        <span class="badge bg-secondary me-2">{{ film.get_rating_display }}</span>
+                                                        <span class="badge bg-primary">{{ film.get_genre_display }}</span>
+                                                    </p>
+                                                    <div class="film-info mb-3">
+                                                        <p class="mb-1"><strong>Director:</strong> {{ film.director }}</p>
+                                                        <p class="mb-1"><strong>Duration:</strong> {{ film.duration }} minutes</p>
+                                                        <p class="mb-1"><strong>Year:</strong> {{ film.year|date:"Y" }}</p>
+                                                    </div>
+                                                    {% if film.synopsis %}
+                                                    <p class="text-muted small">{{ film.synopsis|truncatewords:20 }}</p>
+                                                    {% endif %}
+                                                </div>
+                                                
+                                                <!-- Showtimes -->
+                                                <div class="col-lg-6">
+                                                    <h5 class="fw-bold mb-3" style="color: var(--cinema-gold);">Available Showtimes</h5>
+                                                    <div class="showtimes-grid">
+                                                        {% for showtime in showtimes %}
+                                                        <div class="showtime-card mb-2 p-3 border rounded">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <div class="fw-bold">{{ showtime.date|date:"l, M d" }}</div>
+                                                                    <div class="text-muted small">{{ showtime.time }} - {{ showtime.screen }}</div>
+                                                                    <div class="small text-success">{{ showtime.available_seats }} seats available</div>
+                                                                </div>
+                                                                <div class="text-end">
+                                                                    <div class="fw-bold mb-2 text-primary">£{{ showtime.price }}</div>
+                                                                    <a href="{% url 'select_seats' showtime.id %}" 
+                                                                       class="btn btn-sm" 
+                                                                       style="background-color: var(--cinema-red); color: white;">
+                                                                        Select Seats
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center">
+                        <div class="alert alert-info">
+                            <h4>No showtimes available</h4>
+                            <p>Please check back later for upcoming shows.</p>
+                            <a href="{% url 'dashboard' %}" class="btn btn-primary">Return to Dashboard</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero-section {
+    background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%);
+}
+
+.showtime-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent !important;
+}
+
+.showtime-card:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    border-color: var(--cinema-gold) !important;
+}
+
+.film-item .card {
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+.film-item .card:hover {
+    transform: translateY(-3px);
+}
+</style>
 {% endblock %}
