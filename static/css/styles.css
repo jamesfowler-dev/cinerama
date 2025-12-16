@@ -20,3 +20,62 @@
     --white: #ffffff;
     --black: #000000;
 }
+
+<!-- Custom Styles -->
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.movie-poster {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.movie-poster:hover {
+    transform: scale(1.05);
+}
+
+.poster-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding: 20px 10px 10px;
+}
+
+.film-carousel {
+    padding: 20px;
+}
+
+.movie-item {
+    transition: transform 0.2s ease;
+}
+
+.movie-item:hover {
+    transform: translateY(-2px);
+}
+
+.showtime-buttons .btn {
+    min-width: 80px;
+}
+
+.date-filter .btn.active {
+    background-color: var(--bs-primary);
+    color: white;
+    border-color: var(--bs-primary);
+}
+
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .btn-group .btn {
+        font-size: 0.9rem;
+    }
+}
