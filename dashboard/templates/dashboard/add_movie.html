@@ -1,21 +1,24 @@
-<div class="container mt-4">
+{% extends "base.html" %}
 
+{% block content %}
+<div class="container mt-4 text-white">
     <h2>Add Movie</h2>
 
     <form method="get" class="mb-4">
         <input type="text" name="q" class="form-control" placeholder="Search TMDb for a movie">
+        <button type="submit" class="btn btn-primary mt-2">Search</button>
     </form>
 
     {% if results %}
         <h4>Results</h4>
         <div class="list-group">
             {% for movie in results %}
-                <a href="{% url 'select_movie' movie.id %}" class="list-group-item list-group-item-action">
+                <a href="{% url 'select_tmdb_movie' movie.id %}" class="list-group-item list-group-item-action">
                     <strong>{{ movie.title }}</strong>
                     <span class="text-muted">({{ movie.release_date|default:"No date" }})</span>
                 </a>
             {% endfor %}
         </div>
     {% endif %}
-
 </div>
+{% endblock %}

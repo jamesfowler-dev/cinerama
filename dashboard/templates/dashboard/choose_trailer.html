@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-white">Select a Trailer for {{ film.title }}</h2>
+
+{% if trailers %}
+    <div class="row text-white">
+        {% for t in trailers %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+
+                    <img src="{{ t.snippet.thumbnails.high.url }}" 
+                         class="card-img-top" 
+                         alt="{{ t.snippet.title }}">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ t.snippet.title }}</h5>
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="video_id" value="{{ t.id.videoId }}">
+                            <button type="submit" class="btn btn-primary w-100">
+                                Select This Trailer
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No trailers found.</p>
+{% endif %}
+
+{% endblock %}
