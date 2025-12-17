@@ -54,6 +54,34 @@
                 </li>
                 {% endif %}
             </ul>
+			<!-- Search bar -->
+			<form method="get"
+				action="{% url 'dashboard' %}"
+				class="d-flex ms-auto me-3"
+				role="search"
+				onsubmit="return submitSearchWithAnchor(this);">
+
+				<input
+					type="search"
+					name="q"
+					class="form-control form-control-sm me-2"
+					placeholder="Search films..."
+					value="{{ request.GET.q|default:'' }}"
+					style="width: 220px;"
+				>
+
+				{% if request.GET.date %}
+					<input type="hidden" name="date" value="{{ request.GET.date }}">
+				{% endif %}
+				{% if request.GET.genre %}
+					<input type="hidden" name="genre" value="{{ request.GET.genre }}">
+				{% endif %}
+
+				<button class="btn btn-sm btn-outline-light" type="submit">
+					<i class="bi bi-search"></i>
+				</button>
+			</form>
+	
 
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
@@ -385,6 +413,7 @@ var particles
 
 {% block extra_js %}
 <script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/search.js' %}"></script>
 {% endblock %}
 </body>
 </html>

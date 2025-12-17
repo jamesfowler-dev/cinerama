@@ -33,6 +33,9 @@ def dashboard_view(request):
     date_filter = request.GET.get("date", "today")
     genre_filter = request.GET.get("genre")
 
+    # Search query
+    query = request.GET.get("q")
+
     start_date = today
     end_date = None
 
@@ -79,6 +82,12 @@ def dashboard_view(request):
         .order_by("date", "time")
     )
 
+    # If query for search
+    if query:
+        upcoming_showtimes = upcoming_showtimes.filter(
+            film__title__icontains=query
+        )
+
     films_with_showtimes = {}
     for showtime in upcoming_showtimes:
         films_with_showtimes.setdefault(showtime.film, []).append(
@@ -98,6 +107,7 @@ def dashboard_view(request):
         "films_with_showtimes": films_with_showtimes,
         "selected_date": date_filter,
         "selected_genre": genre_filter or "",
+        "query": query, 
     }
     return render(request, "dashboard/dashboard.html", context)
 
