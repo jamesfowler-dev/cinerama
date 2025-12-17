@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% load dict_extras %}
+
+<style>
+    .hero-banner {
+        height: 60vh;
+        max-height: 80%;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .hero-overlay {
+        position: absolute;
+        bottom: 20px;
+        left: 40px;
+        color: white;
+        text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    }
+    .seat-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        max-width: 300px;
+    }
+    .seat {
+        display: inline-block;
+        padding: 6px 8px;
+        border-radius: 4px;
+        background: #e9ecef;
+        font-size: 0.85rem;
+    }
+    .seat.premium {
+        background: gold;
+    }
+    .seat.wheelchair {
+        background: #6c757d;
+        color: white;
+    }
+</style>
+
+<!-- HERO BANNER -->
+<div class="hero-banner mb-4" style="background-image: url('{{ film.backdrop_url }}');">
+    <div class="hero-overlay">
+        <h1 class="display-4 fw-bold">{{ film.title }}</h1>
+        <p class="lead">{{ film.genre }}</p>
+    </div>
+</div>
+
+<div class="container text-white">
+
+    <div class="row mb-5">
+        <!-- Poster -->
+        <div class="col-md-4 text-center">
+            <img src="{{ film.poster_url }}" class="img-fluid rounded shadow" alt="{{ film.title }}">
+        </div>
+
+        <!-- Film Info -->
+        <div class="col-md-8">
+            <h2>{{ film.title }}</h2>
+            <p class="text-muted">
+                {{ film.release_date }} • {{ film.genre }}
+            </p>
+
+            <p class="lead">{{ film.synopsis }}</p>
+
+            <!-- Trailer -->
+        {% if api_embed_html %}
+            <div class="ratio ratio-16x9 my-4">
+                {{ api_embed_html|safe }}
+            </div>
+            {% if api_embeddable is not none and not api_embeddable %}
+                <p class="small">Embedding appears to be blocked for this
+                video — providing a link instead.</p>
+                <p>
+                    <a class="btn btn-primary" href="https://www.youtube.com/watch?v={{ api_video_id }}" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+                </p>
+            {% endif %}
+        {% elif embed_url %}
+            <div class="ratio ratio-16x9 my-4">
+                <iframe src="{{ embed_url|safe }}" allowfullscreen frameborder="0"></iframe>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+
+    <!-- CAST -->
+    {% if cast_list %}
+        <h3 class="mt-5">Cast</h3>
+        <div class="row">
+            {% for c in cast_list %}
+                <div class="col-4 col-md-2 text-center mb-4">
+                    <img src="https://image.tmdb.org/t/p/w185{{ c.profile_path }}"
+                         class="img-fluid rounded-circle shadow-sm"
+                         alt="{{ c.name }}">
+                    <p class="mt-2 mb-0 fw-bold">{{ c.name }}</p>
+                    <p class="small">{{ c.character }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- SIMILAR MOVIES -->
+    {% if similar_movies %}
+        <h3 class="mt-5">Similar Movies</h3>
+
+        <div id="similarCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                {% for m in similar_movies %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="d-flex justify-content-center">
+                            <img src="https://image.tmdb.org/t/p/w300{{ m.poster_path }}"
+                                 class="rounded shadow"
+                                 alt="{{ m.title }}">
+                        </div>
+                        <div class="text-center mt-2">
+                            <strong>{{ m.title }}</strong>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#similarCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#similarCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    {% endif %}
+
+    <!-- SHOWTIMES -->
+    <h3 class="mt-5">Upcoming Showtimes</h3>
+
+    {% if grouped_showtimes %}
+        {% for day, shows in grouped_showtimes %}
+            <div class="mt-4">
+                <h5 class="text-white">{{ day|date:"l, j M Y" }}</h5>
+
+                <div class="row gy-3">
+                    {% for s in shows %}
+                        <div class="col-4 col-md-2">
+                            <div class="card h-100 text-white bg-dark" style="background-color: rgba(0,0,0,0.65);">
+                                <div class="card-body d-flex flex-column">
+                                    <h6 class="card-title">{{ s.time|time:"H:i" }}</h6>
+                                    <p class="card-text small mb-1">Screen: {{ s.screen.name }}</p>
+                                    <p class="card-text small mb-2">Price: £{{ s.price }}</p>
+
+                                    <!-- small seat preview -->
+                                    <div class="mb-2">
+                                        <div class="seat-grid">
+                                            {% for seat in screen_seats|get_item:s.screen.id|slice:":6" %}
+                                                <span class="seat {{ seat.seat_type }} small">
+                                                    {{ seat.row }}{{ seat.number }}
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-auto">
+                                        <a href="#" class="btn btn-primary w-100">Book Seats</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="">No showtimes scheduled.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -33,7 +33,7 @@
 <canvas id="projector"></canvas>
 
 <!-- Navigation -->
-<nav id="navbar-bg" class="navbar navbar-expand-lg p-3">
+<nav id="navbar-bg" class="navbar navbar-expand-lg p-3 sticky-top">
     <div class="container" id="centered">
         <a class="navbar-brand" id="navbarBrand" href="{% url 'dashboard' %}">
             Cinerama
@@ -117,13 +117,22 @@
 }
 
 #projector {
-  position: absolute; 
-  top: 0px;
-  left: 0px;
-  width:100%;
-  height:100%;
-  pointer-events: none;
-} 
+	/* Keep the projector canvas fixed to the viewport so it doesn't move when the
+		 user scrolls. */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* Ensure main content renders above the projector canvas */
+.main-content {
+	position: relative;
+	z-index: 1;
+}
 
 .center-div {
 	width:580px;
@@ -386,5 +395,6 @@ var particles
 {% block extra_js %}
 <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}
+
 </body>
 </html>

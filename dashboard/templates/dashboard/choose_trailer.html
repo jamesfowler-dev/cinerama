@@ -19,9 +19,10 @@
                         <form method="post">
                             {% csrf_token %}
                             <input type="hidden" name="video_id" value="{{ t.id.videoId }}">
-                            <button type="submit" class="btn btn-primary w-100">
+                            <a href="{% url 'select_trailer' film.tmdb_id t.id.videoId %}"
+                            class="btn btn-primary w-100">
                                 Select This Trailer
-                            </button>
+                            </a>
                         </form>
                     </div>
 
