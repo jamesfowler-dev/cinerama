@@ -189,7 +189,7 @@
                         <div class="row g-3 justify-content-center px-4">
                             {% for film in new_releases %}
                             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="movie-poster">
+                                <div class="movie-poster position-relative">
                                     <img src="{{ film.get_poster_url }}" 
                                          class="img-fluid rounded shadow" 
                                          alt="{{ film.title }}"
@@ -198,6 +198,7 @@
                                         <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
                                         <p class="text-center small">{{ film.get_rating_display }}</p>
                                     </div>
+                                    <a href="{% url 'movie_details' film.tmdb_id %}" class="stretched-link" title="{{ film.title }}"></a>
                                 </div>
                             </div>
                             {% endfor %}
@@ -221,7 +222,7 @@
                         <div class="row g-3 justify-content-center px-4">
                             {% for film in classic_films %}
                             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="movie-poster">
+                                <div class="movie-poster position-relative">
                                     <img src="{{ film.get_poster_url }}" 
                                          class="img-fluid rounded shadow" 
                                          alt="{{ film.title }}"
@@ -230,6 +231,7 @@
                                         <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
                                         <p class="text-center small">{{ film.year|date:"Y" }}</p>
                                     </div>
+                                    <a href="{% url 'movie_details' film.tmdb_id %}" class="stretched-link" title="{{ film.title }}"></a>
                                 </div>
                             </div>
                             {% endfor %}

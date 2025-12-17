@@ -129,7 +129,9 @@ main {
 /* Ensure the main content sits below the fixed navbar so it isn't covered. Adjust height if your
    navbar height changes. */
 .main-content {
-    padding-top: 76px;
+    /* padding will be set dynamically via JS to match the navbar height */
+    padding-top: 0;
+    /* Smooth out small layout shifts when the padding is updated */
 }
 
 .navbar-brand {
