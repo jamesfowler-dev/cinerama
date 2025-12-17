@@ -107,6 +107,23 @@
     box-shadow: var(--shadow);
 }
 
+/* Force a fixed navbar (fallback for sticky issues caused by transformed/overflowing ancestors).
+   This makes the navbar behave like sticky but is robust across browsers. */
+#navbar-bg.sticky-top,
+#navbar-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000; /* above projector and other content */
+}
+
+/* Ensure the main content sits below the fixed navbar so it isn't covered. Adjust height if your
+   navbar height changes. */
+.main-content {
+    padding-top: 76px;
+}
+
 .navbar-brand {
     color: var(--misty-blue) !important;
     font-family: var(--primary-font);
