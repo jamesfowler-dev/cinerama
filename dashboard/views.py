@@ -4,7 +4,7 @@
 """Dashboard views."""
 
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 import requests
@@ -16,7 +16,7 @@ from django.http import HttpResponseForbidden
 
 from booking.models import Film, Showtime, RATING_CHOICES
 from dashboard.services.ai_rating import classify_rating_with_ai
-from datetime import timedelta
+
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +30,51 @@ def dashboard_view(request):
     classic_films = Film.objects.filter(is_classic=True, is_active=True)[:6]
 
     today = timezone.now().date()
+    date_filter = request.GET.get("date", "today")
+    genre_filter = request.GET.get("genre")
+
+    start_date = today
+    end_date = None
+
+    if date_filter == "today":
+        start_date = today
+        end_date = today
+
+    elif date_filter == "tomorrow":
+        start_date = today + timedelta(days=1)
+        end_date = start_date
+
+    elif date_filter == "this-week":
+        start_date = today
+        end_date = today + timedelta(days=6)
+
+    elif date_filter == "next-week":
+        start_date = today + timedelta(days=7)
+        end_date = today + timedelta(days=13)
+
+    elif date_filter:
+        # Custom date (YYYY-MM-DD)
+        try:
+            start_date = end_date = timezone.datetime.strptime(
+                date_filter, "%Y-%m-%d"
+            ).date()
+        except ValueError:
+            pass
+
+    showtime_filter = {
+        "date__gte": start_date,
+        "is_available": True,
+        "film__is_active": True,
+    }
+
+    if end_date:
+        showtime_filter["date__lte"] = end_date
+
+    if genre_filter:
+        showtime_filter["film__genre"] = genre_filter
+
     upcoming_showtimes = (
-        Showtime.objects.filter(
-            date__gte=today, is_available=True, film__is_active=True
-        )
+        Showtime.objects.filter(**showtime_filter)
         .select_related("film", "screen")
         .order_by("date", "time")
     )
@@ -55,6 +96,8 @@ def dashboard_view(request):
         "new_releases": new_releases,
         "classic_films": classic_films,
         "films_with_showtimes": films_with_showtimes,
+        "selected_date": date_filter,
+        "selected_genre": genre_filter or "",
     }
     return render(request, "dashboard/dashboard.html", context)
 

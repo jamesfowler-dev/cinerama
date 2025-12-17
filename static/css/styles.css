@@ -227,7 +227,7 @@ main {
 
 /* Section Backgrounds */
 .whats-on-section {
-    /* background: 
+    background: 
         radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%); */
     /* background: linear-gradient(to bottom, var(--cinema-cream), #F0F0F0) !important; */
@@ -298,4 +298,38 @@ h1, h2, h3, h4, h5, h6 {
         transparent 20%, 
         transparent 80%, 
         rgba(139, 0, 0, 0.05) 100%);
+}
+
+/* Loading and Transition Effects */
+#moviesList {
+    transition: opacity 0.3s ease;
+}
+
+#loadingSpinner {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-outline-primary {
+    transition: all 0.2s ease;
+}
+
+.btn-outline-primary.active {
+    background-color: var(--cinema-primary) !important;
+    border-color: var(--cinema-primary) !important;
+    color: white !important;
+    transform: scale(1.05);
+}
+
+.movie-item {
+    animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
