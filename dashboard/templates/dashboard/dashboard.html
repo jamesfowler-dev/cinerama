@@ -255,21 +255,21 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="col-12 p-3 mb-4" id="whats-on">
-                    <h2 class="text-center mb-5 fw-bold">What's On</h2>
+                <div class="col-12 p-3 mb-5" id="whats-on">
+                    <h2 class="text-center mb-4 fw-bold display-5 pt-3">What's On</h2>
                 
                     <!-- Date Selection Bar -->
                     <div class="date-filter mb-4" data-selected-date="{{ selected_date|default:'today'|force_escape }}" data-selected-genre="{{ selected_genre|default:''|force_escape }}">
                         <div class="row justify-content-center">
-                            <div class="col-12 col-lg-10 col-xl-8">
+                            <div class="col-12 col-lg-10 col-xl-8 py-3">
                                 <!-- Date Filter Buttons -->
-                                <div class="row mb-3">
+                                <div class="row mb-4">
                                     <div class="col-12">
                                         <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
-                                            <button class="btn btn-outline-primary active" data-date="today">Today</button>
-                                            <button class="btn btn-outline-primary" data-date="tomorrow">Tomorrow</button>
-                                            <button class="btn btn-outline-primary" data-date="this-week">This Week</button>
-                                            <button class="btn btn-outline-primary" data-date="next-week">Next Week</button>
+                                            <button class="btn btn-whats-on active" data-date="today">Today</button>
+                                            <button class="btn btn-whats-on" data-date="tomorrow">Tomorrow</button>
+                                            <button class="btn btn-whats-on" data-date="this-week">This Week</button>
+                                            <button class="btn btn-whats-on" data-date="next-week">Next Week</button>
                                         </div>
                                     </div>
                                 </div>
@@ -299,7 +299,7 @@
                     <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <p class="mt-3 text-muted">Loading showtimes...</p>
+                    <p class="mt-3" style="color: var(--cinema-primary);">Loading showtimes...</p>
                 </div>
             </div>
         </div>
@@ -312,8 +312,8 @@
                 <div class="movies-list" id="moviesList">
                     {% if films_with_showtimes %}
                     {% for film, showtimes in films_with_showtimes.items %}
-                    <div class="movie-item mb-4" data-genre="{{ film.genre }}">
-                        <div class="card h-100 shadow-sm">
+                    <div class="movie-item mb-5" data-genre="{{ film.genre }}">
+                        <div class="card h-100">
                             <div class="card-body">
                                 <div class="row align-items-start">
                                     <!-- Movie Poster -->
@@ -584,6 +584,49 @@
 .reel-center {
     display: none;
 }
+
+/* Movie Card Box Shadow Effects */
+.movie-item .card {
+    position: relative;
+    background: rgba(33, 37, 41, 0.9) !important;
+    border: 2px solid var(--cinema-primary);
+    transition: all 0.4s ease;
+    
+    /* Neon box shadow with blur */
+    box-shadow: 
+        0 4px 5px rgba(0, 0, 0, 0.3),                    /* Base shadow */
+        0 0 10px rgba(42, 232, 216, 0.4),                 /* Cyan glow */
+        0 0 15px var(--cinema-primary);                  /* Green outer glow */
+}
+
+.movie-item .card:hover {
+    transform: translateY(-8px);
+    border-color: var(--cinema-gold);
+    
+    /* Enhanced box shadow on hover */
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),                    /* Stronger base shadow */
+        0 0 30px rgba(42, 232, 216, 0.6),                 /* Brighter cyan glow */
+        0 0 60px rgba(57, 255, 20, 0.4),                  /* Stronger green glow */
+        0 0 80px rgba(0, 255, 65, 0.2);                   /* Electric green outer */
+}
+
+/* Dashboard specific movie cards */
+/* #moviesList .movie-item .card { */
+    /* Slightly stronger effect for dashboard */
+    /* box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 25px rgba(42, 232, 216, 0.5),
+        0 0 45px rgba(57, 255, 20, 0.3);
+} */
+
+/* #moviesList .movie-item .card:hover {
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.5),
+        0 0 35px rgba(42, 232, 216, 0.7),
+        0 0 70px rgba(57, 255, 20, 0.5),
+        0 0 100px rgba(0, 255, 65, 0.3);
+} */
 </style>
 
 
