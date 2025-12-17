@@ -75,10 +75,10 @@ class Film(models.Model):
     def __str__(self):
         return self.title
     
-def get_poster_url(self):
-    if self.poster_url:
-        return self.poster_url
-    return "https://via.placeholder.com/300x450/333/fff?text=No+Image"
+    def get_poster_url(self):
+        if self.poster_url:
+            return self.poster_url
+        return "https://via.placeholder.com/300x450/333/fff?text=No+Image"
 
 
 class Showtime(models.Model):
