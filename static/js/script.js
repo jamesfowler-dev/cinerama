@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const customDateInput = document.getElementById('customDate');
     const genreFilter = document.getElementById('genreFilter');
     const dateFilter = document.querySelector('.date-filter');
+    const resultsAnchor = '#moviesList';
     
     // Get selected values from URL params
     const urlParams = new URLSearchParams(window.location.search);
@@ -39,6 +40,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const moviesList = document.getElementById('moviesList');
     if (spinner) spinner.style.display = 'none';
     if (moviesList) moviesList.style.opacity = '1';
+
+    // If arriving with a hash or filters, ensure results are in view
+    const moviesListEl = document.getElementById('moviesList');
+    if (window.location.hash === resultsAnchor && moviesListEl) {
+        moviesListEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if ((urlParams.has('date') || urlParams.has('genre')) && moviesListEl) {
+        moviesListEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
     // Highlight the currently selected date button
     dateButtons.forEach(button => {
@@ -59,7 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 params.delete('genre');
             }
-            window.location.search = params.toString();
+            // Navigate with anchor so the results are in view after reload
+            window.location.href = window.location.pathname + '?' + params.toString() + resultsAnchor;
         });
     });
 
@@ -76,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     params.delete('genre');
                 }
-                window.location.search = params.toString();
+                window.location.href = window.location.pathname + '?' + params.toString() + resultsAnchor;
             }
         });
     }
@@ -95,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 params.delete('genre');
             }
-            window.location.search = params.toString();
+            window.location.href = window.location.pathname + '?' + params.toString() + resultsAnchor;
         });
     }
 
