@@ -57,13 +57,17 @@ class Film(models.Model):
     rating = models.CharField(max_length=5, choices=RATING_CHOICES, default='PG')
     genre = models.CharField(max_length=20, choices=GENRE_CHOICES, default='drama')
     synopsis = models.TextField(blank=True, null=True)
-    poster_image = models.ImageField(upload_to='posters/', blank=True, null=True)
+    poster_url = models.CharField(max_length=300, blank=True, null=True)
     trailer_url = models.URLField(blank=True, null=True)
     is_new_release = models.BooleanField(default=True)
     is_classic = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # NEW FIELDS
+    backdrop_url = models.CharField(max_length=300, blank=True, null=True)
+    tmdb_id = models.PositiveIntegerField(unique=True, null=True, blank=True)
     
     class Meta:
         ordering = ['-created_at']
@@ -71,11 +75,11 @@ class Film(models.Model):
     def __str__(self):
         return self.title
     
-    def get_poster_url(self):
-        """Return poster URL or placeholder"""
-        if self.poster_image:
-            return self.poster_image.url
-        return f'https://via.placeholder.com/300x450/333/fff?text={self.title}'
+def get_poster_url(self):
+    if self.poster_url:
+        return self.poster_url
+    return "https://via.placeholder.com/300x450/333/fff?text=No+Image"
+
 
 class Showtime(models.Model):
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='showtimes')

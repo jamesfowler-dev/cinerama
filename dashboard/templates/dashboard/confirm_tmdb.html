@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 text-white">
+
+    <h2>Confirm Movie Details</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            {% if film.poster_url %}
+                <img src="{{ film.poster_url }}" class="img-fluid rounded">
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <h3>{{ film.title }}</h3>
+            <p><strong>Director:</strong> {{ film.director }}</p>
+            <p><strong>Cast:</strong> {{ film.cast }}</p>
+            <p><strong>Release Date:</strong> {{ film.year }}</p>
+            <p><strong>Duration:</strong> {{ film.duration }} minutes</p>
+            <p><strong>Synopsis:</strong> {{ film.synopsis }}</p>
+
+            <a href="{% url 'choose_trailer' film.tmdb_id %}" class="btn btn-primary mt-3">
+                Continue to Trailer Selection
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

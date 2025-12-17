@@ -1,6 +1,24 @@
+{% extends "base.html" %}
+{% block title %}TMDb API Test{% endblock %}
+{% block content %}
 {% load static %}
+
 <div class="container mt-4">
     <h2>TMDb API Test</h2>
+<h4>Backdrop</h4>
+<div style="
+    width:100%;
+    height:300px;
+    background-image: url('{{ backdrop }}');
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+"><img src="{{ backdrop }}" alt="Backdrop" style="width:100%; border-radius:8px; margin-bottom:20px;">
+</div>
+
+
 
     <div class="card" style="width: 22rem;">
         <img src="{{ poster }}" class="card-img-top" alt="Poster">
@@ -16,4 +34,14 @@
             </ul>
         </div>
     </div>
+        <h4>All Movie Fields</h4>
+    <pre style="background:#f8f9fa; padding:20px; border-radius:6px; white-space: pre-wrap;">
+    {{ movie|json_script:"movie-data" }}
+    </pre>
+
+    <script>
+        const raw = JSON.parse(document.getElementById("movie-data").textContent);
+        document.querySelector("pre").textContent = JSON.stringify(raw, null, 4);
+</script>
 </div>
+{% endblock %}
