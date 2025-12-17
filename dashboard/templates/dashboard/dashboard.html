@@ -1,0 +1,611 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Welcome to Cinerama{% endblock %}
+
+{% block content %}
+<!-- Film Strip Carousel -->
+
+<div class="film-strip-container">
+            <div class="film-strip">
+                <!-- Film frames with movies -->
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>The Matrix</h3>
+                        <p>Action • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Inception</h3>
+                        <p>Thriller • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Casablanca</h3>
+                        <p>Romance • Drama</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Pulp Fiction</h3>
+                        <p>Crime • Drama</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Titanic</h3>
+                        <p>Romance • Drama</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Avatar</h3>
+                        <p>Action • Adventure</p>
+                    </div>
+                </div>
+
+                <!-- Duplicate frames for seamless loop -->
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>The Matrix</h3>
+                        <p>Action • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Inception</h3>
+                        <p>Thriller • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Casablanca</h3>
+                        <p>Romance • Drama</p>
+                    </div>
+                </div>
+                 <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Pulp Fiction</h3>
+                        <p>Crime • Drama</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Titanic</h3>
+                        <p>Romance • Drama</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Avatar</h3>
+                        <p>Action • Adventure</p>
+                    </div>
+                </div>
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>The Matrix</h3>
+                        <p>Action • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Inception</h3>
+                        <p>Thriller • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Casablanca</h3>
+                        <p>Romance • Drama</p>
+                    </div>
+                </div>
+                 <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Pulp Fiction</h3>
+                        <p>Crime • Drama</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Titanic</h3>
+                        <p>Romance • Drama</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Avatar</h3>
+                        <p>Action • Adventure</p>
+                    </div>
+                </div>
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>The Matrix</h3>
+                        <p>Action • Sci-Fi</p>
+                    </div>
+                </div>
+                
+                <div class="film-frame">
+                    <div class="movie-poster">
+                        <h3>Inception</h3>
+                        <p>Thriller • Sci-Fi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<!-- Hero Section with Welcome Message -->
+<section class="hero-section text-white py-3 mb-3">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">Welcome to Cinerama</h1>
+                <p class="lead mb-5">Experience cinema like never before. From the latest blockbusters to timeless classics.</p>
+                
+                <!-- Film Selection Buttons -->
+                <div class="d-flex justify-content-center gap-3 mb-3" role="group" aria-label="Film selection">
+                    <button type="button" class="btn btn-outline-light btn-lg active" id="newReleasesBtn" onclick="showFilms('new')">
+                        <i class="bi bi-star-fill me-2"></i>New Releases
+                    </button>
+                    <button type="button" class="btn btn-outline-light btn-lg" id="classicFilmsBtn" onclick="showFilms('classic')">
+                        <i class="bi bi-film me-2"></i>Classic Films
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+<!-- <section class="carousel-section mb-5">
+    <div class="container-fluid px-0"> -->
+        <!-- New Releases Carousel -->
+        <!-- <div id="newReleasesCarousel" class="film-carousel">
+            <div id="newReleasesSlider" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row g-3 justify-content-center px-4">
+                            {% for film in new_releases %}
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="movie-poster">
+                                    <img src="{{ film.get_poster_url }}" 
+                                         class="img-fluid rounded shadow" 
+                                         alt="{{ film.title }}"
+                                         onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'">
+                                    <div class="poster-overlay">
+                                        <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
+                                        <p class="text-center small">{{ film.get_rating_display }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div> -->
+
+        <!-- Classic Films Carousel -->
+        <!-- <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
+            <div id="classicFilmsSlider" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row g-3 justify-content-center px-4">
+                            {% for film in classic_films %}
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                <div class="movie-poster">
+                                    <img src="{{ film.get_poster_url }}" 
+                                         class="img-fluid rounded shadow" 
+                                         alt="{{ film.title }}"
+                                         onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'">
+                                    <div class="poster-overlay">
+                                        <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
+                                        <p class="text-center small">{{ film.year|date:"Y" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<!-- What's On Section -->
+<section class="whats-on-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-5 fw-bold">What's On</h2>
+                
+                <!-- Date Selection Bar -->
+                <div class="date-filter mb-4">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-lg-10 col-xl-8">
+                            <!-- Date Filter Buttons -->
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                                        <button class="btn btn-outline-primary active" data-date="today">Today</button>
+                                        <button class="btn btn-outline-primary" data-date="tomorrow">Tomorrow</button>
+                                        <button class="btn btn-outline-primary" data-date="this-week">This Week</button>
+                                        <button class="btn btn-outline-primary" data-date="next-week">Next Week</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Custom Date and Genre Filter -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <input type="date" class="form-control" id="customDate" placeholder="Select custom date">
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-select" id="genreFilter">
+                                        <option value="">All Genres</option>
+                                        <option value="action">Action</option>
+                                        <option value="drama">Drama</option>
+                                        <option value="comedy">Comedy</option>
+                                        <option value="thriller">Thriller</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movies List -->
+                <div class="movies-list">
+                    {% for film, showtimes in films_with_showtimes.items %}
+                    <div class="movie-item mb-4" data-genre="{{ film.genre }}">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <div class="row align-items-start">
+                                    <!-- Movie Poster -->
+                                    <div class="col-12 col-sm-4 col-md-3 col-lg-2 mb-3 mb-sm-0">
+                                        <div class="text-center">
+                                            <img src="{{ film.get_poster_url }}" 
+                                                 class="img-fluid rounded shadow" 
+                                                 alt="{{ film.title }}" 
+                                                 style="max-height: 250px; width: auto; max-width: 100%;">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Movie Details -->
+                                    <div class="col-12 col-sm-8 col-md-9 col-lg-10">
+                                        <div class="row h-100">
+                                            <!-- Film Information -->
+                                            <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                                                <h4 class="card-title fw-bold mb-3" style="color: var(--cinema-red);">{{ film.title }}</h4>
+                                                
+                                                <!-- Badges -->
+                                                <div class="mb-3">
+                                                    <span class="badge bg-secondary me-2">{{ film.get_rating_display }}</span>
+                                                    <span class="badge bg-primary">{{ film.get_genre_display }}</span>
+                                                </div>
+                                                
+                                                <!-- Film Details -->
+                                                <div class="film-details mb-3">
+                                                    <div class="row g-2">
+                                                        <div class="col-sm-6">
+                                                            <p class="small mb-1">
+                                                                <i class="bi bi-person-fill me-1" style="color: var(--cinema-gold);"></i>
+                                                                <strong>Director:</strong> {{ film.director }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <p class="small mb-1">
+                                                                <i class="bi bi-clock-fill me-1" style="color: var(--cinema-gold);"></i>
+                                                                <strong>Duration:</strong> {{ film.duration }} minutes
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <p class="small mb-1">
+                                                                <i class="bi bi-calendar-fill me-1" style="color: var(--cinema-gold);"></i>
+                                                                <strong>Year:</strong> {{ film.year|date:"Y" }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Synopsis -->
+                                                {% if film.synopsis %}
+                                                <div class="synopsis">
+                                                    <p class="text-muted small mb-0">{{ film.synopsis|truncatewords:25 }}</p>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <!-- Showtimes -->
+                                            <div class="col-12 col-lg-5">
+                                                <h6 class="fw-bold mb-3" style="color: var(--cinema-gold);">
+                                                    <i class="bi bi-ticket-perforated me-2"></i>Available Showtimes
+                                                </h6>
+                                                <div class="showtime-buttons">
+                                                    <div class="row g-2">
+                                                        {% for showtime in showtimes %}
+                                                        <div class="col-sm-6 col-lg-12 col-xl-6">
+                                                            <div class="showtime-card p-2 border rounded text-center">
+                                                                <div class="fw-bold small text-primary">{{ showtime.date|date:"M d" }}</div>
+                                                                <div class="text-muted small">{{ showtime.time }}</div>
+                                                                <div class="text-success small mb-2">{{ showtime.available_seats }} seats</div>
+                                                                <button class="btn btn-sm w-100" 
+                                                                        style="background-color: var(--cinema-red); color: white; border: none;"
+                                                                        onclick="bookTicket({{ showtime.id }}, '{{ film.title }}', '{{ showtime.time }}', '{{ showtime.date }}')">
+                                                                    Book £{{ showtime.price }}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Film Strip Carousel */
+.film-strip-container {
+    position: relative;
+    width: 100%;
+    /* max-width: 1200px; */
+    height: 300px;
+    margin: 20px auto 50px auto;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 
+        0 10px 30px var(--shadow),
+        inset 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.film-strip {
+    display: flex;
+    width: calc(200% + 100px); /* Wide enough for seamless loop */
+    height: 100%;
+    background: 
+        /* Film strip base */
+        linear-gradient(0deg, #000 0%, #222 50%, #000 100%),
+        /* Perforations on top and bottom */
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 15px,
+            #000 20px,
+            #000 25px,
+            transparent 30px,
+            transparent 45px
+        );
+    background-size: 
+        100% 100%,
+        50px 100%;
+    position: relative;
+    animation: moveFilmStrip 15s linear infinite;
+}
+
+/* Film perforations */
+.film-strip::before,
+.film-strip::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            #000 0px,
+            #000 10px,
+            #fff 12px,
+            #fff 18px,
+            #000 20px,
+            #000 30px
+        );
+    z-index: 2;
+}
+
+.film-strip::before {
+    top: 0;
+}
+
+.film-strip::after {
+    bottom: 0;
+}
+
+.film-frame {
+    flex: 0 0 200px;
+    height: 100%;
+    margin: 0 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border: 3px solid #000;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 
+        inset 0 0 10px rgba(0, 0, 0, 0.3),
+        0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.film-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(
+            45deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.1) 75%,
+            transparent 100%
+        );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.movie-poster {
+    width: 100%;
+    height: 80%;
+    background: linear-gradient(145deg, #FFD700, #FFA500);
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 
+        0 5px 15px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.movie-poster:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        0 8px 25px var(--shadow),
+        0 0 20px var(--gold);
+}
+
+.movie-poster h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--deep-red);
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.movie-poster p {
+    font-size: 12px;
+    color: #8B4513;
+    font-style: italic;
+}
+
+/* Film strip animation */
+@keyframes moveFilmStrip {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pause animation on hover */
+.film-strip-container:hover .film-strip {
+    animation-play-state: paused;
+}
+
+/* Remove old movie reel styles */
+.movie-reel-container,
+.movie-reel,
+.reel-center,
+.movie-item {
+    display: none;
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+function showFilms(type) {
+    const newBtn = document.getElementById('newReleasesBtn');
+    const classicBtn = document.getElementById('classicFilmsBtn');
+    const newCarousel = document.getElementById('newReleasesCarousel');
+    const classicCarousel = document.getElementById('classicFilmsCarousel');
+    
+    if (type === 'new') {
+        newBtn.classList.add('active');
+        classicBtn.classList.remove('active');
+        newCarousel.style.display = 'block';
+        classicCarousel.style.display = 'none';
+    } else {
+        classicBtn.classList.add('active');
+        newBtn.classList.remove('active');
+        classicCarousel.style.display = 'block';
+        newCarousel.style.display = 'none';
+    }
+}
+
+// Date filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const dateButtons = document.querySelectorAll('[data-date]');
+    dateButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            dateButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            console.log('Filtering by:', this.dataset.date);
+        });
+    });
+    
+    // Genre filter
+    document.getElementById('genreFilter').addEventListener('change', function() {
+        const selectedGenre = this.value;
+        const movieItems = document.querySelectorAll('.movie-item');
+        
+        movieItems.forEach(item => {
+            const itemGenre = item.dataset.genre;
+            if (selectedGenre === '' || itemGenre === selectedGenre) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

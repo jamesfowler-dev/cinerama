@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .finalize-backdrop {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 4rem 0;
+        color: #fff;
+        position: relative; /* establish stacking context */
+        z-index: 0;
+    }
+    .finalize-overlay {
+        background: rgba(0,0,0,0.78); /* darker overlay so card stands out above background */
+        padding: 2rem;
+        border-radius: 8px;
+        position: relative;
+        z-index: 20; /* ensure overlay sits above projector/background elements */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    .finalize-poster {
+        max-width: 180px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+        border-radius: 4px;
+        position: relative;
+        z-index: 21; /* poster above overlay so it reads clearly */
+    }
+    .film-details dt { font-weight: 600; }
+</style>
+
+<div class="finalize-backdrop" {% if film.backdrop_url %}style="background-image: url('{{ film.backdrop_url }}');"{% endif %}>
+    <div class="container finalize-overlay text-light">
+        <div class="row align-items-start">
+            <div class="col-md-3 text-center">
+                {% if film.poster_url %}
+                    <img src="{{ film.poster_url }}" alt="{{ film.title }} poster" class="finalize-poster mb-3">
+                {% else %}
+                    <div class="finalize-poster mb-3" style="width:180px;height:270px;background:#333;display:inline-block;"></div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-9">
+                <h2 class="mb-1">{{ film.title }}</h2>
+                <p class="mb-2"><em>{% if film.year %}{{ film.year|date:"Y" }}{% endif %}</em> &middot; {{ film.duration }} mins</p>
+                <p>{{ film.synopsis }}</p>
+            </div>
+        </div>
+
+        <hr style="border-color: rgba(255,255,255,0.15)">
+
+        <div class="row">
+            <div class="col-md-8">
+                <h4>Saved fields</h4>
+                <dl class="row film-details text-start">
+                    <dt class="col-sm-3">Title</dt>
+                    <dd class="col-sm-9">{{ film.title }}</dd>
+
+                    <dt class="col-sm-3">TMDb ID</dt>
+                    <dd class="col-sm-9">{{ film.tmdb_id }}</dd>
+
+                    <dt class="col-sm-3">Year</dt>
+                    <dd class="col-sm-9">{% if film.year %}{{ film.year|date:"Y" }}{% endif %}</dd>
+
+                    <dt class="col-sm-3">Duration</dt>
+                    <dd class="col-sm-9">{{ film.duration }} minutes</dd>
+
+                    <dt class="col-sm-3">Director</dt>
+                    <dd class="col-sm-9">{{ film.director }}</dd>
+
+                    <dt class="col-sm-3">Cast</dt>
+                    <dd class="col-sm-9">{{ film.cast }}</dd>
+
+                    <dt class="col-sm-3">Genre</dt>
+                    <dd class="col-sm-9">{{ film.get_genre_display }}</dd>
+
+                    <dt class="col-sm-3">Rating</dt>
+                    <dd class="col-sm-9">{{ film.get_rating_display }}</dd>
+
+                    <dt class="col-sm-3">Trailer URL</dt>
+                    <dd class="col-sm-9">
+                        {% if film.trailer_url %}
+                            <a href="{{ film.trailer_url }}" target="_blank" rel="noopener">Open trailer</a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </dd>
+
+                    <dt class="col-sm-3">Poster URL</dt>
+                    <dd class="col-sm-9">{{ film.poster_url }}</dd>
+
+                    <dt class="col-sm-3">Backdrop URL</dt>
+                    <dd class="col-sm-9">{{ film.backdrop_url }}</dd>
+
+                    <dt class="col-sm-3">Active</dt>
+                    <dd class="col-sm-9">{% if film.is_active %}Yes{% else %}No{% endif %}</dd>
+
+                    <dt class="col-sm-3">New release</dt>
+                    <dd class="col-sm-9">{% if film.is_new_release %}Yes{% else %}No{% endif %}</dd>
+
+                    <dt class="col-sm-3">Classic</dt>
+                    <dd class="col-sm-9">{% if film.is_classic %}Yes{% else %}No{% endif %}</dd>
+
+                    <dt class="col-sm-3">Created at</dt>
+                    <dd class="col-sm-9">{{ film.created_at }}</dd>
+
+                    <dt class="col-sm-3">Updated at</dt>
+                    <dd class="col-sm-9">{{ film.updated_at }}</dd>
+                </dl>
+            </div>
+
+            <div class="col-md-4">
+                <h4>Quick actions</h4>
+                <p>
+                    <a href="{% url 'dashboard' %}" class="btn btn-light mb-2">Back to Dashboard</a>
+                </p>
+                <p>
+                    <a href="{% url 'add_movie' %}" class="btn btn-outline-light">Add another film</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
