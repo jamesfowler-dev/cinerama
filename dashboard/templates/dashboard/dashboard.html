@@ -179,10 +179,10 @@
 
 
 
-<!-- <section class="carousel-section mb-5">
-    <div class="container-fluid px-0"> -->
+<section class="carousel-section mb-5">
+    <div class="container-fluid px-0">
         <!-- New Releases Carousel -->
-        <!-- <div id="newReleasesCarousel" class="film-carousel">
+        <div id="newReleasesCarousel" class="film-carousel">
             <div id="newReleasesSlider" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
@@ -214,7 +214,7 @@
         </div> -->
 
         <!-- Classic Films Carousel -->
-        <!-- <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
+        <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
             <div id="classicFilmsSlider" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
@@ -245,7 +245,7 @@
             </div>
         </div>
     </div>
-</section> -->
+</section>
 
 <!-- What's On Section -->
 <section class="whats-on-section py-5">
@@ -255,7 +255,7 @@
                 <h2 class="text-center mb-5 fw-bold">What's On</h2>
                 
                 <!-- Date Selection Bar -->
-                <div class="date-filter mb-4">
+                <div class="date-filter mb-4" data-selected-date="{{ selected_date|default:'today'|force_escape }}" data-selected-genre="{{ selected_genre|default:''|force_escape }}">
                     <div class="row justify-content-center">
                         <div class="col-12 col-lg-10 col-xl-8">
                             <!-- Date Filter Buttons -->
@@ -289,8 +289,17 @@
                     </div>
                 </div>
 
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="text-center py-5" style="display: none;">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Loading showtimes...</p>
+                </div>
+
                 <!-- Movies List -->
-                <div class="movies-list">
+                <div class="movies-list" id="moviesList">
+                    {% if films_with_showtimes %}
                     {% for film, showtimes in films_with_showtimes.items %}
                     <div class="movie-item mb-4" data-genre="{{ film.genre }}">
                         <div class="card h-100 shadow-sm">
@@ -366,7 +375,7 @@
                                                                 <div class="text-success small mb-2">{{ showtime.available_seats }} seats</div>
                                                                 <button class="btn btn-sm w-100" 
                                                                         style="background-color: var(--cinema-red); color: white; border: none;"
-                                                                        onclick="bookTicket({{ showtime.id }}, '{{ film.title }}', '{{ showtime.time }}', '{{ showtime.date }}')">
+                                                                        onclick="bookTicket({{ showtime.id }})">
                                                                     Book £{{ showtime.price }}
                                                                 </button>
                                                             </div>
@@ -382,6 +391,14 @@
                         </div>
                     </div>
                     {% endfor %}
+                    {% else %}
+                    <div class="alert alert-warning text-center py-5" role="alert">
+                        <i class="bi bi-calendar-x" style="font-size: 3rem; color: var(--cinema-gold);"></i>
+                        <h4 class="mt-3 fw-bold">No Screenings Available</h4>
+                        <p class="mb-0">There are no showtimes for the selected date{% if selected_genre %} and genre{% endif %}.</p>
+                        <p class="text-muted">Please try a different date or check back later.</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -553,59 +570,11 @@
 /* Remove old movie reel styles */
 .movie-reel-container,
 .movie-reel,
-.reel-center,
-.movie-item {
+.reel-center {
     display: none;
 }
 </style>
 
 <!-- JavaScript -->
-<script>
-function showFilms(type) {
-    const newBtn = document.getElementById('newReleasesBtn');
-    const classicBtn = document.getElementById('classicFilmsBtn');
-    const newCarousel = document.getElementById('newReleasesCarousel');
-    const classicCarousel = document.getElementById('classicFilmsCarousel');
-    
-    if (type === 'new') {
-        newBtn.classList.add('active');
-        classicBtn.classList.remove('active');
-        newCarousel.style.display = 'block';
-        classicCarousel.style.display = 'none';
-    } else {
-        classicBtn.classList.add('active');
-        newBtn.classList.remove('active');
-        classicCarousel.style.display = 'block';
-        newCarousel.style.display = 'none';
-    }
-}
 
-// Date filter functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const dateButtons = document.querySelectorAll('[data-date]');
-    dateButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            dateButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            console.log('Filtering by:', this.dataset.date);
-        });
-    });
-    
-    // Genre filter
-    document.getElementById('genreFilter').addEventListener('change', function() {
-        const selectedGenre = this.value;
-        const movieItems = document.querySelectorAll('.movie-item');
-        
-        movieItems.forEach(item => {
-            const itemGenre = item.dataset.genre;
-            if (selectedGenre === '' || itemGenre === selectedGenre) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    });
-});
-</script>
 {% endblock %}
