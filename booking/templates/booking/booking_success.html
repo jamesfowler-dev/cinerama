@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<br>
+{% include "booking/progress_stepper.html" %}
+
+<div class="container text-white" style=>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-dark text-white" style="background-color: rgba(0,0,0,0.2);">
+                <div class="card-body">
+                    <h2 class="card-title">Booking Confirmed</h2>
+                    <p class="">Thank you — your booking is confirmed.</p>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Booking ID</dt>
+                        <dd class="col-sm-8">{{ booking.booking_id }}</dd>
+
+                        <dt class="col-sm-4">Film</dt>
+                        <dd class="col-sm-8">{{ booking.showtime.film.title }}</dd>
+
+                        <dt class="col-sm-4">Date & Time</dt>
+                        <dd class="col-sm-8">{{ booking.showtime.date|date:"D j M Y" }} at {{ booking.showtime.time|time:"H:i" }}</dd>
+
+                        <dt class="col-sm-4">Seats</dt>
+                        <dd class="col-sm-8">{{ booking.seat_numbers }}</dd>
+
+                        <dt class="col-sm-4">Total</dt>
+                        <dd class="col-sm-8">£{{ booking.total_price }}</dd>
+
+                        <dt class="col-sm-4">Booked On</dt>
+                        <dd class="col-sm-8">{{ booking.booking_date|date:"D j M Y H:i" }}</dd>
+                    </dl>
+
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'booking' %}" class="btn btn-outline-light">Back to bookings</a>
+                        <a href="/" class="btn btn-primary">Go to dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

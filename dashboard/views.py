@@ -14,10 +14,10 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
-from booking.models import Film, Showtime, RATING_CHOICES
+from booking.models import Film, Showtime, RATING_CHOICES, Showtime
 from dashboard.services.ai_rating import classify_rating_with_ai
-
-
+from .utils import build_embed_url
+from datetime import datetime
 logger = logging.getLogger(__name__)
 
 
@@ -261,9 +261,11 @@ def choose_trailer(request, tmdb_id):
     if request.method == "POST":
         video_id = request.POST.get("video_id")
         if video_id:
-            film.trailer_url = f"https://www.youtube.com/watch?v={video_id}"
-            film.save()
-            return redirect("ai_rating", tmdb_id=tmdb_id)
+                film.trailer_url = f"https://www.youtube.com/embed/{video_id}"
+                film.save()
+
+        return redirect("ai_rating", tmdb_id=tmdb_id)
+
 
     return render(
         request,
@@ -271,14 +273,15 @@ def choose_trailer(request, tmdb_id):
         {"film": film, "trailers": items},
     )
 
-
 @login_required
 def select_trailer(request, tmdb_id, video_id):
     film = Film.objects.get(tmdb_id=tmdb_id)
+
+    # Always store the proper embed URL
     film.trailer_url = f"https://www.youtube.com/embed/{video_id}"
     film.save()
-    return redirect("ai_rating", tmdb_id=tmdb_id)
 
+    return redirect("ai_rating", tmdb_id=tmdb_id)
 
 @login_required
 def ai_rating(request, tmdb_id):
@@ -312,4 +315,171 @@ def finalize_film(request, tmdb_id):
         return redirect("finalize_film", tmdb_id=tmdb_id)
 
     return render(request, "dashboard/finalize_film.html", {"film": film})
+
+def movie_details(request, tmdb_id):
+    film = Film.objects.get(tmdb_id=tmdb_id)
+
+    # Build safe YouTube embed URL
+    embed_url = build_embed_url(request, film.trailer_url)
+
+    # Server-side: try to resolve the video via the YouTube Data API and
+    # retrieve the API-provided embed HTML (safer to render the provider's
+    # canonical embed snippet). If the stored URL is missing, fall back to a
+    # search for the top trailer result for the film title.
+    api_embed_html = None
+    api_embeddable = None
+    api_video_id = None
+    api_error = None
+
+    yt_key = os.environ.get('YOUTUBE_API_KEY')
+    try:
+        # Extract video id from stored trailer_url if possible
+        trailer = film.trailer_url or ""
+        vid = None
+        if trailer:
+            if '/embed/' in trailer:
+                vid = trailer.split('/embed/')[-1].split('?')[0]
+            elif 'v=' in trailer:
+                from urllib.parse import urlparse, parse_qs
+                parsed = urlparse(trailer)
+                vid = parse_qs(parsed.query).get('v', [None])[0]
+            elif 'youtu.be' in trailer:
+                from urllib.parse import urlparse
+                parsed = urlparse(trailer)
+                vid = parsed.path.lstrip('/')
+
+        # If we have an id, fetch the video's details
+        if not yt_key:
+            api_error = 'YOUTUBE_API_KEY not set'
+        else:
+            if vid:
+                api_url = (
+                    'https://www.googleapis.com/youtube/v3/videos'
+                    f'?part=player,status,snippet&id={vid}'
+                    f'&key={yt_key}'
+                )
+                resp = requests.get(api_url, timeout=8).json()
+                items = resp.get('items', [])
+                if items:
+                    item = items[0]
+                    api_embed_html = item.get('player', {}).get('embedHtml')
+                    api_embeddable = item.get('status', {}).get('embeddable')
+                    api_video_id = item.get('id')
+                else:
+                    # No item for that id; try searching by title
+                    search_q = f"{film.title} official trailer"
+                    search_url = (
+                        'https://www.googleapis.com/youtube/v3/search'
+                        f'?part=snippet&type=video&maxResults=1&q={search_q}'
+                        f'&key={yt_key}'
+                    )
+                    sresp = requests.get(search_url, timeout=8).json()
+                    sitems = sresp.get('items', [])
+                    if sitems:
+                        found_id = sitems[0].get('id', {}).get('videoId')
+                        if found_id:
+                            api_video_id = found_id
+                            api_url = (
+                                'https://www.googleapis.com/youtube/v3/videos'
+                                f'?part=player,status,snippet&id={found_id}'
+                                f'&key={yt_key}'
+                            )
+                            resp2 = requests.get(api_url, timeout=8).json()
+                            i2 = resp2.get('items', [])
+                            if i2:
+                                item2 = i2[0]
+                                api_embed_html = (
+                                    item2.get('player', {})
+                                    .get('embedHtml')
+                                )
+                                api_embeddable = (
+                                    item2.get('status', {})
+                                    .get('embeddable')
+                                )
+                                api_video_id = item2.get('id')
+            else:
+                # No stored trailer URL -> search by title
+                if yt_key:
+                    search_q = f"{film.title} official trailer"
+                    search_url = (
+                        'https://www.googleapis.com/youtube/v3/search'
+                        f'?part=snippet&type=video&maxResults=1&q={search_q}'
+                        f'&key={yt_key}'
+                    )
+                    sresp = requests.get(search_url, timeout=8).json()
+                    sitems = sresp.get('items', [])
+                    if sitems:
+                        found_id = sitems[0].get('id', {}).get('videoId')
+                        if found_id:
+                            api_video_id = found_id
+                            api_url = (
+                                'https://www.googleapis.com/youtube/v3/videos'
+                                f'?part=player,status,snippet&id={found_id}'
+                                f'&key={yt_key}'
+                            )
+                            resp2 = requests.get(api_url, timeout=8).json()
+                            i2 = resp2.get('items', [])
+                            if i2:
+                                item2 = i2[0]
+                                api_embed_html = (
+                                    item2.get('player', {})
+                                    .get('embedHtml')
+                                )
+                                api_embeddable = (
+                                    item2.get('status', {})
+                                    .get('embeddable')
+                                )
+                                api_video_id = item2.get('id')
+    except Exception as e:
+        logger.exception('YouTube API error when resolving trailer: %s', e)
+        api_error = str(e)
+
+    now = timezone.localtime()
+
+    # Build list of upcoming showtimes
+    showtimes = []
+    for s in film.showtimes.all().order_by("date", "time"):
+        naive_dt = datetime.combine(s.date, s.time)
+        show_dt = timezone.make_aware(naive_dt)
+
+        if show_dt >= now:
+            showtimes.append(s)
+
+    # Group showtimes by date for template display: produce a list of
+    # (date, [showtimes]) tuples in chronological order.
+    grouped_showtimes_list = []
+    if showtimes:
+        current_date = None
+        current_list = []
+        for s in showtimes:
+            if current_date is None:
+                current_date = s.date
+                current_list = [s]
+            elif s.date == current_date:
+                current_list.append(s)
+            else:
+                grouped_showtimes_list.append((current_date, current_list))
+                current_date = s.date
+                current_list = [s]
+
+        if current_date is not None:
+            grouped_showtimes_list.append((current_date, current_list))
+
+    # Build seat layout mapping (screen_id → seats)
+    screen_seats = {
+        s.screen.id: s.screen.seat_layout.all()
+        for s in showtimes
+    }
+
+    return render(request, "dashboard/movie_details.html", {
+        "film": film,
+        "embed_url": embed_url,
+        "api_embed_html": api_embed_html,
+        "api_embeddable": api_embeddable,
+        "api_video_id": api_video_id,
+        "api_error": api_error,
+        "showtimes": showtimes,
+        "grouped_showtimes": grouped_showtimes_list,
+        "screen_seats": screen_seats,
+    })
 

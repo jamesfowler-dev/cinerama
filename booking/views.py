@@ -154,3 +154,4 @@ def booking_success(request, booking_id):
         'current_step': 4,  # Step 4: Confirmation
     }
     return render(request, 'booking/booking_success.html', context)
+
