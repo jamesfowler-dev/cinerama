@@ -7,12 +7,6 @@ import os
 from datetime import datetime
 import logging
 
-"""Dashboard views."""
-
-import os
-from datetime import datetime
-import logging
-
 import requests
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -22,6 +16,7 @@ from django.http import HttpResponseForbidden
 
 from booking.models import Film, Showtime, RATING_CHOICES
 from dashboard.services.ai_rating import classify_rating_with_ai
+from datetime import timedelta
 
 logger = logging.getLogger(__name__)
 
