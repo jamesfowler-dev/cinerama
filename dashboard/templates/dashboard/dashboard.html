@@ -316,7 +316,7 @@
                                     </div>
                                     
                                     <!-- Movie Details -->
-                                    <div class="col-12 col-sm-8 col-md-9 col-lg-10">
+                                    <div class="col-12 col-sm-8 col-md-9 col-lg-10 text-white">
                                         <div class="row h-100">
                                             <!-- Film Information -->
                                             <div class="col-12 col-lg-7 mb-3 mb-lg-0">
@@ -329,7 +329,7 @@
                                                 </div>
                                                 
                                                 <!-- Film Details -->
-                                                <div class="film-details mb-3">
+                                                <div class="film-details mb-3 text-white">
                                                     <div class="row g-2">
                                                         <div class="col-sm-6">
                                                             <p class="small mb-1">
@@ -355,7 +355,7 @@
                                                 <!-- Synopsis -->
                                                 {% if film.synopsis %}
                                                 <div class="synopsis">
-                                                    <p class="text-muted small mb-0">{{ film.synopsis|truncatewords:25 }}</p>
+                                                    <p class="small mb-0 text-white" style="color: white;">{{ film.synopsis|truncatewords:25 }}</p>
                                                 </div>
                                                 {% endif %}
                                             </div>
@@ -371,7 +371,7 @@
                                                         <div class="col-sm-6 col-lg-12 col-xl-6">
                                                             <div class="showtime-card p-2 border rounded text-center">
                                                                 <div class="fw-bold small text-primary">{{ showtime.date|date:"M d" }}</div>
-                                                                <div class="text-muted small">{{ showtime.time }}</div>
+                                                                <div class="small">{{ showtime.time }}</div>
                                                                 <div class="text-success small mb-2">{{ showtime.available_seats }} seats</div>
                                                                 <button class="btn btn-sm w-100" 
                                                                         style="background-color: var(--cinema-red); color: white; border: none;"
