@@ -246,9 +246,9 @@ main {
 
 /* Section Backgrounds */
 .whats-on-section {
-    background: 
+    /* background: 
         radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%); */
+        radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%); */ */
     /* background: linear-gradient(to bottom, var(--cinema-cream), #F0F0F0) !important; */
 }
 
@@ -256,6 +256,11 @@ main {
     color: var(--primary-color);
     font-family: var(--primary-font);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#whats-on {
+    background-color: #212529;
+    width: 100vw;
 }
 
 /* Carousel Controls */
@@ -292,6 +297,15 @@ h1, h2, h3, h4, h5, h6 {
 .display-4 {
     font-family: var(--primary-font);
     font-weight: bold;
+}
+
+#sign-up, #sign-in, #sign-out {
+    color: var(--misty-blue);
+}
+
+form#signup_form.signup button.btn, form.login button.btn.btn-signup, form button.btn.btn-signup {
+    background-color: var(--cinema-secondary);
+    color: var(--misty-blue);
 }
 
 /* Responsive Design */
