@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedSeats.length === 0) {
             selectedSeatsList.innerHTML = '<li class="text-muted">No seats selected</li>';
         } else {
-            selectedSeatsList.innerHTML = selectedSeats.map(seat => 
+            selectedSeatsList.innerHTML = selectedSeats.map(seat =>  
                 `<li class="d-flex justify-content-between">
                     <span>Seat ${seat.number}</span>
                     <span>£${seatPrice}</span>
