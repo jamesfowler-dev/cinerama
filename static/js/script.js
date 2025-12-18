@@ -72,7 +72,7 @@ function showFilms(type) {
                 try {
                     if(selectedListEl){
                         if(selectedListEl.tagName.toLowerCase() === 'div'){
-                            selectedListEl.innerHTML = selectedSeats.length === 0 ? '<span class="text-muted">None selected</span>' : selectedSeats.map(function(s){ return s.number; }).join(', ');
+                            selectedListEl.innerHTML = selectedSeats.length === 0 ? '<span>None selected</span>' : selectedSeats.map(function(s){ return s.number; }).join(', ');
                         } else {
                             selectedListEl.innerHTML = selectedSeats.length === 0 ? '<li class="text-muted">No seats selected</li>' : selectedSeats.map(function(seat){
                                 return '<li class="d-flex justify-content-between"><span>Seat '+seat.number+'</span><span>£'+seatPrice+'</span></li>';

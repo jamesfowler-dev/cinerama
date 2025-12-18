@@ -584,7 +584,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     transform: scale(1.05);
 }
 
-.date-filter-bg, #selected-film-seats {
+.date-filter-bg, #selected-film-seats, #selected-seats-summary {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     backdrop-filter: blur(10px);
@@ -666,12 +666,6 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
         0 0 100px rgba(0, 255, 65, 0.3);
 }
 
-#selected-seats-summary {
-    padding: 10px 20px;
-    background-color: var(--cinema-bg-light);
-    border: 1px solid var(--cinema-secondary);
-}
-
 /* Seat Select Page */
 
 /* Movie Header */
@@ -681,24 +675,25 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 }
 
 /* Compact Selected Seats Summary */
-.selected-seats-summary {
-    border: 2px solid var(--cinema-gold);
-    background-color: rgba(40, 49, 57, 0.95) !important;
+#selected-seats-summary {
+    padding: 10px 20px;
+    /* border: 2px solid var(--cinema-gold);
+    background-color: rgba(40, 49, 57, 0.95) !important; */
     transition: all 0.3s ease;
 }
 
 .selected-seats-summary h6 {
     color: var(--cinema-gold);
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .selected-seats-summary .text-success {
     color: var(--cinema-gold) !important;
 }
 
-#selectedSeatsDisplay {
-    color: var(--cinema-primary);
-    font-weight: 500;
+#selectedSeatsDisplay, #seatQuantity {
+    color: var(--misty-blue);
+    /* font-weight: 500; */
 }
 
 /* Screen Indicator */
@@ -731,16 +726,19 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 /* Seat styling */
 
 .seat {
-    width: 30px;
-    height: 30px;
-    margin: 2px;
-    border: 2px solid #ddd;
-    background-color: #f8f9fa;
+    width: 34px;
+    height: 34px;
+    margin: 5px;
+    border: none;
+    background: transparent;
     border-radius: 6px;
     font-size: 12px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    color: white;
+    font-weight: 700;
+    transition: transform 0.15s ease, filter 0.15s ease;
+    color: inherit;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
 }
 
 .seat.available {
@@ -791,6 +789,31 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 .seat-example.booked {
     background-color: #dc3545;
     border-color: #dc3545;
+}
+
+/* Action Buttons */
+
+#back-to-films {
+    color: var(--cinema-secondary);
+    border: 1px solid var(--cinema-secondary);
+}
+
+#back-to-films:hover {
+    color: var(--cinema-black);
+    background-color: var(--cinema-gold);
+    border: 1px solid var(--cinema-gold);
+}
+
+#proceedBtn {
+    background-color: var(--cinema-gold);
+    color: black;
+    border: none;
+}
+
+#proceedBtn:hover {
+    background-color: var(--cinema-secondary);
+    color: var(--misty-blue);
+    border: none;
 }
 
 /* Responsive Design seat selection */
