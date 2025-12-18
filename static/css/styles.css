@@ -331,6 +331,14 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--primary-font);
 }
 
+#confirm-hr {
+    border: none;
+    height: 1px;
+    color: var(--cinema-primary);
+    background-color: var(--cinema-primary);
+    opacity: 1;
+}
+
 .display-4 {
     font-family: var(--primary-font);
     font-weight: bold;
@@ -623,7 +631,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 }
 
 /* Movie Card Box Shadow Effects */
-.movie-item .card, .film-item .card {
+.movie-item .card, .film-item .card, .review-card {
     position: relative;
     background: rgba(33, 37, 41, 0.9) !important;
     border: 2px solid var(--cinema-primary);
@@ -637,7 +645,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
         0 0 15px var(--cinema-primary);                   /* Green outer glow */
 }
 
-.movie-item .card:hover, .film-item .card:hover {
+.movie-item .card:hover, .film-item .card:hover, .review-card:hover {
     transform: translateY(-8px);
     border-color: var(--cinema-gold);
     
@@ -793,24 +801,24 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 
 /* Action Buttons */
 
-#back-to-films {
+#back-to-films, #back-to-seats {
     color: var(--cinema-secondary);
     border: 1px solid var(--cinema-secondary);
 }
 
-#back-to-films:hover {
+#back-to-films:hover, #back-to-seats:hover {
     color: var(--cinema-black);
     background-color: var(--cinema-gold);
     border: 1px solid var(--cinema-gold);
 }
 
-#proceedBtn {
+#proceedBtn, #confirmBtn {
     background-color: var(--cinema-gold);
     color: black;
     border: none;
 }
 
-#proceedBtn:hover {
+#proceedBtn:hover, #confirmBtn:hover {
     background-color: var(--cinema-secondary);
     color: var(--misty-blue);
     border: none;
