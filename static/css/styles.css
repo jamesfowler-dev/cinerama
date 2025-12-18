@@ -731,16 +731,19 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 /* Seat styling */
 
 .seat {
-    width: 30px;
-    height: 30px;
-    margin: 2px;
-    border: 2px solid #ddd;
-    background-color: #f8f9fa;
+    width: 34px;
+    height: 34px;
+    margin: 5px;
+    border: none;
+    background: transparent;
     border-radius: 6px;
     font-size: 12px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    color: white;
+    font-weight: 700;
+    transition: transform 0.15s ease, filter 0.15s ease;
+    color: inherit;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
 }
 
 .seat.available {
