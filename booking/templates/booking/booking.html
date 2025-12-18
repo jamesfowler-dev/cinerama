@@ -23,14 +23,62 @@
 <section class="available-films py-4" style="color:white;">
     <div class="container">
         <div class="row">
-            <div class="col-12 text-white">
+            <div class="col-12 text-white mb-4">
                 <h2 class="text-center mb-4 fw-bold" style="color: var(--misty-blue);">Select Your Film & Showtime</h2>
+                
+                <!-- Date Selection Bar (copied from dashboard) -->
+                <div class="date-filter mb-5" data-selected-date="{{ selected_date|default:'today'|force_escape }}" data-selected-genre="{{ selected_genre|default:''|force_escape }}">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-lg-10 col-xl-8 py-3">
+                                <!-- Date Filter Buttons -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+                                            <button class="btn btn-whats-on active" data-date="today">Today</button>
+                                            <button class="btn btn-whats-on" data-date="tomorrow">Tomorrow</button>
+                                            <button class="btn btn-whats-on" data-date="this-week">This Week</button>
+                                            <button class="btn btn-whats-on" data-date="next-week">Next Week</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Custom Date and Genre Filter -->
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <input type="date" class="form-control" id="customDateBooking" placeholder="Select custom date">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select class="form-select" id="genreFilterBooking">
+                                            <option value="">All Genres</option>
+                                            <option value="action">Action</option>
+                                            <option value="drama">Drama</option>
+                                            <option value="comedy">Comedy</option>
+                                            <option value="thriller">Thriller</option>
+                                            <option value="sci-fi">Science Fiction</option>
+                                            <option value="romance">Romance</option>
+                                            <option value="horror">Horror</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="loadingSpinnerBooking" class="text-center py-5" style="display: none;">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3" style="color: var(--cinema-primary);">Loading showtimes...</p>
+                </div>
                 
                 {% if films_with_showtimes %}
                     <div class="films-list text-white">
                         {% for film, showtimes in films_with_showtimes.items %}
                         <div class="film-item mb-4">
-                            <div class="card shadow-lg">
+                            <div class="card">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <!-- Film Poster -->
@@ -95,10 +143,11 @@
                     </div>
                 {% else %}
                     <div class="text-center">
-                        <div class="alert alert-info">
-                            <h4>No showtimes available</h4>
-                            <p>Please check back later for upcoming shows.</p>
-                            <a href="{% url 'dashboard' %}" class="btn btn-primary">Return to Dashboard</a>
+                        <div class="alert alert-warning py-5" role="alert">
+                            <i class="bi bi-calendar-x" style="font-size: 3rem; color: var(--cinema-gold);"></i>
+                            <h4 class="mt-3 fw-bold">No Showtimes Available</h4>
+                            <p class="mb-0">There are no showtimes for the selected date{% if selected_genre %} and genre{% endif %}.</p>
+                            <p>Please try a different date or check back later.</p>
                         </div>
                     </div>
                 {% endif %}
@@ -133,5 +182,155 @@
 .film-item .card:hover {
     transform: translateY(-3px);
 }
+
+/* Date Filter Buttons for Booking Page */
+.btn-whats-on {
+    background: rgba(42, 232, 216, 0.2);
+    border: 2px solid rgba(42, 232, 216, 0.5);
+    color: var(--cinema-primary);
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-whats-on:hover {
+    background: rgba(42, 232, 216, 0.3);
+    border-color: var(--cinema-primary);
+    color: var(--cinema-primary);
+    transform: translateY(-2px);
+}
+
+.btn-whats-on.active {
+    background: var(--cinema-primary);
+    border-color: var(--cinema-primary);
+    color: var(--cinema-black);
+    box-shadow: 0 4px 15px rgba(42, 232, 216, 0.4);
+}
+
+.date-filter {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(42, 232, 216, 0.2);
+}
+
+.date-filter .form-control,
+.date-filter .form-select {
+    background: rgba(40, 49, 57, 0.8);
+    border: 1px solid rgba(42, 232, 216, 0.3);
+    color: white;
+    border-radius: 8px;
+}
+
+.date-filter .form-control:focus,
+.date-filter .form-select:focus {
+    background: rgba(40, 49, 57, 0.9);
+    border-color: var(--cinema-primary);
+    box-shadow: 0 0 0 0.2rem rgba(42, 232, 216, 0.25);
+    color: white;
+}
+
+.date-filter .form-select option {
+    background: var(--cinema-black);
+    color: white;
+}
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Booking page specific selectors (different IDs to avoid conflicts with dashboard)
+    const dateButtonsBooking = document.querySelectorAll('.btn-whats-on');
+    const customDateInputBooking = document.getElementById('customDateBooking');
+    const genreFilterBooking = document.getElementById('genreFilterBooking');
+    const resultsAnchor = '#films-list';
+    
+    // Get selected values from URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedDate = urlParams.get('date') || 'today';
+    const selectedGenre = urlParams.get('genre') || '';
+    
+    // Reset loading state on page load
+    const spinner = document.getElementById('loadingSpinnerBooking');
+    if (spinner) spinner.style.display = 'none';
+
+    // Highlight the currently selected date button
+    dateButtonsBooking.forEach(button => {
+        if (button.dataset.date === selectedDate) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            showLoadingSpinner();
+            
+            const params = new URLSearchParams(window.location.search);
+            params.set('date', this.dataset.date);
+            if (genreFilterBooking && genreFilterBooking.value) {
+                params.set('genre', genreFilterBooking.value);
+            } else {
+                params.delete('genre');
+            }
+            
+            // Navigate to booking page with filters
+            window.location.href = '/booking/?' + params.toString();
+        });
+    });
+
+    // Custom date input
+    if (customDateInputBooking) {
+        customDateInputBooking.value = selectedDate.length === 10 ? selectedDate : '';
+        customDateInputBooking.addEventListener('change', function () {
+            if (this.value) {
+                showLoadingSpinner();
+                const params = new URLSearchParams(window.location.search);
+                params.set('date', this.value);
+                if (genreFilterBooking && genreFilterBooking.value) {
+                    params.set('genre', genreFilterBooking.value);
+                } else {
+                    params.delete('genre');
+                }
+                window.location.href = '/booking/?' + params.toString();
+            }
+        });
+    }
+
+    // Genre filter
+    if (genreFilterBooking) {
+        if (selectedGenre) {
+            genreFilterBooking.value = selectedGenre;
+        }
+
+        genreFilterBooking.addEventListener('change', function () {
+            showLoadingSpinner();
+            const params = new URLSearchParams(window.location.search);
+            if (this.value) {
+                params.set('genre', this.value);
+            } else {
+                params.delete('genre');
+            }
+            // Keep current date selection
+            const currentDate = urlParams.get('date') || 'today';
+            params.set('date', currentDate);
+            
+            window.location.href = '/booking/?' + params.toString();
+        });
+    }
+
+    // Loading spinner helper
+    function showLoadingSpinner() {
+        if (spinner) {
+            spinner.style.display = 'block';
+        }
+        // Hide the films list during loading
+        const filmsList = document.querySelector('.films-list');
+        if (filmsList) {
+            filmsList.style.opacity = '0.5';
+        }
+    }
+});
+</script>
 {% endblock %}
