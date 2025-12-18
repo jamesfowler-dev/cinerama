@@ -23,6 +23,153 @@ function showFilms(type) {
     }
 }
 
+// Ensure bookingSeatSelector exists at global scope ASAP so templates/console can reference it
+// without depending on DOMContentLoaded ordering. If it was already defined later, this
+// will not overwrite it.
+(function(){
+    if(window.bookingSeatSelector) return;
+
+    window.bookingSeatSelector = (function(){
+        function init(containerSelector, opts) {
+            opts = opts || {};
+            var container = (typeof containerSelector === 'string') ? document.querySelector(containerSelector) : containerSelector;
+            console.debug && console.debug('bookingSeatSelector.init called for', containerSelector, container, opts);
+            if(!container) return null;
+
+            var isModal = !!opts.modal;
+
+            // If this container was already initialized, return the existing instance to avoid
+            // double-binding event handlers (templates or auto-init may call init multiple times).
+            try {
+                var existing = container.__bookingSeatSelector;
+                if (existing) {
+                    // If an existing instance is present, allow updating it with new options
+                    try { if (typeof existing._update === 'function') existing._update(opts); } catch(e) {}
+                    return existing;
+                }
+            } catch (e) { /* ignore */ }
+
+            var selectedListEl = container.querySelector('#modalSelectedSeatsList') || document.getElementById('selectedSeatsList') || document.getElementById('selectedSeatsDisplay');
+            var quantityEl = container.querySelector('#modalSeatQuantity') || document.getElementById('seatQuantity');
+            var totalEl = container.querySelector('#modalTotalPrice') || document.getElementById('totalPrice');
+            var selectedSeatsInputEl = document.getElementById('selectedSeatsInput');
+            var proceedBtn = container.querySelector('#modalConfirmSeats') || document.getElementById('proceedBtn');
+            var bookingForm = document.getElementById('bookingForm');
+
+            var seatPrice = parseFloat(container.dataset.showtimePrice || opts.showtimePrice || 0) || 0;
+            var showtimeId = parseInt(container.dataset.showtimeId || opts.showtimeId || 0) || 0;
+            var bookingId = container.dataset.bookingId || opts.bookingId || null;
+
+            // SVG artwork URLs (prefer container dataset so templates can provide correct STATIC_URL)
+            var seatAvailableUrl = container.dataset.seatAvailableUrl || opts.seatAvailableUrl || null;
+            var seatSelectedUrl = container.dataset.seatSelectedUrl || opts.seatSelectedUrl || null;
+            var seatBookedUrl = container.dataset.seatBookedUrl || opts.seatBookedUrl || null;
+
+            var seats = container.querySelectorAll('.seat.available');
+            var selectedSeats = [];
+
+            function updateSummary(){
+                try {
+                    if(selectedListEl){
+                        if(selectedListEl.tagName.toLowerCase() === 'div'){
+                            selectedListEl.innerHTML = selectedSeats.length === 0 ? '<span class="text-muted">None selected</span>' : selectedSeats.map(function(s){ return s.number; }).join(', ');
+                        } else {
+                            selectedListEl.innerHTML = selectedSeats.length === 0 ? '<li class="text-muted">No seats selected</li>' : selectedSeats.map(function(seat){
+                                return '<li class="d-flex justify-content-between"><span>Seat '+seat.number+'</span><span>£'+seatPrice+'</span></li>';
+                            }).join('');
+                        }
+                    }
+
+                    if(quantityEl) quantityEl.textContent = selectedSeats.length;
+                    if(totalEl) totalEl.textContent = '£' + (selectedSeats.length * seatPrice).toFixed(2);
+
+                    if(selectedSeatsInputEl){
+                        selectedSeatsInputEl.innerHTML = selectedSeats.map(function(seat){
+                            return '<input type="hidden" name="selected_seats" value="'+seat.id+'">';
+                        }).join('');
+                    }
+
+                    if(proceedBtn) proceedBtn.disabled = selectedSeats.length === 0;
+                } catch(e){ console.warn('updateSummary error', e); }
+            }
+
+            function toggleSeat(btn){
+                var id = btn.getAttribute('data-seat-id');
+                var number = btn.getAttribute('data-seat-number');
+                // ignore clicks on booked seats
+                if(btn.classList.contains('booked')) return;
+
+                var art = btn.querySelector('.seat-art');
+                if(btn.classList.contains('selected')){
+                    btn.classList.remove('selected');
+                    selectedSeats = selectedSeats.filter(function(s){ return s.id !== id; });
+                    // revert artwork
+                    try { if(art) art.src = (seatAvailableUrl ? seatAvailableUrl : art.src); } catch(e){}
+                } else {
+                    if(selectedSeats.length >= (opts.maxSeats || 8)) { alert('Max '+(opts.maxSeats||8)+' seats'); return; }
+                    btn.classList.add('selected');
+                    selectedSeats.push({id: id, number: number});
+                    // swap to selected artwork if available
+                    try { if(art) art.src = (seatSelectedUrl ? seatSelectedUrl : art.src); } catch(e){}
+                }
+                updateSummary();
+            }
+
+            seats.forEach(function(btn){ btn.addEventListener('click', function(){ toggleSeat(btn); }); });
+
+            if(bookingForm){
+                bookingForm.addEventListener('submit', function(e){
+                    if(selectedSeats.length === 0){ e.preventDefault(); alert('Please select at least one seat.'); }
+                });
+            }
+
+            if(isModal && proceedBtn){
+                proceedBtn.addEventListener('click', function(){
+                    if(selectedSeats.length === 0){ alert('Please select at least one seat.'); return; }
+                    if(!bookingId){ alert('Missing booking id'); return; }
+                    var url = '/booking/confirm-reselect/' + bookingId + '/';
+                    var csrftokenEl = document.querySelector('[name=csrfmiddlewaretoken]');
+                    var csrftoken = csrftokenEl ? csrftokenEl.value : '';
+                    var formData = new FormData();
+                    formData.append('showtime_id', showtimeId);
+                    selectedSeats.forEach(function(s){ formData.append('selected_seats', s.id); });
+                    fetch(url, { method: 'POST', body: formData, headers: {'X-CSRFToken': csrftoken}, credentials: 'same-origin' })
+                        .then(function(r){ if(r.redirected) window.location = r.url; else return r.json(); })
+                        .then(function(data){ if(data && data.error) alert(data.error); })
+                        .catch(function(err){ console.error(err); alert('An error occurred'); });
+                });
+            }
+
+            updateSummary();
+
+            var instance = {
+                getSelectedSeats: function(){ return selectedSeats.slice(); },
+                _update: function(newOpts){
+                    try {
+                        newOpts = newOpts || {};
+                        if(newOpts.showtimePrice !== undefined && newOpts.showtimePrice !== null){
+                            seatPrice = parseFloat(newOpts.showtimePrice) || seatPrice;
+                        }
+                        if(newOpts.showtimeId !== undefined && newOpts.showtimeId !== null){
+                            showtimeId = parseInt(newOpts.showtimeId) || showtimeId;
+                        }
+                        if(newOpts.bookingId !== undefined && newOpts.bookingId !== null){
+                            bookingId = newOpts.bookingId;
+                        }
+                        // re-run summary to reflect updated price
+                        updateSummary();
+                    } catch(e){ console.warn('bookingSeatSelector._update error', e); }
+                }
+            };
+            try { container.__bookingSeatSelector = instance; } catch(e) { /* ignore */ }
+            return instance;
+        }
+
+        return { init: init };
+    })();
+
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
     const dateButtons = document.querySelectorAll('[data-date]');
     const customDateInput = document.getElementById('customDate');
@@ -124,29 +271,106 @@ document.addEventListener('DOMContentLoaded', function () {
     window.bookTicket = function (showtimeId) {
         window.location.href = `/booking/select-seats/${showtimeId}/`;
     };
+    // bookingSeatSelector is defined globally above; no need to redefine here.
 
-    // Update booking summary
-    function updateBookingSummary() {
-        const selectedSeatsDisplay = document.getElementById('selectedSeatsDisplay');
-        
-        // Update selected seats display
-        if (selectedSeats.length === 0) {
-            selectedSeatsDisplay.innerHTML = '<span class="text-muted">None selected</span>';
-        } else {
-            selectedSeatsDisplay.innerHTML = selectedSeats.map(seat => seat.number).join(', ');
+
+});
+
+// Auto-init: if a seat map exists on the page, initialize bookingSeatSelector after DOM ready.
+document.addEventListener('DOMContentLoaded', function(){
+    try {
+        var map = document.getElementById('seatMap');
+        if(map && window.bookingSeatSelector && typeof window.bookingSeatSelector.init === 'function'){
+            var price = parseFloat(map.dataset.showtimePrice || map.getAttribute('data-showtime-price') || 0) || 0;
+            var showtimeId = parseInt(map.dataset.showtimeId || map.getAttribute('data-showtime-id') || 0) || 0;
+            window.bookingSeatSelector.init('#seatMap', { modal: false, showtimePrice: price, showtimeId: showtimeId });
+        }
+    } catch(e) { /* ignore */ }
+});
+
+// Edit booking page: centralize film/showtime rendering and modal fetch/init
+document.addEventListener('DOMContentLoaded', function(){
+    try {
+        var form = document.getElementById('editBookingForm');
+        if(!form) return;
+
+        var showtimes = [];
+        try {
+            var raw = form.getAttribute('data-showtimes');
+            if(raw && raw.trim().length) {
+                showtimes = JSON.parse(raw);
+            } else {
+                var scriptEl = document.getElementById('showtimes-data');
+                if(scriptEl && scriptEl.textContent) {
+                    showtimes = JSON.parse(scriptEl.textContent);
+                } else {
+                    showtimes = [];
+                }
+            }
+        } catch(e){ console.warn('Could not parse showtimes JSON', e); showtimes = []; }
+        var bookingId = form.getAttribute('data-booking-id') || '';
+        var currentShowtimeId = form.getAttribute('data-current-showtime') || '';
+
+        var filmSelect = document.getElementById('film_select');
+        var showtimeSelect = document.getElementById('showtime');
+
+        function renderOptions(filterFilmId){
+            if(!showtimeSelect) return;
+            showtimeSelect.innerHTML = '';
+            var list = showtimes.filter(function(s){
+                return !filterFilmId || String(s.film_id) === String(filterFilmId);
+            });
+            list.forEach(function(s){
+                var opt = document.createElement('option');
+                opt.value = s.id;
+                opt.text = s.film_title + ' — ' + s.date + ' ' + s.time + ' (' + s.screen + ') — £' + s.price;
+                if(String(s.id) === String(currentShowtimeId)) opt.selected = true;
+                showtimeSelect.appendChild(opt);
+            });
         }
 
-        // Update quantity and total
-        seatQuantity.textContent = selectedSeats.length;
-        const total = selectedSeats.length * seatPrice;
-        totalPrice.textContent = `£${total.toFixed(2)}`;
+        // initial render: filter to current film so user's selection remains
+        renderOptions(form.querySelector('#film_select')?.value || '');
 
-        // Update form inputs
-        selectedSeatsInput.innerHTML = selectedSeats.map(seat => 
-            `<input type="hidden" name="selected_seats" value="${seat.id}">`
-        ).join('');
+        if(filmSelect){
+            filmSelect.addEventListener('change', function(){ renderOptions(this.value); });
+        }
 
-        // Enable/disable proceed button
-        proceedBtn.disabled = selectedSeats.length === 0;
-    }
+        // Modal handling: fetch partial and initialize bookingSeatSelector for the modal
+        var modalEl = document.getElementById('reselectSeatModal');
+        var bootstrapModal = null;
+        if(window.bootstrap && modalEl){
+            try { document.body.appendChild(modalEl); } catch(e){}
+            try { bootstrapModal = new bootstrap.Modal(modalEl); } catch(e) { bootstrapModal = null; }
+        }
+
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            var showtimeId = showtimeSelect ? showtimeSelect.value : null;
+            if(!showtimeId){ alert('Please select a showtime'); return; }
+
+            var url = '/booking/select-seats/' + showtimeId + '/?modal=1&booking_id=' + encodeURIComponent(bookingId);
+            fetch(url, { credentials: 'same-origin' })
+                .then(function(r){ return r.text(); })
+                .then(function(html){
+                    var body = document.getElementById('reselectModalBody');
+                    if(!body) return;
+                    body.innerHTML = html;
+
+                    // Initialize centralized seat selector for the modal
+                    try {
+                        if(window.bookingSeatSelector && typeof window.bookingSeatSelector.init === 'function'){
+                            var modalContainer = body.querySelector('.seat-selection-modal') || body;
+                            window.bookingSeatSelector.init(modalContainer, { modal: true, bookingId: bookingId, showtimeId: showtimeId });
+                        }
+                    } catch(e){ console.error('bookingSeatSelector init error', e); }
+
+                    if(bootstrapModal) {
+                        try { bootstrapModal.show(); } catch(e) { /* ignore */ }
+                    }
+                })
+                .catch(function(err){ console.error(err); alert('Could not load seat map'); });
+        });
+
+    } catch(e){ /* ignore */ }
 });
