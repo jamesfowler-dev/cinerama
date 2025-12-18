@@ -27,7 +27,7 @@
                 <h2 class="text-center mb-4 fw-bold" style="color: var(--misty-blue);">Select Your Film & Showtime</h2>
                 
                 <!-- Date Selection Bar (copied from dashboard) -->
-                <div class="date-filter mb-5" data-selected-date="{{ selected_date|default:'today'|force_escape }}" data-selected-genre="{{ selected_genre|default:''|force_escape }}">
+                <div class="date-filter date-filter-bg mb-5" data-selected-date="{{ selected_date|default:'today'|force_escape }}" data-selected-genre="{{ selected_genre|default:''|force_escape }}">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-10 col-xl-8 py-3">
@@ -91,45 +91,62 @@
                                         
                                         <!-- Film Details -->
                                         <div class="col-md-9 col-lg-10">
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <h4 class="fw-bold mb-3" style="color: var(--cinema-red);">{{ film.title }}</h4>
-                                                    <p class="mb-2">
+                                            <div class="row h-100">
+                                                <!-- Film Info -->
+                                                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                                                    <h4 class="card-title fw-bold mb-3">{{ film.title }}</h4>
+                                                    <!-- Badges -->
+                                                    <div class="mb-3">
                                                         <span class="badge bg-secondary me-2">{{ film.get_rating_display }}</span>
                                                         <span class="badge bg-primary">{{ film.get_genre_display }}</span>
-                                                    </p>
-                                                    <div class="film-info mb-3">
-                                                        <p class="mb-1"><strong>Director:</strong> {{ film.director }}</p>
-                                                        <p class="mb-1"><strong>Duration:</strong> {{ film.duration }} minutes</p>
-                                                        <p class="mb-1"><strong>Year:</strong> {{ film.year|date:"Y" }}</p>
                                                     </div>
-                                                    {% if film.synopsis %}
-                                                    <p class="small">{{ film.synopsis|truncatewords:20 }}</p>
-                                                    {% endif %}
-                                                </div>
-                                                
-                                                <!-- Showtimes -->
-                                                <div class="col-lg-6">
-                                                    <h5 class="fw-bold mb-3" style="color: var(--cinema-gold);">Available Showtimes</h5>
-                                                    <div class="showtimes-grid">
-                                                        {% for showtime in showtimes %}
-                                                        <div class="showtime-card mb-2 p-3 border rounded">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    <div class="fw-bold">{{ showtime.date|date:"l, M d" }}</div>
-                                                                    <div class="small">{{ showtime.time }} - {{ showtime.screen }}</div>
-                                                                    <div class="small text-success">{{ showtime.available_seats }} seats available</div>
-                                                                </div>
-                                                                <div class="text-end">
-                                                                    <div class="fw-bold mb-2 text-primary">£{{ showtime.price }}</div>
-                                                                    <a href="{% url 'select_seats' showtime.id %}" 
-                                                                       class="btn btn-sm" 
-                                                                       style="background-color: var(--cinema-red); color: white;">
-                                                                        Select Seats
-                                                                    </a>
-                                                                </div>
+
+                                                    <!-- Film Details -->
+                                                    <div class="film-details mb-3 text-white">
+                                                        <div class="row g-2">
+                                                            <div class="col-sm-6">
+                                                                <p class="small mb-1">
+                                                                    <i class="bi bi-person-fill me-1" style="color: var(--cinema-gold);"></i>
+                                                                    <strong>Director:</strong> {{ film.director }}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <p class="small mb-1">
+                                                                    <i class="bi bi-clock-fill me-1" style="color: var(--cinema-gold);"></i>
+                                                                    <strong>Duration:</strong> {{ film.duration }} minutes
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <p class="small mb-1">
+                                                                    <i class="bi bi-calendar-fill me-1" style="color: var(--cinema-gold);"></i>
+                                                                    <strong>Year:</strong> {{ film.year|date:"Y" }}
+                                                                </p>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <!-- Synopsis -->
+                                                    {% if film.synopsis %}
+                                                    <div class="synopsis">
+                                                        <p class="small mb-0 text-white" style="color: white;">{{ film.synopsis|truncatewords:25 }}</p>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+
+                                                <!-- Showtimes -->
+                                                <div class="col-12 col-lg-5">
+                                                    <h6 class="fw-bold mb-3" style="color: var(--cinema-gold);">
+                                                        <i class="bi bi-ticket-perforated me-2"></i>Available Showtimes
+                                                    </h6>
+                                                    <div class="showtime-buttons">
+                                                        <div class="row g-2">
+                                                            {% for showtime in showtimes %}
+                                                            <div class="col-sm-6 col-lg-6 col-xl-6">
+                                                                <a href="{% url 'select_seats' showtime.id %}" class="btn btn-sm select-seat-btn showtime-card mb-2 p-2 border rounded text-center">
+                                                                    <div class="fw-bold">{{ showtime.date|date:"l, M d" }} - {{ showtime.time }}</div>
+                                                                    <div class="small text-success">{{ showtime.available_seats }} seats available</div>
+                                                                    <div class="fw-bold">£{{ showtime.price }}</div>
+                                                                </a>
+                                                            </div>
                                                         {% endfor %}
                                                     </div>
                                                 </div>
@@ -155,88 +172,6 @@
         </div>
     </div>
 </section>
-
-<style>
-.hero-section {
-    background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%);
-}
-
-.showtime-card {
-    transition: all 0.3s ease;
-    border: 2px solid transparent !important;
-}
-
-.showtime-card:hover {
-    background-color: #f8f9fa;
-    transform: translateY(-2px);
-    border-color: var(--cinema-gold) !important;
-    color: black;
-}
-
-.film-item .card {
-    border: none;
-    transition: transform 0.3s ease;
-    color: white;
-}
-
-.film-item .card:hover {
-    transform: translateY(-3px);
-}
-
-/* Date Filter Buttons for Booking Page */
-.btn-whats-on {
-    background: rgba(42, 232, 216, 0.2);
-    border: 2px solid rgba(42, 232, 216, 0.5);
-    color: var(--cinema-primary);
-    padding: 8px 20px;
-    border-radius: 25px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.btn-whats-on:hover {
-    background: rgba(42, 232, 216, 0.3);
-    border-color: var(--cinema-primary);
-    color: var(--cinema-primary);
-    transform: translateY(-2px);
-}
-
-.btn-whats-on.active {
-    background: var(--cinema-primary);
-    border-color: var(--cinema-primary);
-    color: var(--cinema-black);
-    box-shadow: 0 4px 15px rgba(42, 232, 216, 0.4);
-}
-
-.date-filter {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(42, 232, 216, 0.2);
-}
-
-.date-filter .form-control,
-.date-filter .form-select {
-    background: rgba(40, 49, 57, 0.8);
-    border: 1px solid rgba(42, 232, 216, 0.3);
-    color: white;
-    border-radius: 8px;
-}
-
-.date-filter .form-control:focus,
-.date-filter .form-select:focus {
-    background: rgba(40, 49, 57, 0.9);
-    border-color: var(--cinema-primary);
-    box-shadow: 0 0 0 0.2rem rgba(42, 232, 216, 0.25);
-    color: white;
-}
-
-.date-filter .form-select option {
-    background: var(--cinema-black);
-    color: white;
-}
-</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
