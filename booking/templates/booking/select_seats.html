@@ -110,11 +110,11 @@
                 </div>
 
                 <!-- Selected Seats Summary (Compact) - moved below the seating image area -->
-                <div id="selected-seats-summary" class="selected-seats-summary mt-3 p-3 bg-dark rounded text-center">
+                <div id="selected-seats-summary" class="selected-seats-summary mt-3 p-3 rounded text-center">
                     <div class="row align-items-center">
                         <div class="col-12 col-md-4 mb-2 mb-md-0">
                             <h6 class="mb-0">Selected Seats:</h6>
-                            <div id="selectedSeatsDisplay" class="small text-muted">None selected</div>
+                            <div id="selectedSeatsDisplay" class="small">None selected</div>
                         </div>
                         <div class="col-6 col-md-4 mb-2 mb-md-0">
                             <h6 class="mb-0">Quantity:</h6>
@@ -131,7 +131,7 @@
                 <div class="action-buttons mt-4">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <a href="{% url 'booking' %}" class="btn btn-outline-secondary btn-lg w-100">
+                            <a href="{% url 'booking' %}" class="btn w-100" id="back-to-films">
                                 <i class="bi bi-arrow-left me-2"></i>Back to Film Selection
                             </a>
                         </div>
@@ -142,10 +142,9 @@
                                 <div id="selectedSeatsInput"></div>
                                 
                                 <button type="submit" 
-                                        class="btn btn-lg w-100" 
+                                        class="btn w-100" 
                                         id="proceedBtn" 
-                                        disabled
-                                        style="background-color: var(--cinema-gold); color: var(--cinema-black); border: none;">
+                                        disabled>
                                     {% if user.is_authenticated %}
                                         Proceed to Payment <i class="bi bi-arrow-right ms-2"></i>
                                     {% else %}
@@ -174,29 +173,9 @@
 
 <!-- Custom Styles -->
 <style>
-/* Screen Indicator */
-/* .screen-line {
-    width: 60%;
-    height: 4px;
-    background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%);
-    margin: 0 auto;
-    border-radius: 2px;
-    color: white;
-} */
 
-/* Seat Styling */
-/* .seat-map {
-    max-width: 600px;
-    margin: 0 auto;
-    color: white;
-} */
-
-/* .row-label {
-    min-width: 20px;
-    color: var(--cinema-red);
-} */
-
-/* .seat {
+/* 
+.seat {
     width: 34px;
     height: 34px;
     margin: 5px;
@@ -275,34 +254,7 @@
 .seat.selected .seat-art { filter: drop-shadow(0 0 8px rgba(255,215,0,0.9)) saturate(1.2); transform: scale(1.06); }
 .seat.selected .seat-number { color: #fff; text-shadow: 0 1px 0 rgba(0,0,0,0.6); }
 
-/* Movie Header */
-/* .movie-header {
-    border-radius: 0 0 20px 20px;
-    margin-bottom: 30px;
-} */
 
-/* Responsive Design */
-/* @media (max-width: 768px) {
-    .seat {
-        width: 22px;
-        height: 22px;
-        font-size: 10px;
-    }
-    
-    .row-label {
-        min-width: 15px;
-        font-size: 14px;
-    }
-    
-    .movie-header .row {
-        text-align: center;
-    }
-    
-    .movie-header .col-md-3,
-    .movie-header .col-md-9 {
-        margin-bottom: 20px;
-    }
-} */
 </style>
 
 {% endblock %}
