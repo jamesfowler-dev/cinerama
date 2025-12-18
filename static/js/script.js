@@ -124,4 +124,29 @@ document.addEventListener('DOMContentLoaded', function () {
     window.bookTicket = function (showtimeId) {
         window.location.href = `/booking/select-seats/${showtimeId}/`;
     };
+
+    // Update booking summary
+    function updateBookingSummary() {
+        const selectedSeatsDisplay = document.getElementById('selectedSeatsDisplay');
+        
+        // Update selected seats display
+        if (selectedSeats.length === 0) {
+            selectedSeatsDisplay.innerHTML = '<span class="text-muted">None selected</span>';
+        } else {
+            selectedSeatsDisplay.innerHTML = selectedSeats.map(seat => seat.number).join(', ');
+        }
+
+        // Update quantity and total
+        seatQuantity.textContent = selectedSeats.length;
+        const total = selectedSeats.length * seatPrice;
+        totalPrice.textContent = `£${total.toFixed(2)}`;
+
+        // Update form inputs
+        selectedSeatsInput.innerHTML = selectedSeats.map(seat => 
+            `<input type="hidden" name="selected_seats" value="${seat.id}">`
+        ).join('');
+
+        // Enable/disable proceed button
+        proceedBtn.disabled = selectedSeats.length === 0;
+    }
 });

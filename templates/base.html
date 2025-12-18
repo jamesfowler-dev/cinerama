@@ -93,7 +93,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">My Bookings</a></li>
+						<li><a class="dropdown-item" href="{% url 'manage_bookings' %}">My Bookings</a></li>
 						{% if user.is_staff %}
 						<li><a class="dropdown-item" href="{% url 'add_movie' %}">Add Movie</a></li>
 						<li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin panel</a></li>
