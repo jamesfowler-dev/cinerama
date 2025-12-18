@@ -18,6 +18,9 @@ from booking.models import Film, Showtime, RATING_CHOICES, Showtime
 from dashboard.services.ai_rating import classify_rating_with_ai
 from .utils import build_embed_url
 from datetime import datetime
+from dashboard.services.tmdb_reviews import get_tmdb_reviews
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -101,10 +104,16 @@ def dashboard_view(request):
             }
         )
 
+    films_with_reviews = {}
+
+    for film in films_with_showtimes.keys():
+        films_with_reviews[film.id] = get_tmdb_reviews(film.tmdb_id)
+
     context = {
         "new_releases": new_releases,
         "classic_films": classic_films,
         "films_with_showtimes": films_with_showtimes,
+        "films_with_reviews": films_with_reviews,
         "selected_date": date_filter,
         "selected_genre": genre_filter or "",
         "query": query, 
