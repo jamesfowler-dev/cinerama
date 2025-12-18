@@ -171,14 +171,7 @@
     </div>
 </section>
 
-
-
-
-
-
-
-
-
+<!-- Movie carousel -->
 <section class="carousel-section mb-5">
     <div class="container-fluid px-0">
         <!-- New Releases Carousel -->
@@ -212,7 +205,7 @@
                     <span class="carousel-control-next-icon"></span>
                 </button>
             </div>
-        </div> -->
+        </div>
 
         <!-- Classic Films Carousel -->
         <div id="classicFilmsCarousel" class="film-carousel" style="display: none;">
@@ -331,7 +324,7 @@
                                         <div class="row h-100">
                                             <!-- Film Information -->
                                             <div class="col-12 col-lg-7 mb-3 mb-lg-0">
-                                                <h4 class="card-title fw-bold mb-3" style="color: var(--cinema-red);">{{ film.title }}</h4>
+                                                <h4 class="card-title fw-bold mb-3">{{ film.title }}</h4>
                                                 
                                                 <!-- Badges -->
                                                 <div class="mb-3">
@@ -380,16 +373,11 @@
                                                     <div class="row g-2">
                                                         {% for showtime in showtimes %}
                                                         <div class="col-sm-6 col-lg-12 col-xl-6">
-                                                            <div class="showtime-card p-2 border rounded text-center">
-                                                                <div class="fw-bold small text-primary">{{ showtime.date|date:"M d" }}</div>
-                                                                <div class="small">{{ showtime.time }}</div>
-                                                                <div class="text-success small mb-2">{{ showtime.available_seats }} seats</div>
-                                                                <button class="btn btn-sm w-100" 
-                                                                        style="background-color: var(--cinema-red); color: white; border: none;"
-                                                                        onclick="bookTicket({{ showtime.id }})">
-                                                                    Book £{{ showtime.price }}
-                                                                </button>
-                                                            </div>
+                                                            <a href="{% url 'select_seats' showtime.id %}" class="btn btn-sm select-seat-btn showtime-card mb-2 p-2 border rounded text-center">
+                                                                <div class="fw-bold">{{ showtime.date|date:"l, M d" }} - {{ showtime.time }}</div>
+                                                                <div class="small text-success">{{ showtime.available_seats }} seats available</div>
+                                                                <div class="fw-bold">Book - £{{ showtime.price }}</div>
+                                                            </a>
                                                         </div>
                                                         {% endfor %}
                                                     </div>
@@ -418,28 +406,28 @@
 
 <style>
     /* Film Strip Carousel */
-.film-strip-container {
+/* .film-strip-container {
     position: relative;
-    width: 100%;
+    width: 100%; */
     /* max-width: 1200px; */
-    height: 300px;
+    /* height: 300px;
     margin: 20px auto 50px auto;
     overflow: hidden;
     border-radius: 15px;
     box-shadow: 
         0 10px 30px var(--shadow),
         inset 0 5px 15px rgba(0, 0, 0, 0.5);
-}
+} */
 
-.film-strip {
+/* .film-strip {
     display: flex;
     width: calc(200% + 100px); /* Wide enough for seamless loop */
-    height: 100%;
-    background: 
+    /*height: 100%;
+    background:  */
         /* Film strip base */
-        linear-gradient(0deg, #000 0%, #222 50%, #000 100%),
+        /* linear-gradient(0deg, #000 0%, #222 50%, #000 100%), */
         /* Perforations on top and bottom */
-        repeating-linear-gradient(
+        /* repeating-linear-gradient(
             90deg,
             transparent 0px,
             transparent 15px,
@@ -453,10 +441,10 @@
         50px 100%;
     position: relative;
     animation: moveFilmStrip 15s linear infinite;
-}
+} */
 
 /* Film perforations */
-.film-strip::before,
+/* .film-strip::before,
 .film-strip::after {
     content: '';
     position: absolute;
@@ -474,9 +462,9 @@
             #000 30px
         );
     z-index: 2;
-}
+} */
 
-.film-strip::before {
+/* .film-strip::before {
     top: 0;
 }
 
@@ -499,9 +487,9 @@
     box-shadow: 
         inset 0 0 10px rgba(0, 0, 0, 0.3),
         0 5px 15px rgba(0, 0, 0, 0.5);
-}
+} */
 
-.film-frame::before {
+/* .film-frame::before {
     content: '';
     position: absolute;
     top: 0;
@@ -519,9 +507,9 @@
         );
     pointer-events: none;
     z-index: 1;
-}
+} */
 
-.movie-poster {
+/* .movie-poster {
     width: 100%;
     height: 80%;
     background: linear-gradient(145deg, #FFD700, #FFA500);
@@ -540,9 +528,9 @@
     transition: all 0.3s ease;
     position: relative;
     z-index: 2;
-}
+} */
 
-.movie-poster:hover {
+/* .movie-poster:hover {
     transform: scale(1.05);
     box-shadow: 
         0 8px 25px var(--shadow),
@@ -561,71 +549,28 @@
     font-size: 12px;
     color: #8B4513;
     font-style: italic;
-}
+} */
 
 /* Film strip animation */
-@keyframes moveFilmStrip {
+/* @keyframes moveFilmStrip {
     0% {
         transform: translateX(0);
     }
     100% {
         transform: translateX(-50%);
     }
-}
+} */
 
 /* Pause animation on hover */
-.film-strip-container:hover .film-strip {
+/* .film-strip-container:hover .film-strip {
     animation-play-state: paused;
-}
+} */
 
 /* Remove old movie reel styles */
-.movie-reel-container,
+/* .movie-reel-container,
 .movie-reel,
 .reel-center {
     display: none;
-}
-
-/* Movie Card Box Shadow Effects */
-.movie-item .card {
-    position: relative;
-    background: rgba(33, 37, 41, 0.9) !important;
-    border: 2px solid var(--cinema-primary);
-    transition: all 0.4s ease;
-    
-    /* Neon box shadow with blur */
-    box-shadow: 
-        0 4px 5px rgba(0, 0, 0, 0.3),                    /* Base shadow */
-        0 0 10px rgba(42, 232, 216, 0.4),                 /* Cyan glow */
-        0 0 15px var(--cinema-primary);                  /* Green outer glow */
-}
-
-.movie-item .card:hover {
-    transform: translateY(-8px);
-    border-color: var(--cinema-gold);
-    
-    /* Enhanced box shadow on hover */
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.4),                    /* Stronger base shadow */
-        0 0 30px rgba(42, 232, 216, 0.6),                 /* Brighter cyan glow */
-        0 0 60px rgba(57, 255, 20, 0.4),                  /* Stronger green glow */
-        0 0 80px rgba(0, 255, 65, 0.2);                   /* Electric green outer */
-}
-
-/* Dashboard specific movie cards */
-/* #moviesList .movie-item .card { */
-    /* Slightly stronger effect for dashboard */
-    /* box-shadow: 
-        0 6px 20px rgba(0, 0, 0, 0.4),
-        0 0 25px rgba(42, 232, 216, 0.5),
-        0 0 45px rgba(57, 255, 20, 0.3);
-} */
-
-/* #moviesList .movie-item .card:hover {
-    box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.5),
-        0 0 35px rgba(42, 232, 216, 0.7),
-        0 0 70px rgba(57, 255, 20, 0.5),
-        0 0 100px rgba(0, 255, 65, 0.3);
 } */
 </style>
 
