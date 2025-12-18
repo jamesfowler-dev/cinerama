@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from .models import Showtime, Seat, Booking, BookingSeat, Film
 from django.utils import timezone
+from datetime import timedelta
 import json
 
 
@@ -104,11 +105,58 @@ def delete_booking(request, booking_id):
 def booking_view(request):  
     # Get all available films and showtimes for the booking page
     today = timezone.now().date()
-    upcoming_showtimes = Showtime.objects.filter(
-        date__gte=today,
-        is_available=True,
-        film__is_active=True
-    ).select_related('film', 'screen').order_by('date', 'time')
+    
+    # Add date filtering similar to dashboard
+    date_filter = request.GET.get("date", "today")
+    genre_filter = request.GET.get("genre")
+    
+    # Search query
+    query = request.GET.get("q")
+    
+    start_date = today
+    end_date = None
+
+    if date_filter == "today":
+        start_date = today
+        end_date = today
+    elif date_filter == "tomorrow":
+        start_date = today + timedelta(days=1)
+        end_date = start_date
+    elif date_filter == "this-week":
+        start_date = today
+        end_date = today + timedelta(days=6)
+    elif date_filter == "next-week":
+        start_date = today + timedelta(days=7)
+        end_date = today + timedelta(days=13)
+    elif date_filter:
+        # Custom date (YYYY-MM-DD)
+        try:
+            start_date = end_date = timezone.datetime.strptime(
+                date_filter, "%Y-%m-%d"
+            ).date()
+        except ValueError:
+            pass
+
+    # Build filter criteria
+    showtime_filter = {
+        "date__gte": start_date,
+        "is_available": True,
+        "film__is_active": True,
+    }
+
+    if end_date:
+        showtime_filter["date__lte"] = end_date
+
+    if genre_filter:
+        showtime_filter["film__genre"] = genre_filter
+
+    upcoming_showtimes = Showtime.objects.filter(**showtime_filter).select_related('film', 'screen').order_by('date', 'time')
+    
+    # If query for search
+    if query:
+        upcoming_showtimes = upcoming_showtimes.filter(
+            film__title__icontains=query
+        )
     
     # Group showtimes by film
     films_with_showtimes = {}
@@ -127,7 +175,11 @@ def booking_view(request):
     context = {
         'films_with_showtimes': films_with_showtimes,
         'current_step': 1,  # Step 1: Select Film & Showtime
+        'selected_date': date_filter,
+        'selected_genre': genre_filter or "",
+        'query': query,
     }
+    
     return render(request, 'booking/booking.html', context)
 
 def select_seats(request, showtime_id):
