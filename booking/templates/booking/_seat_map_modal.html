@@ -1,0 +1,127 @@
+{% load static %}
+
+<div class="seat-selection-modal">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="seat-selection-container">
+                <h5 class="text-center mb-3 text-white">Select seats for {{ film.title }} — {{ showtime.date|date:"D j M Y" }} at {{ showtime.time|time:"H:i" }}</h5>
+
+                <div class="screen-indicator text-center mb-3">
+                    <div class="screen-line"></div>
+                    <p class="mt-2 text-muted">SCREEN</p>
+                </div>
+
+                <div class="seat-map" id="modalSeatMap">
+                    {% regroup seats by row as seat_rows %}
+                    {% for row_group in seat_rows %}
+                    <div class="seat-row d-flex justify-content-center align-items-center mb-2">
+                        <span class="row-label me-3 fw-bold">{{ row_group.grouper }}</span>
+                        <div class="seats d-flex">
+                            {% for seat in row_group.list %}
+                            <button type="button"
+                                    class="seat {% if seat.id in booked_seats %}booked{% else %}available{% endif %}"
+                                    data-seat-id="{{ seat.id }}"
+                                    data-seat-number="{{ seat }}"
+                                    {% if seat.id in booked_seats %}disabled{% endif %}>
+                                {{ seat.number }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                        <span class="row-label ms-3 fw-bold">{{ row_group.grouper }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card bg-dark text-white p-3">
+                <h6>Selected Seats</h6>
+                <ul id="modalSelectedSeatsList" class="list-unstyled mb-3 text-white"><li class="text-muted">No seats selected</li></ul>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Seat Price:</span>
+                    <span>£{{ showtime.price }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Quantity:</span>
+                    <span id="modalSeatQuantity">0</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 fw-bold">
+                    <span>Total:</span>
+                    <span id="modalTotalPrice">£0.00</span>
+                </div>
+
+                <div class="d-grid">
+                    <button id="modalConfirmSeats" class="btn btn-success">Confirm seats and update booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Minimal seat styles (relies on global styles where available) */
+.seat { width:30px; height:30px; margin:2px; border-radius:6px; }
+.seat.available { background:#e8f5e8; border:2px solid #28a745; color:#28a745 }
+.seat.selected { background:var(--cinema-red); color:#fff }
+.seat.booked { background:#dc3545; color:#fff; opacity:0.6 }
+.screen-line { width:60%; height:4px; background:linear-gradient(135deg,var(--cinema-red) 0%,var(--cinema-gold) 100%); margin:0 auto; border-radius:2px }
+</style>
+
+<script>
+// Expose an initializer so the host page can call it after inserting HTML into the modal.
+window.initModalSeatSelection = function() {
+    var container = document.getElementById('modalSeatMap');
+    if(!container) return;
+
+    var seats = container.querySelectorAll('.seat.available');
+    var selectedSeats = [];
+    var seatPrice = {{ showtime.price }};
+
+    function updateSummary(){
+        var list = document.getElementById('modalSelectedSeatsList');
+        var qty = document.getElementById('modalSeatQuantity');
+        var total = document.getElementById('modalTotalPrice');
+        if(selectedSeats.length === 0){
+            list.innerHTML = '<li class="text-muted">No seats selected</li>';
+        } else {
+            list.innerHTML = selectedSeats.map(function(s){ return '<li class="d-flex justify-content-between"><span>Seat '+s.number+'</span><span>£'+seatPrice+'</span></li>'; }).join('');
+        }
+        qty.textContent = selectedSeats.length;
+        total.textContent = '£' + (selectedSeats.length * seatPrice).toFixed(2);
+    }
+
+    seats.forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var id = this.getAttribute('data-seat-id');
+            var number = this.getAttribute('data-seat-number');
+            if(this.classList.contains('selected')){
+                this.classList.remove('selected');
+                selectedSeats = selectedSeats.filter(function(s){ return s.id !== id; });
+            } else {
+                if(selectedSeats.length >= 8){ alert('Max 8 seats'); return; }
+                this.classList.add('selected');
+                selectedSeats.push({id:id, number:number});
+            }
+            updateSummary();
+        });
+    });
+
+    document.getElementById('modalConfirmSeats').addEventListener('click', function(){
+        if(selectedSeats.length === 0){ alert('Please select at least one seat.'); return; }
+    // POST to confirm_reselect endpoint
+    var bookingId = '{{ booking.booking_id }}';
+    // Build URL client-side to avoid Django reversing at render-time with a placeholder.
+    var url = '/booking/confirm-reselect/' + bookingId + '/';
+        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        var formData = new FormData();
+        formData.append('showtime_id', {{ showtime.id }});
+        selectedSeats.forEach(function(s){ formData.append('selected_seats', s.id); });
+
+        fetch(url, { method: 'POST', body: formData, headers: {'X-CSRFToken': csrftoken} })
+            .then(function(r){ if(r.redirected) { window.location = r.url; } else return r.json(); })
+            .then(function(data){ if(data && data.error) alert(data.error); })
+            .catch(function(err){ console.error(err); alert('An error occurred'); });
+    });
+};
+</script>

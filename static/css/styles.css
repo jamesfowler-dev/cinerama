@@ -134,6 +134,19 @@ main {
     /* Smooth out small layout shifts when the padding is updated */
 }
 
+/* Ensure Bootstrap modals sit above the navbar, projector and any overlay elements. */
+.modal-backdrop,
+.modal-backdrop.show {
+    z-index: 99998 !important;
+}
+.modal,
+.modal.show {
+    z-index: 99999 !important;
+}
+.modal-dialog {
+    z-index: 100000 !important;
+}
+
 .navbar-brand {
     color: var(--misty-blue) !important;
     font-family: var(--primary-font);
