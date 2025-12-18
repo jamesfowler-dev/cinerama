@@ -27,6 +27,11 @@
     --primary-text-color: var(--cinema-black);
     --secondary-text-color: var(--misty-blue);
     --white-text: #FFFFFF;
+
+    /* Neon card colors */
+    --cinema-primary: #2ae8d8;         /* Cyan */
+    --neon-green: #39ff14;              /* Bright neon green */
+    --electric-green: #00ff41;  
     
     /* Status Colors */
     --success-color: #228B22;        /* Forest green */
@@ -258,17 +263,18 @@ main {
 }
 
 /* Section Backgrounds */
-.whats-on-section {
-    background: 
-        radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%); */
-    /* background: linear-gradient(to bottom, var(--cinema-cream), #F0F0F0) !important; */
-}
 
 .whats-on-section h2 {
-    color: var(--primary-color);
+    color: var(--misty-blue);
     font-family: var(--primary-font);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#whats-on {
+    background-color: #212529;
+    width: 100vw;
+    border-top: 1px solid var(--cinema-primary);
+    border-bottom: 1px solid var(--cinema-primary);
 }
 
 /* Carousel Controls */
@@ -279,9 +285,9 @@ main {
 
 /* Date Filter Buttons */
 .date-filter .btn.active {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-    color: white !important;
+    background-color: var(--cinema-gold) !important;
+    border-color: var(--cinema-gold) !important;
+    color: var(--primary-text-color) !important;
 }
 
 /* Input Styling */
@@ -305,6 +311,15 @@ h1, h2, h3, h4, h5, h6 {
 .display-4 {
     font-family: var(--primary-font);
     font-weight: bold;
+}
+
+#sign-up, #sign-in, #sign-out {
+    color: var(--misty-blue);
+}
+
+form#signup_form.signup button.btn, form.login button.btn.btn-signup, form button.btn.btn-signup {
+    background-color: var(--cinema-secondary);
+    color: var(--misty-blue);
 }
 
 /* Responsive Design */
@@ -346,14 +361,22 @@ h1, h2, h3, h4, h5, h6 {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-outline-primary {
+.btn-whats-on {
+    color: var(--cinema-gold);
+    border-color: var(--cinema-gold);
     transition: all 0.2s ease;
 }
 
-.btn-outline-primary.active {
-    background-color: var(--cinema-primary) !important;
-    border-color: var(--cinema-primary) !important;
-    color: white !important;
+.btn-whats-on:hover {
+    color: var(--cinema-primary);
+    border-color: var(--cinema-primary);
+    transition: all 0.2s ease;
+}
+
+.btn-whats-on.active {
+    /* background-color: var(--cinema-gold) !important;
+    border-color: var(--cinema-gold) !important;
+    color: var(--primary-text-color) !important; */
     transform: scale(1.05);
 }
 
@@ -364,4 +387,55 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes slideIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Movie Card Box Shadow Effects */
+.movie-item .card {
+    position: relative;
+    background: rgba(33, 37, 41, 0.9) !important;
+    border: 1px solid rgba(42, 232, 216, 0.3);
+    transition: all 0.4s ease;
+    
+    /* Neon box shadow with blur */
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.3),                    /* Base shadow */
+        0 0 20px rgba(42, 232, 216, 0.4),                 /* Cyan glow */
+        0 0 40px rgba(57, 255, 20, 0.2);                  /* Green outer glow */
+}
+
+.movie-item .card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(57, 255, 20, 0.6);
+    
+    /* Enhanced box shadow on hover */
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),                    /* Stronger base shadow */
+        0 0 30px rgba(42, 232, 216, 0.6),                 /* Brighter cyan glow */
+        0 0 60px rgba(57, 255, 20, 0.4),                  /* Stronger green glow */
+        0 0 80px rgba(0, 255, 65, 0.2);                   /* Electric green outer */
+}
+
+/* Dashboard specific movie cards */
+#moviesList .movie-item .card {
+    /* Slightly stronger effect for dashboard */
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 25px rgba(42, 232, 216, 0.5),
+        0 0 45px rgba(57, 255, 20, 0.3);
+}
+
+#moviesList .movie-item .card:hover {
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.5),
+        0 0 35px rgba(42, 232, 216, 0.7),
+        0 0 70px rgba(57, 255, 20, 0.5),
+        0 0 100px rgba(0, 255, 65, 0.3);
+}
+
+/* Color Variables */
+:root {
+    /* Add these if not already present */
+    --cinema-primary: #2ae8d8;         /* Cyan */
+    --neon-green: #39ff14;              /* Bright neon green */
+    --electric-green: #00ff41;          /* Electric green */
 }
