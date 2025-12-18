@@ -212,6 +212,21 @@ main {
     box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
 }
 
+/* Book you tickets bookings */
+.btn-cinema {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-cinema:hover,
+.btn-cinema:focus {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
 /* Card Styling */
 .card {
     border: 1px solid var(--border-color);
