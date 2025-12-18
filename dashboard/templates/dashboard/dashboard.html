@@ -67,7 +67,7 @@
 </section>
 
 <!-- Movie carousel -->
-<section class="carousel-section mb-5">
+<section class="carousel-section mb-3">
     <div class="container-fluid px-0">
         <!-- New Releases Carousel -->
         <div id="newReleasesCarousel" class="film-carousel">
@@ -82,10 +82,10 @@
                                          class="img-fluid rounded shadow" 
                                          alt="{{ film.title }}"
                                          onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'">
-                                    <div class="poster-overlay">
+                                    <!-- <div class="poster-overlay">
                                         <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
                                         <p class="text-center small">{{ film.get_rating_display }}</p>
-                                    </div>
+                                    </div> -->
                                     <a href="{% url 'movie_details' film.tmdb_id %}" class="stretched-link" title="{{ film.title }}"></a>
                                 </div>
                             </div>
@@ -93,12 +93,6 @@
                         </div>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#newReleasesSlider" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
             </div>
         </div>
 
@@ -115,10 +109,10 @@
                                          class="img-fluid rounded shadow" 
                                          alt="{{ film.title }}"
                                          onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'">
-                                    <div class="poster-overlay">
+                                    <!-- <div class="poster-overlay">
                                         <h6 class="text-white text-center mt-2">{{ film.title }}</h6>
                                         <p class="text-center small">{{ film.year|date:"Y" }}</p>
-                                    </div>
+                                    </div> -->
                                     <a href="{% url 'movie_details' film.tmdb_id %}" class="stretched-link" title="{{ film.title }}"></a>
                                 </div>
                             </div>
@@ -126,12 +120,6 @@
                         </div>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#classicFilmsSlider" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
             </div>
         </div>
     </div>
@@ -200,7 +188,7 @@
                 <div class="movies-list" id="moviesList">
                     {% if films_with_showtimes %}
                     {% for film, showtimes in films_with_showtimes.items %}
-                    <div class="movie-item mb-5" data-genre="{{ film.genre }}">
+                    <div class="movie-item mb-3" data-genre="{{ film.genre }}">
                         <div class="card h-100">
                             <div class="card-body">
                                 <div class="row align-items-start">
