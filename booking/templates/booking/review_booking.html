@@ -4,6 +4,18 @@
 {% block title %}Review Booking - {{ film.title }}{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white py-4 mb-4">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Review & Pay</h1>
+                <p class="lead mb-3">Please review your booking details below</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Progress Stepper -->
 {% include 'booking/progress_stepper.html' %}
 
@@ -12,7 +24,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card shadow-lg">
+                <div class="card review-card mb-5">
                     <div class="card-header text-center" style="background: var(--cinema-bg-light); color: white;">
                         <h3 class="mb-0">Review Your Booking</h3>
                         <p class="mb-0 small">Please review your details before payment</p>
@@ -62,7 +74,7 @@
                                 <div class="col-md-6">
                                     <div class="seats-list">
                                         {% for seat in seats %}
-                                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                                        <div class="d-flex justify-content-between align-items-center mb-2 p-2" style="border-bottom: 1px solid var(--cinema-primary);">
                                             <span class="fw-bold">Seat {{ seat.row }}{{ seat.number }}</span>
                                             <span>£{{ showtime.price }}</span>
                                         </div>
@@ -70,8 +82,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="price-breakdown bg-light p-3 rounded">
-                                        <div class="d-flex justify-content-between mb-2">
+                                    <div class="price-breakdown p-2 rounded">
+                                        <div class="d-flex justify-content-between mb-3">
                                             <span>{{ seats|length }} × £{{ showtime.price }}</span>
                                             <span>£{{ total_price }}</span>
                                         </div>
@@ -79,7 +91,7 @@
                                             <span>Booking Fee:</span>
                                             <span>£0.00</span>
                                         </div>
-                                        <hr>
+                                        <hr id="confirm-hr">
                                         <div class="d-flex justify-content-between fw-bold fs-5">
                                             <span>Total:</span>
                                             <span style="color: var(--cinema-red);">£{{ total_price }}</span>
@@ -91,8 +103,8 @@
 
                         <hr>
 
-                        <!-- Customer Details -->
-                        <div class="customer-section mb-4">
+                        <!-- Customer Details ADD AT A LATER DATE -->
+                        <!-- <div class="customer-section mb-4" style="color: var(--misty-blue);">
                             <h5 class="fw-bold mb-3" style="color: var(--cinema-gold);">Customer Details</h5>
                             <div class="row">
                                 <div class="col-md-6">
@@ -100,7 +112,7 @@
                                     <p><strong>Email:</strong> {{ user.email }}</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- Payment Section -->
                         <div class="payment-section">
@@ -116,7 +128,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <a href="{% url 'select_seats' showtime.id %}" 
-                                       class="btn btn-outline-secondary btn-lg w-100">
+                                       class="btn btn-outline-secondary w-100" id="back-to-seats">
                                         <i class="bi bi-arrow-left me-2"></i>Back to Seat Selection
                                     </a>
                                 </div>
@@ -124,8 +136,8 @@
                                     <form method="post" action="{% url 'confirm_booking' %}">
                                         {% csrf_token %}
                                         <button type="submit" 
-                                                class="btn btn-lg w-100"
-                                                style="background-color: var(--cinema-gold); color: var(--cinema-black); border: none;">
+                                                class="btn w-100"
+                                                id="confirmBtn">
                                             <i class="bi bi-credit-card me-2"></i>Confirm & Pay £{{ total_price }}
                                         </button>
                                     </form>
@@ -135,10 +147,10 @@
 
                         <!-- Terms -->
                         <div class="terms mt-3">
-                            <small class="text-muted">
+                            <small>
                                 By confirming this booking, you agree to our 
-                                <a href="#" style="color: var(--cinema-red);">Terms and Conditions</a> and 
-                                <a href="#" style="color: var(--cinema-red);">Privacy Policy</a>.
+                                <a href="#" style="color: var(--cinema-primary);">Terms and Conditions</a> and 
+                                <a href="#" style="color: var(--cinema-primary);">Privacy Policy</a>.
                             </small>
                         </div>
                     </div>
