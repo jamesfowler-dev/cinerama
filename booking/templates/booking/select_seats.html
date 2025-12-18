@@ -24,7 +24,7 @@
         <div class="row align-items-center">
             <div class="col-12">
                 <!-- Title, Rating, and Showtime Row -->
-                <div id="selected-film-seats" class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between mb-3">
+                <div id="selected-film-seats" class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between p-4 mb-3">
                     <!-- Left side: Title and Rating -->
                     <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 mb-3 mb-lg-0">
                         <h2 class="fw-bold mb-0 me-md-3">{{ film.title }}</h2>
@@ -175,26 +175,26 @@
 <!-- Custom Styles -->
 <style>
 /* Screen Indicator */
-.screen-line {
+/* .screen-line {
     width: 60%;
     height: 4px;
     background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%);
     margin: 0 auto;
     border-radius: 2px;
     color: white;
-}
+} */
 
 /* Seat Styling */
-.seat-map {
+/* .seat-map {
     max-width: 600px;
     margin: 0 auto;
     color: white;
-}
+} */
 
-.row-label {
+/* .row-label {
     min-width: 20px;
     color: var(--cinema-red);
-}
+} */
 
 .seat {
     width: 34px;
@@ -276,19 +276,13 @@
 .seat.selected .seat-number { color: #fff; text-shadow: 0 1px 0 rgba(0,0,0,0.6); }
 
 /* Movie Header */
-.movie-header {
+/* .movie-header {
     border-radius: 0 0 20px 20px;
     margin-bottom: 30px;
-}
-
-/* Booking Summary */
-.booking-summary {
-    position: sticky;
-    top: 20px;
-}
+} */
 
 /* Responsive Design */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .seat {
         width: 22px;
         height: 22px;
@@ -308,7 +302,7 @@
     .movie-header .col-md-9 {
         margin-bottom: 20px;
     }
-}
+} */
 </style>
 
 {% endblock %}

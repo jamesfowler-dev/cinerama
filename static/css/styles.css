@@ -584,7 +584,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     transform: scale(1.05);
 }
 
-.date-filter-bg {
+.date-filter-bg, #selected-film-seats {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     backdrop-filter: blur(10px);
@@ -666,10 +666,18 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
         0 0 100px rgba(0, 255, 65, 0.3);
 }
 
-#selected-film-seats, #selected-seats-summary {
+#selected-seats-summary {
     padding: 10px 20px;
     background-color: var(--cinema-bg-light);
     border: 1px solid var(--cinema-secondary);
+}
+
+/* Seat Select Page */
+
+/* Movie Header */
+.movie-header {
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 30px;
 }
 
 /* Compact Selected Seats Summary */
@@ -693,11 +701,121 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     font-weight: 500;
 }
 
-/* Enhanced seat map centering */
+/* Screen Indicator */
+.screen-line {
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%);
+    margin: 0 auto;
+    border-radius: 2px;
+    color: white;
+}
+
+.row-label {
+    min-width: 20px;
+    color: var(--cinema-red);
+}
+
+/* Seat Map */
+.seat-map {
+    max-width: 600px;
+    margin: 0 auto;
+    color: white;
+}
+
 .seat-selection-container {
     max-width: 700px;
     margin: 0 auto;
 }
+
+/* Seat styling */
+
+.seat {
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+    border: 2px solid #ddd;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.seat.available {
+    background-color: #e8f5e8;
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.seat.available:hover {
+    background-color: var(--cinema-gold);
+    border-color: var(--cinema-gold);
+    color: var(--cinema-black);
+    transform: scale(1.1);
+}
+
+.seat.selected {
+    background-color: var(--cinema-red);
+    border-color: var(--cinema-red);
+    color: white;
+    transform: scale(1.1);
+}
+
+.seat.booked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.seat-example {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid;
+}
+
+.seat-example.available {
+    background-color: #e8f5e8;
+    border-color: #28a745;
+}
+
+.seat-example.selected {
+    background-color: var(--cinema-red);
+    border-color: var(--cinema-red);
+}
+
+.seat-example.booked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Responsive Design seat selection */
+/* @media (max-width: 768px) {
+    .seat {
+        width: 25px;
+        height: 25px;
+        font-size: 10px;
+    }
+    
+    .row-label {
+        min-width: 15px;
+        font-size: 14px;
+    }
+    
+    .movie-header .row {
+        text-align: center;
+    }
+    
+    .movie-header .col-md-3,
+    .movie-header .col-md-9 {
+        margin-bottom: 20px;
+    }
+} */
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -711,5 +829,25 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     
     .action-buttons .row {
         margin-top: 20px;
+    }
+
+    .seat {
+        width: 25px;
+        height: 25px;
+        font-size: 10px;
+    }
+    
+    .row-label {
+        min-width: 15px;
+        font-size: 14px;
+    }
+    
+    .movie-header .row {
+        text-align: center;
+    }
+    
+    .movie-header .col-md-3,
+    .movie-header .col-md-9 {
+        margin-bottom: 20px;
     }
 }
