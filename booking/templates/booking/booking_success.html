@@ -1,17 +1,34 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block title %}Booking Confirmation - {{ film.title }}{% endblock %}
+
 {% block content %}
-<br>
+<!-- Hero Section -->
+<section class="hero-section text-white py-4 mb-4">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Booking Confirmation</h1>
+                <!-- <p class="lead mb-3">Please review your booking details below</p> -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Progress Stepper -->
 {% include "booking/progress_stepper.html" %}
 
-<div class="container text-white" style=>
-    <div class="row justify-content-center">
+<!-- Confirmation Section -->
+<div class="container text-white pt-3">
+    <div class="row justify-content-center my-5">
         <div class="col-md-8">
-            <div class="card bg-dark text-white" style="background-color: rgba(0,0,0,0.2);">
+            <div class="card confirm-card text-white mb-5">
+                <div class="card-header text-center mb-3" style="background: var(--cinema-bg-light); color: white;">
+                    <h2 class="card-title p-3" style="color: var(--cinema-gold);">Booking Confirmed</h2>
+                    <p class="">Thank you <span class="fw-bold" style="color: var(--cinema-gold);">{{ user.username }}</span> — your booking is confirmed.</p>
+                </div>
                 <div class="card-body">
-                    <h2 class="card-title">Booking Confirmed</h2>
-                    <p class="">Thank you — your booking is confirmed.</p>
-
                     <dl class="row">
                         <dt class="col-sm-4">Booking ID</dt>
                         <dd class="col-sm-8">{{ booking.booking_id }}</dd>
@@ -33,8 +50,8 @@
                     </dl>
 
                     <div class="d-flex gap-2">
-                        <a href="{% url 'booking' %}" class="btn btn-outline-light">Back to bookings</a>
-                        <a href="/" class="btn btn-primary">Go to dashboard</a>
+                        <a href="{% url 'booking' %}" class="btn" id="back-to-start">Book another film</a>
+                        <a href="/" class="btn" id="returnHome">Go to dashboard</a>
                     </div>
                 </div>
             </div>

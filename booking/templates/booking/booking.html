@@ -27,7 +27,7 @@
                 <h2 class="text-center mb-4 fw-bold" style="color: var(--misty-blue);">Select Your Film & Showtime</h2>
                 
                 <!-- Date Selection Bar (copied from dashboard) -->
-                <div class="date-filter date-filter-bg mb-5" data-selected-date="{{ selected_date|default:'today'|force_escape }}" data-selected-genre="{{ selected_genre|default:''|force_escape }}">
+                <div class="date-filter date-filter-bg mb-5 py-3" data-selected-date="{{ selected_date|default:'today'|force_escape }}" data-selected-genre="{{ selected_genre|default:''|force_escape }}">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-10 col-xl-8 py-3">
@@ -73,12 +73,21 @@
                     </div>
                     <p class="mt-3" style="color: var(--cinema-primary);">Loading showtimes...</p>
                 </div>
+            </div>
+        </div>
+    </div>
                 
-                {% if films_with_showtimes %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                    <!-- Movies List -->
                     <div class="films-list text-white">
+                        {% if films_with_showtimes %}
                         {% for film, showtimes in films_with_showtimes.items %}
-                        <div class="film-item mb-4">
-                            <div class="card">
+                        
+                        <!-- ADD THIS WRAPPER with proper class and spacing -->
+                        <div class="movie-item film-item mb-4" data-genre="{{ film.genre }}">
+                            <div class="card h-100">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <!-- Film Poster -->
@@ -127,7 +136,7 @@
                                                     <!-- Synopsis -->
                                                     {% if film.synopsis %}
                                                     <div class="synopsis">
-                                                        <p class="small mb-0 text-white" style="color: white;">{{ film.synopsis|truncatewords:25 }}</p>
+                                                        <p class="small mb-0 text-white">{{ film.synopsis|truncatewords:25 }}</p>
                                                     </div>
                                                     {% endif %}
                                                 </div>
@@ -140,14 +149,16 @@
                                                     <div class="showtime-buttons">
                                                         <div class="row g-2">
                                                             {% for showtime in showtimes %}
-                                                            <div class="col-sm-6 col-lg-6 col-xl-6">
-                                                                <a href="{% url 'select_seats' showtime.id %}" class="btn btn-sm select-seat-btn showtime-card mb-2 p-2 border rounded text-center">
+                                                            <div class="col-sm-6 col-lg-12 col-xl-6">
+                                                                <a href="{% url 'select_seats' showtime.id %}" 
+                                                                   class="btn btn-sm select-seat-btn showtime-card w-100 mb-2 p-2 border rounded text-center">
                                                                     <div class="fw-bold">{{ showtime.date|date:"l, M d" }} - {{ showtime.time }}</div>
                                                                     <div class="small text-success">{{ showtime.available_seats }} seats available</div>
-                                                                    <div class="fw-bold">£{{ showtime.price }}</div>
+                                                                    <div class="fw-bold">Book - £{{ showtime.price }}</div>
                                                                 </a>
                                                             </div>
-                                                        {% endfor %}
+                                                            {% endfor %}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,18 +167,21 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- END WRAPPER -->
+                        
                         {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="text-center">
-                        <div class="alert alert-warning py-5" role="alert">
-                            <i class="bi bi-calendar-x" style="font-size: 3rem; color: var(--cinema-gold);"></i>
-                            <h4 class="mt-3 fw-bold">No Showtimes Available</h4>
-                            <p class="mb-0">There are no showtimes for the selected date{% if selected_genre %} and genre{% endif %}.</p>
-                            <p>Please try a different date or check back later.</p>
+                        {% else %}
+                        <div class="text-center">
+                            <div class="alert alert-warning py-5" role="alert">
+                                <i class="bi bi-calendar-x" style="font-size: 3rem; color: var(--cinema-gold);"></i>
+                                <h4 class="mt-3 fw-bold">No Showtimes Available</h4>
+                                <p class="mb-0">There are no showtimes for the selected date{% if selected_genre %} and genre{% endif %}.</p>
+                                <p>Please try a different date or check back later.</p>
+                            </div>
                         </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                </div>
             </div>
         </div>
     </div>

@@ -4,11 +4,13 @@
     --secondary-font: 'Arial', 'Helvetica', sans-serif;
     
     /* Main Colors - Classic Cinema Theme */
+    --cinema-black: #1E1E1E;
     --cinema-primary: #2ae8d8;         /* Matching canvas cyan */
     --cinema-secondary: #008B8B;       /* Deep teal */
     --cinema-gold: #DAA520;          /* Rich gold */
     --cinema-bg-dark: #191d1e;       /* Background dark */
     --cinema-bg-light: #283139;      /* Background light */
+    --nav-background: linear-gradient(135deg, var(--cinema-bg-dark) 0%, var(--cinema-bg-light) 100%);
     
     /* Primary Palette */
     --misty-blue: #E6F3FF;           /* Very light blue */
@@ -16,12 +18,6 @@
     --secondary-color: var(--cinema-gold);
     --accent-color: #B8860B;         /* Darker gold for accents */
     --tertiary-color: #CD853F;       /* Peru/bronze for warmth */
-    
-    /* Background Colors */
-    --primary-background-color: var(--cinema-bg-dark);
-    --secondary-background-color: var(--cinema-bg-light);
-    --nav-background: linear-gradient(135deg, var(--cinema-bg-dark) 0%, var(--cinema-bg-light) 100%);
-    --hero-background: linear-gradient(135deg, var(--primary-color) 0%, var(--cinema-gold) 100%);
     
     /* Text Colors */
     --primary-text-color: var(--cinema-black);
@@ -107,7 +103,7 @@ main {
     z-index: 2;
     width: 100vw;
     background: var(--nav-background) !important;
-    box-shadow: var(--shadow);
+    /* border-bottom: var(--cinema-primary) !important; */
 }
 
 /* Force a fixed navbar (fallback for sticky issues caused by transformed/overflowing ancestors).
@@ -142,12 +138,29 @@ main {
     z-index: 100000 !important;
 }
 
+/* Navbar Brand - Bootstrap Override */
 .navbar-brand {
-    color: var(--misty-blue) !important;
-    font-family: var(--primary-font);
-    font-weight: bold;
-    font-size: 2rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: var(--misty-blue);
+    font-family: var(--primary-font) !important;
+    font-weight: bold !important;
+    font-size: 2rem !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+    color: var(--cinema-gold) !important;
+    text-shadow: 0 0 15px rgba(218, 165, 32, 0.9) !important;
+    text-decoration: none !important;
+    transform: scale(1.05) !important;
+}
+
+/* Ensure the link inside navbar-brand also follows these rules */
+.navbar-brand:link,
+.navbar-brand:visited {
+    color: var(--misty-blue);
 }
 
 .navbar-nav .nav-link {
@@ -222,12 +235,7 @@ main {
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
-    background: var(--primary-background-color);
-}
-
-.card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
+    background: var(--cinema-bg-dark);
 }
 
 .card-title {
@@ -627,16 +635,14 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     border: 1px solid var(--cinema-secondary);
 }
 
-.date-filter .form-control,
-.date-filter .form-select {
+.date-filter .form-control, .date-filter .form-select {
     background: rgba(40, 49, 57, 0.8);
     border: 1px solid rgba(42, 232, 216, 0.3);
     color: white;
     border-radius: 8px;
 }
 
-.date-filter .form-control:focus,
-.date-filter .form-select:focus {
+.date-filter .form-control:focus, .date-filter .form-select:focus {
     background: rgba(40, 49, 57, 0.9);
     border-color: var(--cinema-primary);
     box-shadow: 0 0 0 0.2rem rgba(42, 232, 216, 0.25);
@@ -645,6 +651,20 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 
 .date-filter .form-select option {
     background: var(--cinema-black);
+    color: white;
+}
+
+.navbar .form-control, .navbar .form-select {
+    background: var(--misty-blue);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--cinema-secondary);
+}
+
+.navbar .form-control:focus, .navbar .form-select:focus {
+    background: rgba(40, 49, 57, 0.9);
+    border-color: var(--cinema-primary);
+    box-shadow: 0 0 0 0.2rem rgba(42, 232, 216, 0.25);
     color: white;
 }
 
@@ -659,7 +679,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 }
 
 /* Movie Card Box Shadow Effects */
-.movie-item .card, .film-item .card, .review-card {
+.movie-item .card, .film-item .card, .review-card, .confirm-card {
     position: relative;
     background: rgba(33, 37, 41, 0.9) !important;
     border: 2px solid var(--cinema-primary);
@@ -673,7 +693,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
         0 0 15px var(--cinema-primary);                   /* Green outer glow */
 }
 
-.movie-item .card:hover, .film-item .card:hover, .review-card:hover {
+.movie-item .card:hover, .film-item .card:hover {
     transform: translateY(-8px);
     border-color: var(--cinema-gold);
     
@@ -838,24 +858,24 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 
 /* Action Buttons */
 
-#back-to-films, #back-to-seats {
+#back-to-films, #back-to-seats, #back-to-start {
     color: var(--cinema-secondary);
     border: 1px solid var(--cinema-secondary);
 }
 
-#back-to-films:hover, #back-to-seats:hover {
+#back-to-films:hover, #back-to-seats:hover, #back-to-start:hover {
     color: var(--cinema-black);
     background-color: var(--cinema-gold);
     border: 1px solid var(--cinema-gold);
 }
 
-#proceedBtn, #confirmBtn {
+#proceedBtn, #confirmBtn, #returnHome {
     background-color: var(--cinema-gold);
     color: black;
     border: none;
 }
 
-#proceedBtn:hover, #confirmBtn:hover {
+#proceedBtn:hover, #confirmBtn:hover, #returnHome:hover {
     background-color: var(--cinema-secondary);
     color: var(--misty-blue);
     border: none;
@@ -919,3 +939,4 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
         margin-bottom: 20px;
     }
 }
+
