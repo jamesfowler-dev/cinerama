@@ -112,6 +112,7 @@ def dashboard_view(request):
     context = {
         "new_releases": new_releases,
         "classic_films": classic_films,
+        "film_strip": Film.objects.filter(is_active=True).order_by('-is_new_release','title')[:12],
         "films_with_showtimes": films_with_showtimes,
         "films_with_reviews": films_with_reviews,
         "selected_date": date_filter,

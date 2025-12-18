@@ -274,6 +274,34 @@ main {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Link-based poster for film-strip (fills the frame) */
+.movie-poster-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    text-decoration: none;
+}
+
+.movie-poster-link:hover {
+    filter: brightness(1.02) saturate(1.05);
+}
+.film-strip .movie-poster { 
+    background: transparent; 
+    border: none; 
+    padding: 0; 
+    overflow: visible;
+    border-radius: 0px;
+}
+
+.film-strip .movie-poster-link { display:block; 
+    width:100%; 
+    height:100%; 
+    background-size:cover; 
+    background-position:center center; 
+}
+
 .movie-poster:hover {
     transform: scale(1.05);
     box-shadow: var(--shadow-hover);
@@ -438,7 +466,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f0f0f0;
+    background: #1d1d1d;
     border: 3px solid #000;
     border-radius: 5px;
     overflow: hidden;
@@ -742,9 +770,18 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     transition: all 0.3s ease;
     color: white;
 }
-
+.film-strip .movie-poster-link .film-strip-img {
+    width: 100%;
+    height: 100%;
+    object-fit:fill;
+    object-position: 50% 50%;
+    border-radius: 0;
+    display: block;
+    }
 .seat.available {
-    background-color: #e8f5e8;
+
+
+    background-color: transparent;
     border-color: #28a745;
     color: #28a745;
 }

@@ -8,146 +8,40 @@
 <!-- Film Strip Carousel -->
 
 <div class="film-strip-container">
-            <div class="film-strip">
-                <!-- Film frames with movies -->
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>The Matrix</h3>
-                        <p>Action • Sci-Fi</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Inception</h3>
-                        <p>Thriller • Sci-Fi</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Casablanca</h3>
-                        <p>Romance • Drama</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Pulp Fiction</h3>
-                        <p>Crime • Drama</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Titanic</h3>
-                        <p>Romance • Drama</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Avatar</h3>
-                        <p>Action • Adventure</p>
-                    </div>
-                </div>
-
-                <!-- Duplicate frames for seamless loop -->
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>The Matrix</h3>
-                        <p>Action • Sci-Fi</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Inception</h3>
-                        <p>Thriller • Sci-Fi</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Casablanca</h3>
-                        <p>Romance • Drama</p>
-                    </div>
-                </div>
-                 <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Pulp Fiction</h3>
-                        <p>Crime • Drama</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Titanic</h3>
-                        <p>Romance • Drama</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Avatar</h3>
-                        <p>Action • Adventure</p>
-                    </div>
-                </div>
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>The Matrix</h3>
-                        <p>Action • Sci-Fi</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Inception</h3>
-                        <p>Thriller • Sci-Fi</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Casablanca</h3>
-                        <p>Romance • Drama</p>
-                    </div>
-                </div>
-                 <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Pulp Fiction</h3>
-                        <p>Crime • Drama</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Titanic</h3>
-                        <p>Romance • Drama</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Avatar</h3>
-                        <p>Action • Adventure</p>
-                    </div>
-                </div>
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>The Matrix</h3>
-                        <p>Action • Sci-Fi</p>
-                    </div>
-                </div>
-                
-                <div class="film-frame">
-                    <div class="movie-poster">
-                        <h3>Inception</h3>
-                        <p>Thriller • Sci-Fi</p>
-                    </div>
+    <div class="film-strip">
+        {# Use DB-driven films for the strip. Duplicate the sequence once for seamless looping #}
+        {% for film in film_strip %}
+            {% comment %} Using film_strip from the view context {% endcomment %}
+            <div class="film-frame">
+                <div class="movie-poster">
+                    <a href="{% url 'movie_details' film.tmdb_id %}" class="movie-poster-link" title="{{ film.title }}">
+                        <img src="{{ film.get_poster_url|default:film.poster_url|default:'' }}"
+                             alt="{{ film.title }}"
+                             class="film-strip-img"
+                             loading="lazy"
+                             onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'" />
+                    </a>
                 </div>
             </div>
-        </div>
+            {% endfor %}
+            
+            {# duplicate for smooth loop #}
+            {% for film in film_strip %}
+            <div class="film-frame">
+                <div class="movie-poster">
+                    <a href="{% url 'movie_details' film.tmdb_id %}" class="movie-poster-link" title="{{ film.title }}">
+                        <img src="{{ film.get_poster_url|default:film.poster_url|default:'' }}"
+                             alt="{{ film.title }}"
+                             class="film-strip-img"
+                             loading="lazy"
+                             onerror="this.src='https://via.placeholder.com/300x450/333/fff?text={{ film.title|urlencode }}'" />
+                    </a>
+                </div>
+                
+            </div>
+            {% endfor %}
+    </div>
+</div>
 
 
 <!-- Hero Section with Welcome Message -->
