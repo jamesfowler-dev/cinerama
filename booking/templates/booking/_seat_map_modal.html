@@ -1,57 +1,87 @@
 {% load static %}
 
-<div class="seat-selection-modal">
+<div class="seat-selection-modal" data-showtime-price="{{ showtime.price }}" data-showtime-id="{{ showtime.id }}" data-booking-id="{{ booking.booking_id|default:'' }}"
+    data-seat-available-url="{% static 'images/seat.png' %}"
+    data-seat-selected-url="{% static 'images/seat.png' %}"
+    data-seat-booked-url="{% static 'images/seat.png' %}">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-12">
             <div class="seat-selection-container">
                 <h5 class="text-center mb-3 text-white">Select seats for {{ film.title }} — {{ showtime.date|date:"D j M Y" }} at {{ showtime.time|time:"H:i" }}</h5>
 
-                <div class="screen-indicator text-center mb-3">
-                    <div class="screen-line"></div>
-                    <p class="mt-2 text-muted">SCREEN</p>
-                </div>
-
-                <div class="seat-map" id="modalSeatMap">
-                    {% regroup seats by row as seat_rows %}
-                    {% for row_group in seat_rows %}
-                    <div class="seat-row d-flex justify-content-center align-items-center mb-2">
-                        <span class="row-label me-3 fw-bold">{{ row_group.grouper }}</span>
-                        <div class="seats d-flex">
-                            {% for seat in row_group.list %}
-                            <button type="button"
-                                    class="seat {% if seat.id in booked_seats %}booked{% else %}available{% endif %}"
-                                    data-seat-id="{{ seat.id }}"
-                                    data-seat-number="{{ seat }}"
-                                    {% if seat.id in booked_seats %}disabled{% endif %}>
-                                {{ seat.number }}
-                            </button>
-                            {% endfor %}
-                        </div>
-                        <span class="row-label ms-3 fw-bold">{{ row_group.grouper }}</span>
+                <!-- Seating background wrapper to match main page -->
+                <div class="seating-bg p-3 rounded">
+                    <div class="screen-indicator text-center mb-3">
+                        <div class="screen-line"></div>
+                        <p class="mt-2 text-muted">SCREEN</p>
                     </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
 
-        <div class="col-lg-4">
-            <div class="card bg-dark text-white p-3">
-                <h6>Selected Seats</h6>
-                <ul id="modalSelectedSeatsList" class="list-unstyled mb-3 text-white"><li class="text-muted">No seats selected</li></ul>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Seat Price:</span>
-                    <span>£{{ showtime.price }}</span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <span>Quantity:</span>
-                    <span id="modalSeatQuantity">0</span>
-                </div>
-                <div class="d-flex justify-content-between mb-3 fw-bold">
-                    <span>Total:</span>
-                    <span id="modalTotalPrice">£0.00</span>
+                    <div class="seat-map" id="modalSeatMap">
+                        {% regroup seats by row as seat_rows %}
+                        {% for row_group in seat_rows reversed %}
+                        <div class="seat-row d-flex justify-content-center align-items-center mb-2">
+                            <span class="row-label me-3 fw-bold">{{ row_group.grouper }}</span>
+                            <div class="seats d-flex">
+                                {% for seat in row_group.list %}
+                                <button type="button" 
+                                        class="seat {% if seat.id in booked_seats %}booked{% else %}available{% endif %}"
+                                        data-seat-id="{{ seat.id }}"
+                                        data-seat-number="{{ seat }}"
+                                        {% if seat.id in booked_seats %}disabled{% endif %}>
+                                    <img class="seat-art" src="{% static 'images/seat.png' %}" alt="">
+                                    <span class="seat-number">{{ seat.number }}</span>
+                                </button>
+                                {% endfor %}
+                            </div>
+                            <span class="row-label ms-3 fw-bold">{{ row_group.grouper }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
-                <div class="d-grid">
+                <!-- Legend card below image (match main page) -->
+                <div class="legend-card mt-3 p-3 bg-dark rounded text-center">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center me-4">
+                                <div class="seat-example available me-2"></div>
+                                <span>Available</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center me-4">
+                                <div class="seat-example selected me-2"></div>
+                                <span>Selected</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center">
+                                <div class="seat-example booked me-2"></div>
+                                <span>Booked</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Seats Summary (modal) - placed under legend to match main page layout -->
+                <div id="modal-selected-seats-summary" class="selected-seats-summary mt-3 p-3 bg-dark rounded text-center">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <h6 class="mb-0">Selected Seats:</h6>
+                            <div id="modalSelectedSeatsList" class="small text-muted">No seats selected</div>
+                        </div>
+                        <div class="col-6 col-md-4 mb-2 mb-md-0">
+                            <h6 class="mb-0">Quantity:</h6>
+                            <span id="modalSeatQuantity" class="fw-bold">0</span>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <h6 class="mb-0">Total:</h6>
+                            <span id="modalTotalPrice" class="fw-bold text-success">£0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid mt-3">
                     <button id="modalConfirmSeats" class="btn btn-success">Confirm seats and update booking</button>
                 </div>
             </div>
@@ -60,68 +90,29 @@
 </div>
 
 <style>
-/* Minimal seat styles (relies on global styles where available) */
-.seat { width:30px; height:30px; margin:2px; border-radius:6px; }
-.seat.available { background:#e8f5e8; border:2px solid #28a745; color:#28a745 }
-.seat.selected { background:var(--cinema-red); color:#fff }
-.seat.booked { background:#dc3545; color:#fff; opacity:0.6 }
-.screen-line { width:60%; height:4px; background:linear-gradient(135deg,var(--cinema-red) 0%,var(--cinema-gold) 100%); margin:0 auto; border-radius:2px }
+/* Modal seat styles mirror the main page so the modal looks identical */
+.seating-bg { background-image: url('{% static "images/cinema_background.webp" %}'); background-size: contain; background-repeat: no-repeat; background-position: center top; padding: 18px; border-radius: 8px; min-height: 420px; background-color: rgba(0,0,0,0.18); }
+.seat { width: 34px; height: 34px; margin: 5px; border: none; background: transparent; border-radius: 6px; font-size: 12px; font-weight: 700; transition: transform 0.15s ease, filter 0.15s ease; color: inherit; position: relative; padding: 0; overflow: hidden; }
+.seat-art { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 6px; }
+.seat-number { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; color: inherit; pointer-events: none; text-shadow: 0 1px 0 rgba(0,0,0,0.5); }
+.seat.available { color: #28a745; }
+.seat.available:hover { transform: scale(1.05); cursor: pointer; filter: brightness(1.02); }
+.seat.selected { color: #fff; transform: scale(1.06); }
+.seat.selected .seat-art { filter: drop-shadow(0 0 8px rgba(255,215,0,0.9)) saturate(1.2); }
+.seat.booked { background-color: #dc3545; color: #fff; opacity: 0.9; cursor: not-allowed; }
+.seat-example { width: 20px; height: 20px; border-radius: 4px; border: 2px solid; }
+.seat-example.available { background-image: url('{% static "images/seat.png" %}'); background-size: cover; }
+.seat-example.selected { background-image: url('{% static "images/seat.png" %}'); background-size: cover; }
+.seat-example.booked { background-image: url('{% static "images/seat.png" %}'); background-size: cover; }
+.screen-line { width: 60%; height: 4px; background: linear-gradient(135deg, var(--cinema-red) 0%, var(--cinema-gold) 100%); margin: 0 auto; border-radius: 2px; }
+.legend-card, .selected-seats-summary { background: #111; }
+@media (max-width: 768px) {
+    .seat { width: 22px; height: 22px; }
+}
 </style>
 
-<script>
-// Expose an initializer so the host page can call it after inserting HTML into the modal.
-window.initModalSeatSelection = function() {
-    var container = document.getElementById('modalSeatMap');
-    if(!container) return;
+{# Seat map initialization is handled by centralized JS (static/js/script.js).
+   The edit page will call bookingSeatSelector.init('#modalSeatMap', { modal: true, bookingId: '...' })
+   after inserting this partial into the modal body. #}
 
-    var seats = container.querySelectorAll('.seat.available');
-    var selectedSeats = [];
-    var seatPrice = {{ showtime.price }};
-
-    function updateSummary(){
-        var list = document.getElementById('modalSelectedSeatsList');
-        var qty = document.getElementById('modalSeatQuantity');
-        var total = document.getElementById('modalTotalPrice');
-        if(selectedSeats.length === 0){
-            list.innerHTML = '<li class="text-muted">No seats selected</li>';
-        } else {
-            list.innerHTML = selectedSeats.map(function(s){ return '<li class="d-flex justify-content-between"><span>Seat '+s.number+'</span><span>£'+seatPrice+'</span></li>'; }).join('');
-        }
-        qty.textContent = selectedSeats.length;
-        total.textContent = '£' + (selectedSeats.length * seatPrice).toFixed(2);
-    }
-
-    seats.forEach(function(btn){
-        btn.addEventListener('click', function(){
-            var id = this.getAttribute('data-seat-id');
-            var number = this.getAttribute('data-seat-number');
-            if(this.classList.contains('selected')){
-                this.classList.remove('selected');
-                selectedSeats = selectedSeats.filter(function(s){ return s.id !== id; });
-            } else {
-                if(selectedSeats.length >= 8){ alert('Max 8 seats'); return; }
-                this.classList.add('selected');
-                selectedSeats.push({id:id, number:number});
-            }
-            updateSummary();
-        });
-    });
-
-    document.getElementById('modalConfirmSeats').addEventListener('click', function(){
-        if(selectedSeats.length === 0){ alert('Please select at least one seat.'); return; }
-    // POST to confirm_reselect endpoint
-    var bookingId = '{{ booking.booking_id }}';
-    // Build URL client-side to avoid Django reversing at render-time with a placeholder.
-    var url = '/booking/confirm-reselect/' + bookingId + '/';
-        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        var formData = new FormData();
-        formData.append('showtime_id', {{ showtime.id }});
-        selectedSeats.forEach(function(s){ formData.append('selected_seats', s.id); });
-
-        fetch(url, { method: 'POST', body: formData, headers: {'X-CSRFToken': csrftoken} })
-            .then(function(r){ if(r.redirected) { window.location = r.url; } else return r.json(); })
-            .then(function(data){ if(data && data.error) alert(data.error); })
-            .catch(function(err){ console.error(err); alert('An error occurred'); });
-    });
-};
-</script>
+{# Modal scripts are centralized in static/js/script.js #}
