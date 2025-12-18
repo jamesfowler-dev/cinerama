@@ -9,7 +9,7 @@
       <h5 class="card-title text-white">Current: {{ booking.showtime.film.title }} — {{ booking.showtime.date|date:"D j M Y" }} at {{ booking.showtime.time|time:"H:i" }}</h5>
       <p class="text-white small">Seats: {{ booking.seat_numbers }}</p>
 
-      <form method="post" id="editBookingForm">
+  <form method="post" id="editBookingForm" data-booking-id='{{ booking.booking_id }}' data-current-showtime='{{ booking.showtime.id }}'>
         {% csrf_token %}
         <div class="row mb-3">
           <div class="col-md-6 mb-2">
@@ -41,35 +41,10 @@
   </div>
 </div>
 
-<script>
-  (function(){
-    var showtimes = {{ showtimes_json|safe }} || [];
-    var filmSelect = document.getElementById('film_select');
-    var showtimeSelect = document.getElementById('showtime');
-    var currentShowtimeId = {{ booking.showtime.id }};
+    {# Embed showtimes JSON in a safe application/json block to avoid attribute-escaping edge cases. #}
+    <script id="showtimes-data" type="application/json">{{ showtimes_json|safe }}</script>
 
-    function renderOptions(filterFilmId){
-      showtimeSelect.innerHTML = '';
-      var list = showtimes.filter(function(s){
-        return !filterFilmId || String(s.film_id) === String(filterFilmId);
-      });
-      list.forEach(function(s){
-        var opt = document.createElement('option');
-        opt.value = s.id;
-        opt.text = s.film_title + ' — ' + s.date + ' ' + s.time + ' (' + s.screen + ') — £' + s.price;
-        if(String(s.id) === String(currentShowtimeId)) opt.selected = true;
-        showtimeSelect.appendChild(opt);
-      });
-    }
-
-    // initial render: filter to current film so user's selection remains
-    renderOptions({{ booking.showtime.film.id }});
-
-    filmSelect.addEventListener('change', function(){
-      renderOptions(this.value);
-    });
-  })();
-</script>
+    {# Showtime rendering and modal handling are centralized in static/js/script.js #}
 
 <!-- Seat reselect modal -->
 <div class="modal fade" id="reselectSeatModal" tabindex="-1" aria-hidden="true">
@@ -86,51 +61,6 @@
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  var form = document.getElementById('editBookingForm');
-  var modalEl = document.getElementById('reselectSeatModal');
-  var bootstrapModal = null;
-  if(window.bootstrap && modalEl){
-    // Move modal element to document.body to avoid stacking/context issues
-    // where ancestor stacking contexts or overlays sit above the modal.
-    try { document.body.appendChild(modalEl); } catch(e) { /* ignore */ }
-    bootstrapModal = new bootstrap.Modal(modalEl);
-  }
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    var showtimeId = document.getElementById('showtime').value;
-    if(!showtimeId){ alert('Please select a showtime'); return; }
-
-    // Load seat map partial
-    var url = '/booking/select-seats/' + showtimeId + '/?modal=1&booking_id={{ booking.booking_id }}';
-    fetch(url, { credentials: 'same-origin' })
-      .then(function(r){ return r.text(); })
-      .then(function(html){
-        var body = document.getElementById('reselectModalBody');
-        body.innerHTML = html;
-
-        // Initialize centralized seat selector for the modal. Pass booking and showtime info.
-        try {
-          if(window.bookingSeatSelector && typeof window.bookingSeatSelector.init === 'function'){
-            // Prefer initializing against the modal container so the selector can find
-            // the confirm button and summary elements which are siblings of the seat map.
-            var modalContainer = body.querySelector('.seat-selection-modal') || document.getElementById('reselectModalBody');
-            if(modalContainer){
-                window.bookingSeatSelector.init(modalContainer, { modal: true, bookingId: '{{ booking.booking_id }}', showtimeId: showtimeId });
-            } else {
-                // Fallback: initialize against the seat map element if container not found
-                window.bookingSeatSelector.init('#modalSeatMap', { modal: true, bookingId: '{{ booking.booking_id }}', showtimeId: showtimeId });
-            }
-          }
-        } catch(e){ console.error('bookingSeatSelector init error', e); }
-
-        if(bootstrapModal) bootstrapModal.show();
-      })
-      .catch(function(err){ console.error(err); alert('Could not load seat map'); });
-  });
-});
-</script>
+{# Modal fetch & initialization handled centrally in static/js/script.js #}
 
 {% endblock %}
