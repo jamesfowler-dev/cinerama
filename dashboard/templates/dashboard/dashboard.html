@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load tmdb_reviews %}
 
 {% block title %}Welcome to Cinerama{% endblock %}
 
@@ -383,6 +384,37 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <!-- TMDb Reviews --> 
+                                            <div class="mt-4">
+                                                <h6 class="fw-bold text-warning">
+                                                    <i class="bi bi-chat-left-quote me-2"></i>TMDb Reviews
+                                                </h6>
+
+                                                {% get_tmdb_reviews film.tmdb_id as reviews %}
+
+                                                {% if reviews %}
+                                                    {% for review in reviews %}
+                                                        <div class="border-start border-3 border-warning ps-3 mb-3">
+                                                            <strong class="text-white">{{ review.author }}</strong>
+                                                            {% if review.content %}
+                                                                <p class="small text-white-50 mb-1">
+                                                                    {{ review.content|truncatewords:30 }}
+                                                                </p>
+                                                            {% else %}
+                                                                <p class="small text-muted fst-italic mb-1">
+                                                                    No review text available
+                                                                </p>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <p class="small text-muted fst-italic">
+                                                        No external reviews available.
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
