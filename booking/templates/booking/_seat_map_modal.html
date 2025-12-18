@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="seat-selection-modal">
+<div class="seat-selection-modal" data-showtime-price="{{ showtime.price }}" data-showtime-id="{{ showtime.id }}" data-booking-id="{{ booking.booking_id|default:'' }}">
     <div class="row">
         <div class="col-lg-8">
             <div class="seat-selection-container">
@@ -68,60 +68,49 @@
 .screen-line { width:60%; height:4px; background:linear-gradient(135deg,var(--cinema-red) 0%,var(--cinema-gold) 100%); margin:0 auto; border-radius:2px }
 </style>
 
+{# Seat map initialization is handled by centralized JS (static/js/script.js).
+   The edit page will call bookingSeatSelector.init('#modalSeatMap', { modal: true, bookingId: '...' })
+   after inserting this partial into the modal body. #}
+
+<!-- Modal fallback: if the central bookingSeatSelector isn't available (script.js failed to load),
+     attach a small local handler so the modal seat map still works. This keeps functionality
+     available while you debug the main script. -->
 <script>
-// Expose an initializer so the host page can call it after inserting HTML into the modal.
-window.initModalSeatSelection = function() {
-    var container = document.getElementById('modalSeatMap');
-    if(!container) return;
+document.addEventListener('DOMContentLoaded', function(){
+    // If the modal is loaded into the page later via fetch, this will still run when inserted.
+    try {
+        if(window.bookingSeatSelector && typeof window.bookingSeatSelector.init === 'function') return;
 
-    var seats = container.querySelectorAll('.seat.available');
-    var selectedSeats = [];
-    var seatPrice = {{ showtime.price }};
+        var modalRoot = document.querySelector('.seat-selection-modal');
+        if(!modalRoot) return;
 
-    function updateSummary(){
-        var list = document.getElementById('modalSelectedSeatsList');
-        var qty = document.getElementById('modalSeatQuantity');
-        var total = document.getElementById('modalTotalPrice');
-        if(selectedSeats.length === 0){
-            list.innerHTML = '<li class="text-muted">No seats selected</li>';
-        } else {
-            list.innerHTML = selectedSeats.map(function(s){ return '<li class="d-flex justify-content-between"><span>Seat '+s.number+'</span><span>£'+seatPrice+'</span></li>'; }).join('');
+        var seatButtons = modalRoot.querySelectorAll('.seat.available');
+        var selected = [];
+        var selectedList = modalRoot.querySelector('#modalSelectedSeatsList');
+        var qtyEl = modalRoot.querySelector('#modalSeatQuantity');
+        var totalEl = modalRoot.querySelector('#modalTotalPrice');
+        var confirmBtn = modalRoot.querySelector('#modalConfirmSeats');
+        var price = parseFloat(modalRoot.dataset.showtimePrice || 0) || 0;
+
+        function refresh(){
+            if(selectedList) selectedList.innerHTML = selected.length ? selected.map(function(s){ return '<li>'+s.number+' — £'+price+'</li>'; }).join('') : '<li class="text-muted">No seats selected</li>';
+            if(qtyEl) qtyEl.textContent = selected.length;
+            if(totalEl) totalEl.textContent = '£' + (selected.length * price).toFixed(2);
+            if(confirmBtn) confirmBtn.disabled = selected.length === 0;
         }
-        qty.textContent = selectedSeats.length;
-        total.textContent = '£' + (selectedSeats.length * seatPrice).toFixed(2);
-    }
 
-    seats.forEach(function(btn){
-        btn.addEventListener('click', function(){
-            var id = this.getAttribute('data-seat-id');
-            var number = this.getAttribute('data-seat-number');
-            if(this.classList.contains('selected')){
-                this.classList.remove('selected');
-                selectedSeats = selectedSeats.filter(function(s){ return s.id !== id; });
-            } else {
-                if(selectedSeats.length >= 8){ alert('Max 8 seats'); return; }
-                this.classList.add('selected');
-                selectedSeats.push({id:id, number:number});
-            }
-            updateSummary();
+        seatButtons.forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var id = btn.getAttribute('data-seat-id');
+                var number = btn.getAttribute('data-seat-number');
+                var idx = selected.findIndex(function(s){ return s.id === id; });
+                if(idx !== -1){ selected.splice(idx,1); btn.classList.remove('selected'); }
+                else { selected.push({id:id, number:number}); btn.classList.add('selected'); }
+                refresh();
+            });
         });
-    });
 
-    document.getElementById('modalConfirmSeats').addEventListener('click', function(){
-        if(selectedSeats.length === 0){ alert('Please select at least one seat.'); return; }
-    // POST to confirm_reselect endpoint
-    var bookingId = '{{ booking.booking_id }}';
-    // Build URL client-side to avoid Django reversing at render-time with a placeholder.
-    var url = '/booking/confirm-reselect/' + bookingId + '/';
-        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        var formData = new FormData();
-        formData.append('showtime_id', {{ showtime.id }});
-        selectedSeats.forEach(function(s){ formData.append('selected_seats', s.id); });
-
-        fetch(url, { method: 'POST', body: formData, headers: {'X-CSRFToken': csrftoken} })
-            .then(function(r){ if(r.redirected) { window.location = r.url; } else return r.json(); })
-            .then(function(data){ if(data && data.error) alert(data.error); })
-            .catch(function(err){ console.error(err); alert('An error occurred'); });
-    });
-};
+        refresh();
+    } catch(e){ console.error('modal fallback error', e); }
+});
 </script>

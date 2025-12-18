@@ -109,33 +109,23 @@ document.addEventListener('DOMContentLoaded', function(){
       .then(function(r){ return r.text(); })
       .then(function(html){
         var body = document.getElementById('reselectModalBody');
-        // Use DOMParser so we can extract and execute scripts from the returned HTML.
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(html, 'text/html');
+        body.innerHTML = html;
 
-        // Clear and append non-script nodes
-        body.innerHTML = '';
-        Array.from(doc.body.childNodes).forEach(function(node){
-          if(node.tagName && node.tagName.toLowerCase() === 'script') return; // skip scripts for now
-          body.appendChild(document.importNode(node, true));
-        });
+        // Initialize centralized seat selector for the modal. Pass booking and showtime info.
+        try {
+          if(window.bookingSeatSelector && typeof window.bookingSeatSelector.init === 'function'){
+            // Prefer initializing against the modal container so the selector can find
+            // the confirm button and summary elements which are siblings of the seat map.
+            var modalContainer = body.querySelector('.seat-selection-modal') || document.getElementById('reselectModalBody');
+            if(modalContainer){
+                window.bookingSeatSelector.init(modalContainer, { modal: true, bookingId: '{{ booking.booking_id }}', showtimeId: showtimeId });
+            } else {
+                // Fallback: initialize against the seat map element if container not found
+                window.bookingSeatSelector.init('#modalSeatMap', { modal: true, bookingId: '{{ booking.booking_id }}', showtimeId: showtimeId });
+            }
+          }
+        } catch(e){ console.error('bookingSeatSelector init error', e); }
 
-        // Execute scripts by creating new script elements
-        var scripts = doc.querySelectorAll('script');
-        scripts.forEach(function(s){
-          var newScript = document.createElement('script');
-          // Copy attributes (e.g., type)
-          Array.from(s.attributes || []).forEach(function(attr){ newScript.setAttribute(attr.name, attr.value); });
-          newScript.text = s.textContent;
-          document.body.appendChild(newScript);
-          // remove after execution to keep DOM clean
-          document.body.removeChild(newScript);
-        });
-
-        // Initialize modal seat logic if provided
-        if(typeof window.initModalSeatSelection === 'function'){
-          try { window.initModalSeatSelection(); } catch(e) { console.error('initModalSeatSelection', e); }
-        }
         if(bootstrapModal) bootstrapModal.show();
       })
       .catch(function(err){ console.error(err); alert('Could not load seat map'); });

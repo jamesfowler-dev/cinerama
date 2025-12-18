@@ -288,80 +288,60 @@
 }
 </style>
 
-<!-- JavaScript for Seat Selection -->
+{% block extra_js %}
+{{ block.super }}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const seats = document.querySelectorAll('.seat.available');
-    const selectedSeatsList = document.getElementById('selectedSeatsList');
-    const selectedSeatsInput = document.getElementById('selectedSeatsInput');
-    const seatQuantity = document.getElementById('seatQuantity');
-    const totalPrice = document.getElementById('totalPrice');
-    const proceedBtn = document.getElementById('proceedBtn');
-    const seatPrice = {{ showtime.price }};
-    
-    let selectedSeats = [];
-
-    seats.forEach(seat => {
-        seat.addEventListener('click', function() {
-            const seatId = this.getAttribute('data-seat-id');
-            const seatNumber = this.getAttribute('data-seat-number');
-            
-            if (this.classList.contains('selected')) {
-                // Deselect seat
-                this.classList.remove('selected');
-                selectedSeats = selectedSeats.filter(seat => seat.id !== seatId);
-            } else {
-                // Select seat (limit to 8 seats)
-                if (selectedSeats.length < 8) {
-                    this.classList.add('selected');
-                    selectedSeats.push({
-                        id: seatId,
-                        number: seatNumber
-                    });
-                } else {
-                    alert('You can select maximum 8 seats at once.');
-                    return;
-                }
-            }
-            
-            updateBookingSummary();
-        });
-    });
-
-    function updateBookingSummary() {
-        // Update selected seats list
-        if (selectedSeats.length === 0) {
-            selectedSeatsList.innerHTML = '<li class="text-muted">No seats selected</li>';
-        } else {
-            selectedSeatsList.innerHTML = selectedSeats.map(seat =>  
-                `<li class="d-flex justify-content-between">
-                    <span>Seat ${seat.number}</span>
-                    <span>£${seatPrice}</span>
-                </li>`
-            ).join('');
-        }
-
-        // Update quantity and total
-        seatQuantity.textContent = selectedSeats.length;
-        const total = selectedSeats.length * seatPrice;
-        totalPrice.textContent = `£${total.toFixed(2)}`;
-
-        // Update form inputs
-        selectedSeatsInput.innerHTML = selectedSeats.map(seat => 
-            `<input type="hidden" name="selected_seats" value="${seat.id}">`
-        ).join('');
-
-        // Enable/disable proceed button
-        proceedBtn.disabled = selectedSeats.length === 0;
+document.addEventListener('DOMContentLoaded', function(){
+    if(window.bookingSeatSelector && typeof window.bookingSeatSelector.init === 'function'){
+        window.bookingSeatSelector.init('#seatMap', { modal: false, showtimePrice: {{ showtime.price|floatformat:"2" }}, showtimeId: {{ showtime.id }} });
     }
-
-    // Form validation
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
-        if (selectedSeats.length === 0) {
-            e.preventDefault();
-            alert('Please select at least one seat.');
-        }
-    });
 });
 </script>
+<!-- Fallback: if the central script failed to load (syntax error/truncated), attach a minimal client-side
+     seat handler so users can still select seats and see quantity/total. This runs only when bookingSeatSelector
+     is not available. -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    if(window.bookingSeatSelector && typeof window.bookingSeatSelector.init === 'function') return;
+
+    try {
+        var seatButtons = document.querySelectorAll('#seatMap .seat.available');
+        var selected = [];
+        var selectedDisplay = document.getElementById('selectedSeatsDisplay');
+        var qtyEl = document.getElementById('seatQuantity');
+        var totalEl = document.getElementById('totalPrice');
+        var selectedSeatsInput = document.getElementById('selectedSeatsInput');
+        var proceedBtn = document.getElementById('proceedBtn');
+        var price = parseFloat(document.getElementById('seatMap')?.getAttribute('data-showtime-price') || {{ showtime.price|floatformat:"2" }} ) || 0;
+
+        function refresh() {
+            if(selectedDisplay) selectedDisplay.innerHTML = selected.length ? selected.map(function(s){ return s.number; }).join(', ') : '<span class="text-muted">None selected</span>';
+            if(qtyEl) qtyEl.textContent = selected.length;
+            if(totalEl) totalEl.textContent = '£' + (selected.length * price).toFixed(2);
+            if(selectedSeatsInput) selectedSeatsInput.innerHTML = selected.map(function(s){ return '<input type="hidden" name="selected_seats" value="'+s.id+'">'; }).join('');
+            if(proceedBtn) proceedBtn.disabled = selected.length === 0;
+        }
+
+        seatButtons.forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var id = btn.getAttribute('data-seat-id');
+                var number = btn.getAttribute('data-seat-number');
+                var idx = selected.findIndex(function(s){ return s.id === id; });
+                if(idx !== -1){
+                    selected.splice(idx,1);
+                    btn.classList.remove('selected');
+                } else {
+                    selected.push({id:id, number:number});
+                    btn.classList.add('selected');
+                }
+                refresh();
+            });
+        });
+
+        // initial refresh
+        refresh();
+    } catch(e){ console.error('Fallback seat script error', e); }
+});
+</script>
+{% endblock %}
 {% endblock %}
