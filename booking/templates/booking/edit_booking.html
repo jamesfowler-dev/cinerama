@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="container py-4">
-  <h2 class="mb-4 text-white">Edit Booking</h2>
 
-  <div class="card bg-dark" style="background-color: rgba(0,0,0,0.6);">
+<!-- Hero Section -->
+<section class="hero-section text-white py-4 mb-4">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Edit Your Booking</h1>
+        </div>
+    </div>
+</section>
+<!-- Edit Booking -->
+<div class="container py-4">
+  <div class="card edit-card">
     <div class="card-body">
       <h5 class="card-title text-white">Current: {{ booking.showtime.film.title }} — {{ booking.showtime.date|date:"D j M Y" }} at {{ booking.showtime.time|time:"H:i" }}</h5>
       <p class="text-white small">Seats: {{ booking.seat_numbers }}</p>
@@ -31,12 +40,12 @@
         </div>
 
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-primary" id="openSeatModalBtn">Update Booking</button>
-          <a href="{% url 'manage_bookings' %}" class="btn btn-outline-light">Cancel</a>
+          <button type="submit" class="btn mb-3" id="openSeatModalBtn">Update Booking</button>
+          <a href="{% url 'manage_bookings' %}" class="btn btn-outline-light mb-3">Cancel</a>
         </div>
       </form>
 
-      <p class="mt-3 text-muted">Note: Changing the showtime will clear the seats associated with this booking. After updating you'll be asked to re-select seats.</p>
+      <small class="mt-4">Note: Changing the showtime will clear the seats associated with this booking. After updating you'll be asked to re-select seats.</small>
     </div>
   </div>
 </div>
