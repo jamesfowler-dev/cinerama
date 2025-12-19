@@ -4,8 +4,9 @@
 
 ![landing_gif.gif](static/readme/landing_gif.gif)
 
-Cinerama is our awesome way of showcasing an ecommerce website.
-From showing dynamic prices to having a manageable booking. Using TMBD API to show titles, posters, cast and more.
+Cinerama is our awesome way of showcasing an e-commerce website.
+From displaying dynamic prices to having a manageable booking/cart. Using TMBD API to show titles, posters, cast and
+more.
 YouTube API to fetch appropriate trailers for the films and a Copilot API that creates age ratings.
 This web app was a big package and lots of fun to work on. It has tons of room for improvement.
 But even now, comparing it to other cinema websites we are quite happy with the design and logic behind it.
@@ -45,7 +46,17 @@ But even now, comparing it to other cinema websites we are quite happy with the 
 
 # Overview
 
+Cinerama is a full-stack cinema booking web application built using Django and PostgreSQL.
+The platform allows users to browse films, view showtimes, select seats, and manage
+bookings through a clear, multi-step booking flow.
 
+The project was developed as a capstone hackathon application, with a strong focus on
+user experience, real-world data relationships, and deployment readiness.
+External APIs such as TMDB and YouTube are used to enrich the platform with up-to-date
+film metadata, posters, and trailers.
+
+While the application delivers a complete and functional MVP, the architecture also
+leaves room for future refactoring and feature expansion beyond the hackathon scope.
 
 ---
 
@@ -57,6 +68,32 @@ But even now, comparing it to other cinema websites we are quite happy with the 
 ---
 
 # User Stories
+
+User stories were tracked and managed using a GitHub Projects board, allowing the team
+to prioritise core functionality while keeping future ideas clearly documented.
+
+### Completed User Stories
+
+- As a user, I can register an account so that I can manage my bookings
+- As a user, I can browse available movies
+- As a user, I can view film trailers
+- As a user, I can search and filter films
+- As a user, I can book tickets for a selected film and showtime
+- As a user, I can view seat availability before booking
+- As a user, I can edit an existing booking
+- As a user, I can delete a booking
+- As an admin, I can add new films and metadata via the admin panel
+- As a user, I can view film ratings and reviews
+- The application is responsive across a wide range of devices
+
+### Backlog / Future User Stories
+
+- As a user, I can rate or review films
+- As a user, I can switch between light and dark mode
+- As a user, I can share film pages via social media
+- As a user, I can add films to a personal watchlist
+
+
 
 
 ---
@@ -258,26 +295,26 @@ usage and easy future refactoring or replacement.
 # Key Features
 
 - **Film browsing and discovery**
-  - Browse active films with posters, genres, ratings, and trailers
-  - Dynamic filtering by date, genre, and search keywords
+    - Browse active films with posters, genres, ratings, and trailers
+    - Dynamic filtering by date, genre, and search keywords
 
 - **Multi-step booking flow**
-  - Select film and showtime
-  - Choose seats using an interactive seat map
-  - Review booking and confirm purchase
-  - View booking confirmation with unique booking ID
+    - Select film and showtime
+    - Choose seats using an interactive seat map
+    - Review booking and confirm purchase
+    - View booking confirmation with unique booking ID
 
 - **Real-time seat availability**
-  - Seats are dynamically marked as available, selected, or booked
-  - Seat conflicts are prevented at database level and revalidated server-side
+    - Seats are dynamically marked as available, selected, or booked
+    - Seat conflicts are prevented at database level and revalidated server-side
 
 - **Booking management**
-  - Users can view, edit, or delete their existing bookings
-  - Re-select showtimes and seats for future bookings
+    - Users can view, edit, or delete their existing bookings
+    - Re-select showtimes and seats for future bookings
 
 - **Admin cinema management**
-  - Admin users can manage films, screens, showtimes, seats, and bookings
-  - Read-only and filtered admin views ensure data integrity
+    - Admin users can manage films, screens, showtimes, seats, and bookings
+    - Read-only and filtered admin views ensure data integrity
 
 ---
 
@@ -291,8 +328,8 @@ to provide secure and scalable user management.
 - Anonymous users may browse films and showtimes but must log in to complete a booking
 - User sessions are used to temporarily store booking progress before authentication
 - Role-based access:
-  - Regular users can manage their own bookings
-  - Staff users have access to the Django admin panel for content management
+    - Regular users can manage their own bookings
+    - Staff users have access to the Django admin panel for content management
 
 Redirects and permissions are enforced using decorators and middleware to ensure a
 secure and consistent user experience.
@@ -327,9 +364,9 @@ The application is deployed to **Heroku** using a production-ready Django config
 - **PostgreSQL** is used as the production database via `dj-database-url`
 - **WhiteNoise** handles static file serving
 - Environment variables are used for sensitive configuration:
-  - SECRET_KEY
-  - DATABASE_URL
-  - TMDB_API_KEY
+    - SECRET_KEY
+    - DATABASE_URL
+    - TMDB_API_KEY
 - DEBUG mode is disabled in production
 - Static files are collected and served from a dedicated static directory
 
@@ -344,10 +381,10 @@ AI tools were used during the development process primarily as **assistive tools
 rather than as core application logic.
 
 - AI was used for:
-  - Drafting website content 
-  - Debugging assistance
-  - Generating boilerplate code
-  - Exploring UI/UX ideas
+    - Drafting website content
+    - Debugging assistance
+    - Generating boilerplate code
+    - Exploring UI/UX ideas
 - External APIs such as **TMDB** and **YouTube** provide dynamic film data and trailers
 - No automated decision-making or user-facing AI logic is embedded directly in the app
 
@@ -404,9 +441,41 @@ Without further a due here are some tests and our notes.
 
 # Future Enhancements
 
+
+Given more time and post-hackathon development, the following improvements would be
+prioritised:
+
+- Refactor front-end assets to better separate CSS and JavaScript concerns
+- Introduce automated testing for models, views, and booking logic
+- Implement film ratings and user reviews
+- Add a watchlist feature for registered users
+- Improve accessibility and ARIA support
+- Add social sharing functionality for film pagesa
+- Introduce a true payment gateway integration
+- Implement user profile pages and booking history exports
+- Improve admin workflows for bulk film and showtime management
+
+
 ---
 
 # Credits
 
+### APIs & External Services
+- TMDB API – film metadata, posters, and imagery
+- YouTube API – film trailers
+- Django & Django Allauth – backend framework and authentication
+- Bootstrap – responsive layout and UI components
 
+### Media & Design
+- Film posters and backdrops provided via TMDB
+- Icons provided by Bootstrap Icons and Font Awesome
 
+### Team
+- James Fowler – Project Lead / Full-Stack Development
+- Amy Cartwright – Full-Stack Development
+- Thomas Clevely – Full-Stack Development
+- Rafael Sanchez – Ideation, drafting, debugging, and documentation
+
+### Acknowledgements
+Special thanks to the Code Institute tutors and the open-source community for guidance,
+documentation, and tools that made this project possible.
