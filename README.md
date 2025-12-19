@@ -2,7 +2,7 @@
 
 ### [⛓️ Click Here To see The Live Website](https://cinerama-project-c41e4c3cc388.herokuapp.com/)
 
-![landing_gif.gif](static/readme/landing_gif.gif)
+![rolling film.gif](static/readme/rolling%20film.gif)
 
 Cinerama is our awesome way of showcasing an e-commerce website.
 From displaying dynamic prices to having a manageable booking/cart. Using TMBD API to show titles, posters, cast and
@@ -62,7 +62,10 @@ leaves room for future refactoring and feature expansion beyond the hackathon sc
 
 # UX Design
 
-
+We wanted to showcase a wide variety of films so that the user can get the impression of a big cinema, a good experience
+and great choices. The user should come to the site, see the offers, the show times and make a quick move to booking one
+of the available titles. taking them through an easy booking experience that end with a confirmation ticket for the
+booking.
 
 ### Templates
 
@@ -70,6 +73,31 @@ leaves room for future refactoring and feature expansion beyond the hackathon sc
 <summary>Our template design was inspired by Odeon and Everyman cinema websites, in addition to an idea of having
 a local cinema showing classic films. </summary>
 <br>
+
+<details>
+<summary>
+See wireframes and templates below...
+</summary>
+<br>
+
+Our first wireframes were copies of other sites, but we quickly went for a more unique touch with the film roll.
+
+![wireframe 1.png](static/readme/wireframe%201.png)
+
+Our last version showcases movie posters and titles in a rolling film animation.
+
+
+
+
+Booking follows quite strictly other templates from every other site, we were trying to make it recognisable for the
+user.
+![wireframe 2.png](static/readme/wireframe%202.png)
+
+In the end the seat selection is pretty and useful.
+
+![Screenshot 2025-12-19 at 9.27.46 a.m..png](static/readme/Screenshot%202025-12-19%20at%209.27.46%E2%80%AFa.m..png)[image-1.webp](static/readme/image-1.webp)
+
+</details>
 
 </details>
 
@@ -100,7 +128,6 @@ to prioritise core functionality while keeping future ideas clearly documented.
 - As a user, I can switch between light and dark mode
 - As a user, I can share film pages via social media
 - As a user, I can add films to a personal watchlist
-
 
 ---
 
@@ -447,7 +474,6 @@ Without further a due here are some tests and our notes.
 
 # Future Enhancements
 
-
 Given more time and post-hackathon development, the following improvements would be
 prioritised:
 
@@ -461,27 +487,30 @@ prioritised:
 - Implement user profile pages and booking history exports
 - Improve admin workflows for bulk film and showtime management
 
-
 ---
 
 # Credits
 
 ### APIs & External Services
+
 - TMDB API – film metadata, posters, and imagery
 - YouTube API – film trailers
 - Django & Django Allauth – backend framework and authentication
 - Bootstrap – responsive layout and UI components
 
 ### Media & Design
+
 - Film posters and backdrops provided via TMDB
 - Icons provided by Bootstrap Icons and Font Awesome
 
 ### Team
+
 - James Fowler – Project Lead / Full-Stack Development
 - Amy Cartwright – Full-Stack Development
 - Thomas Clevely – Full-Stack Development
 - Rafael Sanchez – Ideation, drafting, debugging, and documentation
 
 ### Acknowledgements
+
 Special thanks to the Code Institute tutors and the open-source community for guidance,
 documentation, and tools that made this project possible.
