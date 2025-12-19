@@ -635,6 +635,13 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     border: 1px solid var(--cinema-secondary);
 }
 
+#edit-booking-box{
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--cinema-secondary);
+}
+
 .date-filter .form-control, .date-filter .form-select {
     background: rgba(40, 49, 57, 0.8);
     border: 1px solid rgba(42, 232, 216, 0.3);
