@@ -63,7 +63,15 @@ leaves room for future refactoring and feature expansion beyond the hackathon sc
 # UX Design
 
 
+
 ### Templates
+
+<details>
+<summary>Our template design was inspired by Odeon and Everyman cinema websites, in addition to an idea of having
+a local cinema showing classic films. </summary>
+<br>
+
+</details>
 
 ---
 
@@ -86,14 +94,12 @@ to prioritise core functionality while keeping future ideas clearly documented.
 - As a user, I can view film ratings and reviews
 - The application is responsive across a wide range of devices
 
-### Backlog / Future User Stories
+### Future User Stories
 
 - As a user, I can rate or review films
 - As a user, I can switch between light and dark mode
 - As a user, I can share film pages via social media
 - As a user, I can add films to a personal watchlist
-
-
 
 
 ---
