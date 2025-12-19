@@ -452,17 +452,32 @@ Without further a due here are some tests and our notes.
 
 ### HTML Validation
 
+_The following warnings have been discussed and will be addressed after Christmas and code tidying up._
+
+
 ---
 
 ### CSS Validation
+
+We were glad that no CSS errors were encountered for the final testing before submission.
+The management of CSS leaves some room to improve but the results speak for themselves.
+
+[css-testing-no-errors.webp](static/readme/css-testing-no-errors.webp)
 
 ---
 
 ### Python Validation
 
+_To be done after Christmas and code tidying up_
+
+
 ---
 
 ### JavaScript Validation
+
+_The following warnings have been discussed and will be addressed after Christmas and code tidying up._
+
+[testing-script.js-results.webp](static/readme/testing-script.js-results.webp)
 
 ---
 
