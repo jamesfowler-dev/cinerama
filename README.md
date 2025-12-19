@@ -7,7 +7,7 @@
 Cinerama is our awesome way of showcasing an e-commerce website.
 From displaying dynamic prices to having a manageable booking/cart. Using TMBD API to show titles, posters, cast and
 more.
-YouTube API to fetch appropriate trailers for the films and a Copilot API that creates age ratings.
+YouTube API to fetch appropriate trailers for the films and a GitHub Models API that creates age ratings.
 This web app was a big package and lots of fun to work on. It has tons of room for improvement.
 But even now, comparing it to other cinema websites we are quite happy with the design and logic behind it.
 
@@ -85,9 +85,6 @@ Our first wireframes were copies of other sites, but we quickly went for a more 
 ![wireframe 1.png](static/readme/wireframe%201.png)
 
 Our last version showcases movie posters and titles in a rolling film animation.
-
-
-
 
 Booking follows quite strictly other templates from every other site, we were trying to make it recognisable for the
 user.
@@ -444,9 +441,13 @@ Without further a due here are some tests and our notes.
 
 ### Desktop Lighthouse Reports
 
+[lighthouse.webp](static/readme/lighthouse.webp)
+
 ---
 
 ### Mobile Lighthouse Reports
+
+[lighthouse.webp](static/readme/lighthouse.webp)
 
 ---
 
@@ -454,6 +455,9 @@ Without further a due here are some tests and our notes.
 
 _The following warnings have been discussed and will be addressed after Christmas and code tidying up._
 
+![html.png](static/readme/html.png)
+------------------------------------------------------------------------------------------------------------------------
+![html 2.png](static/readme/html%202.png)
 
 ---
 
@@ -469,7 +473,6 @@ The management of CSS leaves some room to improve but the results speak for them
 ### Python Validation
 
 _To be done after Christmas and code tidying up_
-
 
 ---
 
@@ -508,8 +511,10 @@ prioritised:
 
 ### APIs & External Services
 
+- [GitHub Models API](https://github.com/marketplace/models
+  )
 - TMDB API – film metadata, posters, and imagery
-- YouTube API – film trailers
+- [YouTube (google cloud) API – film trailers](https://console.cloud.google.com/)
 - Django & Django Allauth – backend framework and authentication
 - Bootstrap – responsive layout and UI components
 
@@ -529,3 +534,6 @@ prioritised:
 
 Special thanks to the Code Institute tutors and the open-source community for guidance,
 documentation, and tools that made this project possible.
+
+Some resources are listed below:
+https://codepen.io/mimikos/pen/wKqyqY for the background.
