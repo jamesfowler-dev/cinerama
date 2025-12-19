@@ -348,7 +348,32 @@ main {
 .carousel-control-next-icon {
     filter: brightness(0) saturate(100%) invert(85%) sepia(82%) saturate(347%) hue-rotate(3deg) brightness(104%) contrast(87%);
 }
+/* Make carousel and movie-card posters fill their card area like the animated film-strip.
+   Uses aspect-ratio for responsive poster boxes; images are stretched to fill (object-fit: fill)
+   to match the top strip behaviour. */
+.film-carousel .movie-poster,
+.movies-list .movie-poster {
+    aspect-ratio: 2 / 3;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    display: block;
+    /* remove default poster padding/background so images fill edge-to-edge */
+    padding: 0;
+    background: transparent;
+    border: none;
+}
 
+.film-carousel .movie-poster img,
+.movies-list .movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* keep same fill behaviour as the top strip */
+    object-position: 50% 50%;
+    display: block;
+    /* ensure image touches container edges and is clipped by border-radius */
+    border-radius: 0;
+}
 /* Input Styling */
 .form-control,
 .form-select {
