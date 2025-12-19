@@ -45,17 +45,19 @@ But even now, comparing it to other cinema websites we are quite happy with the 
 
 # Overview
 
+
+
 ---
 
 # UX Design
 
----
 
 ### Templates
 
 ---
 
 # User Stories
+
 
 ---
 
@@ -227,61 +229,176 @@ This was the first sketch for the ERDs:
 
 # Colors
 
+<details>
+<summary>Colors were chosen to mimic Kodak film and a dark-mode web experience. with a special background 
+of light bokeh to inspire the cinematic feeling.</summary>
+<br>
+
+![Cinerama.png](static/readme/Cinerama.png)
+
+</details>
+
 ---
 
 # Font
+
+Cinerama uses a combination of classic serif and clean sans-serif fonts to evoke a
+traditional cinema aesthetic while maintaining readability and accessibility.
+
+The primary typography is based on serif fonts such as **Georgia** and **Times New Roman**,
+used for headings and branding elements to reinforce a cinematic, theatrical feel.
+Secondary sans-serif fonts like **Arial** and **Helvetica** are used for body text,
+navigation, and UI elements to ensure clarity across devices.
+
+Font variables are defined globally using CSS custom properties, allowing consistent
+usage and easy future refactoring or replacement.
 
 ---
 
 # Key Features
 
+- **Film browsing and discovery**
+  - Browse active films with posters, genres, ratings, and trailers
+  - Dynamic filtering by date, genre, and search keywords
+
+- **Multi-step booking flow**
+  - Select film and showtime
+  - Choose seats using an interactive seat map
+  - Review booking and confirm purchase
+  - View booking confirmation with unique booking ID
+
+- **Real-time seat availability**
+  - Seats are dynamically marked as available, selected, or booked
+  - Seat conflicts are prevented at database level and revalidated server-side
+
+- **Booking management**
+  - Users can view, edit, or delete their existing bookings
+  - Re-select showtimes and seats for future bookings
+
+- **Admin cinema management**
+  - Admin users can manage films, screens, showtimes, seats, and bookings
+  - Read-only and filtered admin views ensure data integrity
+
 ---
 
 # User Authentication & Management
+
+Cinerama uses Django’s built-in authentication system enhanced with **django-allauth**
+to provide secure and scalable user management.
+
+- User registration, login, and logout are handled via Django Allauth
+- Authentication is required for booking confirmation and booking management
+- Anonymous users may browse films and showtimes but must log in to complete a booking
+- User sessions are used to temporarily store booking progress before authentication
+- Role-based access:
+  - Regular users can manage their own bookings
+  - Staff users have access to the Django admin panel for content management
+
+Redirects and permissions are enforced using decorators and middleware to ensure a
+secure and consistent user experience.
 
 ---
 
 # Data Management
 
+Data persistence and integrity are handled using Django’s ORM with a relational
+PostgreSQL database.
+
+- Clear separation of entities: Film, Screen, Showtime, Seat, Booking, and BookingSeat
+- Foreign key relationships enforce real-world cinema constraints
+- Composite uniqueness constraints prevent duplicate screens, seats, and showtimes
+- Cascading deletes ensure orphaned data is not retained
+- Calculated properties (e.g. available seats) avoid redundant storage
+- Admin configuration includes filters, search, and read-only fields for sensitive data
+
+All business logic related to availability and conflicts is validated server-side,
+ensuring consistent behavior regardless of client state.
+
+
+
+
 ---
 
 # Deployment
+
+The application is deployed to **Heroku** using a production-ready Django configuration.
+
+- **Gunicorn** is used as the WSGI HTTP server
+- **PostgreSQL** is used as the production database via `dj-database-url`
+- **WhiteNoise** handles static file serving
+- Environment variables are used for sensitive configuration:
+  - SECRET_KEY
+  - DATABASE_URL
+  - TMDB_API_KEY
+- DEBUG mode is disabled in production
+- Static files are collected and served from a dedicated static directory
+
+The deployment setup allows the application to scale while keeping configuration
+secure and environment-agnostic.
 
 ---
 
 # AI Implementation
 
+AI tools were used during the development process primarily as **assistive tools**
+rather than as core application logic.
+
+- AI was used for:
+  - Drafting website content 
+  - Debugging assistance
+  - Generating boilerplate code
+  - Exploring UI/UX ideas
+- External APIs such as **TMDB** and **YouTube** provide dynamic film data and trailers
+- No automated decision-making or user-facing AI logic is embedded directly in the app
+
+While AI accelerated development in certain areas, the team recognises that some
+sections of the codebase would benefit from further refactoring and consolidation.
+Future iterations would aim to reduce duplication and improve structural consistency.
+
+
 ---
 
 # Testing
 
----
+<details>
+<summary>
+We took a big project estimating that the MVP would be doable in a short period of time, while hoping to 
+continue this project into the future as graduates. 
+That being said, we threw all our tools at the problem and were able to go beyond our own expectations, this made us go
+slightly overboard and leave testing as a post-project item. Given that manual testing allows the user to follow a clear
+path and succeed in booking and claiming their receipt, we were happy and ready to present. 
+Simple tests and validations were made in hopes of redirecting our focus to those areas post submission.
+Without further a due here are some tests and our notes.
+</summary>
+<br>
 
-# Desktop Lighthouse Reports
-
----
-
-# Mobile Lighthouse Reports
-
----
-
-# HTML Validation
-
----
-
-# CSS Validation
+### Desktop Lighthouse Reports
 
 ---
 
-# Python Validation
+### Mobile Lighthouse Reports
 
 ---
 
-# JavaScript Validation
+### HTML Validation
 
 ---
 
-# Manual Testing
+### CSS Validation
+
+---
+
+### Python Validation
+
+---
+
+### JavaScript Validation
+
+---
+
+### Manual Testing
+
+</details>
 
 ---
 
