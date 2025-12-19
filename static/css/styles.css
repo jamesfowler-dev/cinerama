@@ -686,7 +686,7 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 }
 
 /* Movie Card Box Shadow Effects */
-.movie-item .card, .film-item .card, .review-card, .confirm-card {
+.movie-item .card, .film-item .card, .review-card, .confirm-card, .list-group-item, .edit-card {
     position: relative;
     background: rgba(33, 37, 41, 0.9) !important;
     border: 2px solid var(--cinema-primary);
@@ -757,6 +757,14 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
 #selectedSeatsDisplay, #seatQuantity {
     color: var(--misty-blue);
     /* font-weight: 500; */
+}
+
+.seat-example.seat-example-label {
+    color: var(--misty-blue);
+}
+
+.legend-card {
+    border: 1px solid var(--cinema-gold);
 }
 
 /* Screen Indicator */
@@ -888,29 +896,16 @@ form#signup_form.signup button.btn, form.login button.btn.btn-signup, form butto
     border: none;
 }
 
-/* Responsive Design seat selection */
-/* @media (max-width: 768px) {
-    .seat {
-        width: 25px;
-        height: 25px;
-        font-size: 10px;
-    }
-    
-    .row-label {
-        min-width: 15px;
-        font-size: 14px;
-    }
-    
-    .movie-header .row {
-        text-align: center;
-    }
-    
-    .movie-header .col-md-3,
-    .movie-header .col-md-9 {
-        margin-bottom: 20px;
-    }
-} */
+#openSeatModalBtn {
+    background-color: var(--cinema-secondary);
+    color: var(--misty-blue);
+}
 
+#openSeatModalBtn:hover {
+    background: transparent;
+    border: 1px solid var(--cinema-primary);
+    color: var(--cinema-primary);
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
